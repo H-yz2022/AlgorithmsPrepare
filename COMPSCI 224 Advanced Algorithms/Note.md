@@ -35,7 +35,7 @@ never faster than nlog(n)
 2. Fuston trees (Fredman, Willard Jcss 1993)
     - query in time: θ($\log_w n$)time
    ➜ achieve min{log w$ , $\log_w n$} <= $\sqrt{$\log n$}$
-   ➜ (w/ dynamic fusion trees) O(n $\sqrt{$\log n$}$) sorting
+   ➜ (w/ dynamic fusion trees) $O(\sqrt{n})$ sorting
    - Faster sorting 
 
  
