@@ -33,11 +33,16 @@ never faster than nlog(n)
     - update /query: θ($\log w$) time, θ(u) space(can be made θ(n) w/randomization
     - yfast tries: same bounds
 2. Fuston trees (Fredman, Willard Jcss 1993)
-    - query in time: θ($\log_w n$)time
-   ➜ achieve min{log w$ , $\log_w n$} <= $O(\sqrt{\log n})$
-   ➜ (w/ dynamic fusion trees) $O(\sqrt{n})$ sorting
-   - Faster sorting 
-
+    - query in time: θ($\log_w n$)time.
+   ➜ achieve min{log w$ , $\log_w n$} <= $O(\sqrt{\log n})$.
+   ➜ (w/ dynamic fusion trees) $O(\sqrt{n})$ sorting.
+   - Faster sorting
+      + $O(lg_lg n)$ delete. (Itan, STOC 2002)
+      + $O(\sqrt{lg_lg n})$ random time (Han,Thomp FOCS 2002)
+    
+ ### Word RAM Model (continue)
+ Assume that given x,y fitting in a word each, we can do:.
+     + / * - ~ ^ | $ >>  <<
  
  
 
