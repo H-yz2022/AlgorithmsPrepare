@@ -1,16 +1,16 @@
-#Intro
- SCRIBING 10%
- P sets 60%
- Final Project 30%
+# Intro
+ SCRIBING 10%.
+ P sets 60%.
+ Final Project 30%.
 
 - Goals: 
   - Increased ability to analyze and algorithms.
   - Looking at different models within which to analyze algorithms.
 
- ##Word RAM Model
+ ## Word RAM Model
 never faster than nlog(n)
 
- #Static predecessor
+ # Static predecessor
  - data structure represents set S of items {x<sub>1</sub>,...x<sub>n</sub>}
  - Query perd(x)=max{x∈S:x<z};predecessor of z is the maximum of x and S
  - want low space, fast query
@@ -20,7 +20,7 @@ never faster than nlog(n)
    +  O(lgn) dynamic query using balanced BST
    + Comparison based sorting
   
- #Word RAM Model
+ # Word RAM Model
 never faster than nlog(n)
  - items are integers in {0,1,...,2^w-1}
  - w="word size", u=2^w-1
