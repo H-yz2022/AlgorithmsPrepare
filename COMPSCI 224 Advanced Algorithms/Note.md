@@ -26,7 +26,7 @@ never faster than nlog(n)
  - w="word size", u=2^w-1
  - also assume that pointers fit in a word
  - space>=n
- - w>= lg(space)>=lgn
+ - w>= lg(space)>=lgn.
 
 ### Two data structures
 1. Van Emde Boos tree (FOCS 1975), Reference(...):
@@ -42,7 +42,16 @@ never faster than nlog(n)
     
  ### Word RAM Model (continue)
  Assume that given x,y fitting in a word each, we can do:.
-     + / * - ~ ^ | $ >>  <<
+     + / * - ~ ^ | $ >>  <<   in constant time.
  
- 
+ ### Van Emde Boos tree (vEB tree)
+ vEB tree defined recursively
+ Triangle vEB tree bottom has $\sqrt{n}$ vEB
+ <!--图片 ![cat](https://example.com/cat.png)-->
+Fields of vEB—_u(V).
+
+
+
+
+
 
