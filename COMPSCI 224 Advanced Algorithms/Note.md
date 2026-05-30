@@ -37,8 +37,8 @@ never faster than nlog(n)
    ➜ achieve min{log w$ , $\log_w n$} <= $O(\sqrt{\log n})$.
    ➜ (w/ dynamic fusion trees) $O(\sqrt{n})$ sorting.
    - Faster sorting
-      + $O(lg_lg n)$ delete. (Itan, STOC 2002)
-      + $O(\sqrt{lg_lg n})$ random time (Han,Thomp FOCS 2002)
+      + $O(lg lg n)$ delete. (Itan, STOC 2002)
+      + $O(\sqrt{lg lg n})$ random time (Han,Thomp FOCS 2002)
     
  ### Word RAM Model (continue)
  Assume that given x,y fitting in a word each, we can do:.
