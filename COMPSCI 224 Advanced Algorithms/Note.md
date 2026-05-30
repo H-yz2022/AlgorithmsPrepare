@@ -34,7 +34,7 @@ never faster than nlog(n)
     - yfast tries: same bounds
 2. Fuston trees (Fredman, Willard Jcss 1993)
     - query in time: θ($\log_w n$)time
-   ➜ achieve min{log w$ , $\log_w n$} <= $O(\sqrt{$\log n$})$
+   ➜ achieve min{log w$ , $\log_w n$} <= $O(\sqrt{\log n})$
    ➜ (w/ dynamic fusion trees) $O(\sqrt{n})$ sorting
    - Faster sorting 
 
