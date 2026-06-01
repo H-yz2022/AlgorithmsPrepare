@@ -1,0 +1,22 @@
+#1. Build the Pintos Environment
+cd ~/code/personal
+
+git pull staff main
+
+cd proj-pregame/src/userprog
+
+make clean
+make
+
+#2. Run the do-nothing Test
+
+pintos-test do-nothing
+
+cat build/tests/userprog/do-nothing.result
+
+#3. Start GDB
+FORCE_SIMULATOR=--bochs PINTOS_DEBUG=1 pintos-test do-nothing
+
+
+
+Q1What virtual address caused the crash?
