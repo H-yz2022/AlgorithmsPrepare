@@ -1,3 +1,5 @@
+#https://cs162.org/static/hw/hw-intro/docs/setup/git-debug/
+
 #1. Build the Pintos Environment
 cd ~/code/personal
 
