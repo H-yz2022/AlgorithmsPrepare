@@ -22,3 +22,68 @@ FORCE_SIMULATOR=--bochs PINTOS_DEBUG=1 pintos-test do-nothing
 
 
 Q1What virtual address caused the crash?
+
+Q2
+info registers
+
+Q3Disassemble executable:
+
+cd build
+
+i386-elf-objdump -d tests/userprog/do-nothing
+
+
+objdump -d tests/userprog/do-nothing
+
+Q4
+grep -R "_start" ../../
+
+Question 6-12 (Step Through the Crash)
+
+Set breakpoint:
+break run_task
+continue
+
+Q6
+step
+thread_current()
+print *thread_current()
+dumplist &all_list thread allelem
+
+Q7
+backtrace
+
+Q8
+break start_process
+continue
+
+print *thread_current()
+dumplist &all_list thread allelem
+
+
+Q9
+success = load(...)
+
+print/x if_
+
+
+Q10
+stepi
+movl ...
+jmp intr_exit
+iret
+
+Q11
+info registers
+print/x if_
+
+Q12Load user symbols:
+loadusersymbols tests/userprog/do-nothing
+backtrace
+stepi
+btpagefault
+
+Debug Part (Autograder)
+setup_stack()
+*esp = PHYS_BASE - 12;
+
