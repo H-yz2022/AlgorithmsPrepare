@@ -44,7 +44,8 @@ never faster than nlog(n)
  Assume that given x,y fitting in a word each, we can do:<br>
      + / * - ~ ^ | $ >>  <<   in constant time.
  
- ### Van Emde Boos tree (vEB tree)
+ 
+ ## Van Emde Boos tree (vEB tree)
  vEB tree defined recursively
   - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_($\sqrt{n}$), the top have onevEB_(\sqrt{n}) and one minimum element in the tip<br>
  <!--图片 ![cat](https://example.com/cat.png)-->
@@ -154,7 +155,7 @@ graph TD
 - store tree as an array root at index 0. Node v has left child at 2v+1, and right child at 2v+2.<br> This implies we can find the kth ancestor in constant time by doing >>k
 - could also, for each node, store its 2^k th ancestor for each k, where k: 0, lglgu
 
-### Y-fast tries
+## Y-fast tries
 - To save space, only store the 1's in a hash table
 - For each level of tree, hash table store localtion of 1's.<br> 
    space θ(nw) (x-fast tries)
@@ -172,3 +173,11 @@ graph TD
     A --> E["θ(w)"]
 ```
 linear space and search time is still lglg u
+
+# Fusion trees 
+(Fredman, Willard JCSS 1993)
+- static dynamic by (Andersson- Thorup JACM 2007):  $O((\log_w n)+lglgn)$ updates
+- by (Raman ESA 1996): $O(\log_w n)$ updates （expected time）
+- Query for all, $O(\log_w n)$
+
+
