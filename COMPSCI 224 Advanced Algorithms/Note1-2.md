@@ -180,4 +180,5 @@ linear space and search time is still lglg u
 - by (Raman ESA 1996): $O(\log_w n)$ updates （expected time）
 - Query for all, $O(\log_w n)$
 
-
+### Fusion tree
+- 
