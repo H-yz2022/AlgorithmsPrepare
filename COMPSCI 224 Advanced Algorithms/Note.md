@@ -46,10 +46,10 @@ never faster than nlog(n)
  
  ### Van Emde Boos tree (vEB tree)
  vEB tree defined recursively
-  - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_(\sqrt{n}), the top have onevEB_(\sqrt{n}) and one minimum element in the tip.
+  - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_($\sqrt{n}$), the top have onevEB_(\sqrt{n}) and one minimum element in the tip.
  <!--图片 ![cat](https://example.com/cat.png)-->
 Fields of vEB_u (V).
- - (\sqrt{n}) site array V.cluster[0], ..., V.cluster[(\sqrt{n})-1] for  V.cluster[] means for vEB(\sqrt{u}) data structure
+ - (\sqrt{n}) site array V.cluster[0], ..., V.cluster[($\sqrt{n}$)-1] for  V.cluster[] means for vEB(\sqrt{u}) data structure
  - V.summary is a vEB(\sqrt{u}) instance
  - V.min/V.max are integers in {0,...,u-1}
  - x∈{0,...,u-1},
@@ -67,8 +67,8 @@ else:
     c'=pred(V.summary,c)
    return V.cluster[c'].max
 ```
-for this onlyu one recursive call:
-pred time T(u)=T((\sqrt{n})+$O(1)$
+for this only u one recursive call:
+pred time T(u)=T(($\sqrt{n}$)+$O(1)$
          ➜T(u)=$O(lg lg u)$
 
 
