@@ -106,6 +106,7 @@ Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element 
 
 Another solution bit array of legth u
 ```mermaid
+graph TD
     A["1"]
 
     A --> B["1"]
@@ -118,29 +119,29 @@ Another solution bit array of legth u
 
     D --> H["1"]
     D --> I["1"]
-    E --> J["0"]
+    E --> J["1"]
     E --> K["1"]
     F --> L["1"]
-    F --> M["0"]
+    F --> M["1"]
     G --> N["1"]
-    G --> O["0"]
+    G --> O["1"]
 
     H --> P["1"]
-    H --> Q["0"]
+    H --> Q["1"]
     I --> R["1"]
     I --> S["1"]
-    J --> T["0"]
-    J --> U["0"]
-    K --> V["0"]
+    J --> T["1"]
+    J --> U["1"]
+    K --> V["1"]
     K --> W["1"]
     L --> X["1"]
     L --> Y["1"]
-    M --> Z["0"]
-    M --> AA["0"]
+    M --> Z["1"]
+    M --> AA["1"]
     N --> AB["1"]
     N --> AC["1"]
-    O --> AD["0"]
-    O --> AE["0"]
+    O --> AD["1"]
+    O --> AE["1"]
 ```
 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
