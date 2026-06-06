@@ -87,3 +87,9 @@ insertion time T(u)<= 2*T(($\sqrt{u}$)+O(1).
                T(w)<= 1*T(w/2)+O(1).
                 ➜T(u)=O(lg lg u).
 
+Space of vEB
+S(u)=($\sqrt{u}$+1)+ $O(1)$
+➜S(u)=θ(u)
+
+
+
