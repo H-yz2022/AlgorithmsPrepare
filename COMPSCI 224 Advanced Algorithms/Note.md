@@ -48,8 +48,10 @@ never faster than nlog(n)
  vEB tree defined recursively
  Triangle vEB tree bottom has $\sqrt{n}$ vEB
  <!--图片 ![cat](https://example.com/cat.png)-->
-Fields of vEB—_u(V).
-
+Fields of vEB_u (V).
+ - (\sqrt{n}) site array V.cluster[0], ..., V.cluster[(\sqrt{n})-1] for  V.cluster[] means for vEB(\sqrt{u}) data structure
+ - V.summary is a vEB(\sqrt{u}) instance
+ - V.min/V.max are integers in {0,...,u-1}
 
 
 
