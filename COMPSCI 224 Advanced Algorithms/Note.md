@@ -106,10 +106,23 @@ Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element 
 
 Another solution bit array of legth u
 
-| A | B | C | D | A | B | C | D | A | B | C | D | A | B | C | D |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+
+```mermaid
+graph TD
+    A[1]
+    A --> B[1]
+    A --> C[1]
+
+    B --> B1[1]
+    B --> B2[1]
+
+    C --> C1[1]
+    C --> C2[1]
+```
+ - store all the 1's in a doubly linked list
 
 # Y-fast tries
 
