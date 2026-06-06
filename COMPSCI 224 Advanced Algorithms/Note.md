@@ -160,7 +160,7 @@ graph TD
    space θ(nw) (x-fast tries)
 - from x-fast to y-fast:
     + use "indirection": each "θ(w)" use balanced binary search tree BST to store
-  ```mermaid
+```mermaid
   graph TD
     A["x-fast trie on n/w items"]
 
@@ -168,5 +168,5 @@ graph TD
     A --> C["θ(w)"]
     A --> D["θ(w)"]
     A --> E["θ(w)"]
-  ```
-   
+```
+linear space and search time is still lg lg u
