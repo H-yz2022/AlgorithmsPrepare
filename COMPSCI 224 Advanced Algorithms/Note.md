@@ -149,6 +149,11 @@ graph TD
 
 
  - store all the 1's in a doubly linked list
+ - running time is log(u)
+ - On any leaf-to-root path, the bits are monotone
+ - store tree as an array root at index 0. Node v has left child at 2v+1, and right child at 2v+2.<br> This implies we can find the kth ancestor in constant time by doing >>k
+ - could also, for each node, store its 2^k th ancestor for each k, where k: 0, lglgu
+ - 
 
 # Y-fast tries
 
