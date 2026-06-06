@@ -68,7 +68,7 @@ else:
    return V.cluster[c'].max
 ```
 for this, only have one recursive call:
-pred time T(u)=T(($\sqrt{n}$)+O(1)
+pred time T(u)=T(($\sqrt{n}$)+O(1).
          ➜T(u)=O(lg lg u)
 ``` python
 insert(V,x=<c,i>)
@@ -80,7 +80,10 @@ if V.cluster[c].min=∅
     insert(V.summary,c)
 insert(V.cluster[c].i)
 ```
-insertion time T(u)<= 2*T(($\sqrt{u}$))+O(1)
-               T(w)<= 2*T(w/2)+O(1)
- 
+insertion time T(u)<= 2*T(($\sqrt{u}$)+O(1).
+               T(w)<= 2*T(w/2)+O(1).
+ However, 2 is too pessimistic:
+               T(u)<= 1*T(($\sqrt{u}$)+O(1).
+               T(w)<= 1*T(w/2)+O(1).
+                ➜T(u)=O(lg lg u).
 
