@@ -57,7 +57,7 @@ Fields of vEB_u (V)<br>
  - How to do a query for x? 按位与和位移运算在常数时间提取c, i
  - How to search for the predecessor of x in this recursive data structure?
  - 1) Insert i into the cluster c； if the c cluster happened to be empty, insert c into the summary. The summary keeps track of which is non-empty.
- - 2) Look for the minimum element in c cluster; if mine is bigger, then my predecessor lives in the same cluster. Therefore, recursively do a predecessor in i cluster; if it is empty or bigger than or equal to min, then my predecessor does not live in the same cluster, it lives in the largest cluster before me that is non-empty. Therefore, do a predecessor in c cluster in the summary and return a max in that cluster.
+ - 2) Look for the minimum element in c cluster; if mine is bigger, then my predecessor lives in the same cluster. Therefore, recursively do a predecessor in i cluster; <br> if it is empty or bigger than or equal to min, then my predecessor does not live in the same cluster, it lives in the largest cluster before me that is non-empty. Therefore, do a predecessor in c cluster in the summary and return a max in that cluster.
 
 ``` C
 pred (V, x=<c,i>)
@@ -68,8 +68,8 @@ else:
     c'=pred(V.summary,c)
    return V.cluster[c'].max
 ```
-for this, only have one recursive call:
-pred time T(u)=T($\sqrt{n}$)+O(1).
+for this, only have one recursive call:<br> 
+pred time T(u)=T($\sqrt{n}$)+O(1).<br> 
          ➜T(u)=O(lg lg u)
 ``` python
 insert(V,x=<c,i>)
@@ -106,7 +106,6 @@ Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element 
 
 Another solution bit array of legth u
 ```mermaid
-graph TD
     A["1"]
 
     A --> B["1"]
@@ -148,12 +147,24 @@ graph TD
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
 
 
- - store all the 1's in a doubly linked list
- - running time is log(u)
- - On any leaf-to-root path, the bits are monotone
- - store tree as an array root at index 0. Node v has left child at 2v+1, and right child at 2v+2.<br> This implies we can find the kth ancestor in constant time by doing >>k
- - could also, for each node, store its 2^k th ancestor for each k, where k: 0, lglgu
- - 
+- store all the 1's in a doubly linked list
+- running time is log(u)
+- On any leaf-to-root path, the bits are monotone
+- store tree as an array root at index 0. Node v has left child at 2v+1, and right child at 2v+2.<br> This implies we can find the kth ancestor in constant time by doing >>k
+- could also, for each node, store its 2^k th ancestor for each k, where k: 0, lglgu
 
-# Y-fast tries
+### Y-fast tries
+- To save space, only store the 1's in a hash table
+- For each level of tree, hash table store localtion of 1's.<br> 
+   space θ(nw) (x-fast tries)
+- from x-fast to y-fast:
+    + use "indirection": each "θ(w)" use balanced binary search tree BST to store
+  ```mermaid
+    A["x-fast trie on n/w items"]
 
+    A --> B["θ(w)"]
+    A --> C["θ(w)"]
+    A --> D["θ(w)"]
+    A --> E["θ(w)"]
+  ```
+   
