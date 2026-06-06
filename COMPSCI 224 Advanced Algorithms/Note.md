@@ -46,12 +46,25 @@ never faster than nlog(n)
  
  ### Van Emde Boos tree (vEB tree)
  vEB tree defined recursively
- Triangle vEB tree bottom has $\sqrt{n}$ vEB
+  - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_(\sqrt{n}), the top have onevEB_(\sqrt{n}) and one minimum element in the tip.
  <!--图片 ![cat](https://example.com/cat.png)-->
 Fields of vEB_u (V).
  - (\sqrt{n}) site array V.cluster[0], ..., V.cluster[(\sqrt{n})-1] for  V.cluster[] means for vEB(\sqrt{u}) data structure
  - V.summary is a vEB(\sqrt{u}) instance
  - V.min/V.max are integers in {0,...,u-1}
+ - x∈{0,...,u-1},
+ - Write x in binary x=10010011, where 1001 is c and 001 is i, then x=<c,i>, c,i∈{0,...,u-1},
+ - How to do a query for x? 按位与和位移运算在常数时间提取c, i
+ - How to search for the predecessor of x in this recursive data structure? 1)insert i into the cluster c； if the c cluster happened to be empty, insert c into the summary. The summary keeps track of which is non-empty.
+2)look for the minimum element in c cluster; if mine is bigger, then my predecessor lives in the same cluster. Therefore, recursively do a predecessor in i cluster; if it is empty or bigger than or equal to min, then my predecessor does not live in the same cluster, it lives in the largest cluster before me that is non-empty. Therefore, do a predecessor in c cluster in the summary and return a max in that cluster.
+pred (V, x=<c,i>)
+if x > V.max: return V.amx
+else if V.cluster[c].min< x:
+    return pred(V.cluster[c],i)
+else:
+    c'=pred(V.summary,c)
+   return V.cluster[c'].max
+
 
 
 
