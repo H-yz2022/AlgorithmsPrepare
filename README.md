@@ -1,5 +1,6 @@
 # AlgorithmsPrepare
 
+算法 系统结构等课程自学
 | # | Note | Fold | Link | Difficulcty |
 |------|------|------|------|------|
 | 1 | MIT6.006 Introduction to AlgorithmsPython | []() | [link]()  |  |
