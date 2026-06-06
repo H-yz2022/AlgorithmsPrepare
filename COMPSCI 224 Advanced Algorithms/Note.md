@@ -161,6 +161,7 @@ graph TD
 - from x-fast to y-fast:
     + use "indirection": each "θ(w)" use balanced binary search tree BST to store
   ```mermaid
+  graph TD
     A["x-fast trie on n/w items"]
 
     A --> B["θ(w)"]
