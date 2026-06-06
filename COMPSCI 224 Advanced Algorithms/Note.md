@@ -41,14 +41,14 @@ never faster than nlog(n)
       + $O(\sqrt{lg lg n})$ random time (Han,Thomp FOCS 2002)
     
  ### Word RAM Model (continue)
- Assume that given x,y fitting in a word each, we can do:.
+ Assume that given x,y fitting in a word each, we can do:<br>
      + / * - ~ ^ | $ >>  <<   in constant time.
  
  ### Van Emde Boos tree (vEB tree)
  vEB tree defined recursively
-  - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_($\sqrt{n}$), the top have onevEB_(\sqrt{n}) and one minimum element in the tip.
+  - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_($\sqrt{n}$), the top have onevEB_(\sqrt{n}) and one minimum element in the tip<br>
  <!--图片 ![cat](https://example.com/cat.png)-->
-Fields of vEB_u (V).
+Fields of vEB_u (V)<br>
  - (\sqrt{n}) site array V.cluster[0], ..., V.cluster[($\sqrt{n}$)-1] for  V.cluster[] means for vEB(\sqrt{u}) data structure
  - V.summary is a vEB(\sqrt{u}) instance
  - V.min/V.max are integers in {0,...,u-1}
@@ -81,12 +81,12 @@ if V.cluster[c].min=∅
     insert(V.summary,c)
 insert(V.cluster[c].i)
 ```
-insertion time T(u)<= 2*T($\sqrt{u}$)+O(1).
-               T(w)<= 2*T(w/2)+O(1).
- However, 2 is too pessimistic:
-               T(u)<= 1*T $\sqrt{u}$+O(1).
-               T(w)<= 1*T(w/2)+O(1).
-                ➜T(u)=O(lg lg u).
+insertion time T(u)<= 2*T($\sqrt{u}$)+O(1)<br>
+               T(w)<= 2*T(w/2)+O(1).<br>
+ However, 2 is too pessimistic:<br>
+               T(u)<= 1*T $\sqrt{u}$+O(1)<br>
+               T(w)<= 1*T(w/2)+O(1)<br>
+                ➜T(u)=O(lg lg u)<br>
 
 ### Space of vEB
 S(u)=($\sqrt{u}$+1)+ $O(1)$
