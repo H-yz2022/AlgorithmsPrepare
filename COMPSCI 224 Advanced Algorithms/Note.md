@@ -105,23 +105,49 @@ Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element 
  - Dynamic diction is possible w/ θ(n) space, θ(l) wprst case query, θ(l) constant expected insertion (with high possbility)
 
 Another solution bit array of legth u
+```mermaid
+graph TD
+    A["1"]
 
+    A --> B["1"]
+    A --> C["1"]
+
+    B --> D["1"]
+    B --> E["1"]
+    C --> F["1"]
+    C --> G["1"]
+
+    D --> H["1"]
+    D --> I["1"]
+    E --> J["1"]
+    E --> K["1"]
+    F --> L["1"]
+    F --> M["1"]
+    G --> N["1"]
+    G --> O["1"]
+
+    H --> P["1"]
+    H --> Q["0"]
+    I --> R["1"]
+    I --> S["1"]
+    J --> T["0"]
+    J --> U["0"]
+    K --> V["0"]
+    K --> W["1"]
+    L --> X["1"]
+    L --> Y["1"]
+    M --> Z["0"]
+    M --> AA["0"]
+    N --> AB["1"]
+    N --> AC["1"]
+    O --> AD["0"]
+    O --> AE["0"]
+```
 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
 
-```mermaid
-graph TD
-    A[1]
-    A --> B[1]
-    A --> C[1]
 
-    B --> B1[1]
-    B --> B2[1]
-
-    C --> C1[1]
-    C --> C2[1]
-```
  - store all the 1's in a doubly linked list
 
 # Y-fast tries
