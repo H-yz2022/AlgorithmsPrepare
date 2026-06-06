@@ -57,6 +57,8 @@ Fields of vEB_u (V).
  - How to do a query for x? 按位与和位移运算在常数时间提取c, i
  - How to search for the predecessor of x in this recursive data structure? 1)insert i into the cluster c； if the c cluster happened to be empty, insert c into the summary. The summary keeps track of which is non-empty.
 2)look for the minimum element in c cluster; if mine is bigger, then my predecessor lives in the same cluster. Therefore, recursively do a predecessor in i cluster; if it is empty or bigger than or equal to min, then my predecessor does not live in the same cluster, it lives in the largest cluster before me that is non-empty. Therefore, do a predecessor in c cluster in the summary and return a max in that cluster.
+
+``` C
 pred (V, x=<c,i>)
 if x > V.max: return V.amx
 else if V.cluster[c].min< x:
@@ -64,9 +66,14 @@ else if V.cluster[c].min< x:
 else:
     c'=pred(V.summary,c)
    return V.cluster[c'].max
+```
 
-
-
-
+``` python
+insert(V,x=<c,i>)
+if v=∅：
+    V.min∈x', return;
+if x< V.min:
+    swap(x,V.min)
+```
 
 
