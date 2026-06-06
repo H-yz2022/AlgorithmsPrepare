@@ -67,13 +67,20 @@ else:
     c'=pred(V.summary,c)
    return V.cluster[c'].max
 ```
+for this onlyu one recursive call:
+pred time T(u)=T((\sqrt{n})+$O(1)$
+         ➜T(u)=$O(lg lg u)$
+
 
 ``` python
 insert(V,x=<c,i>)
 if v=∅：
-    V.min∈x', return;
+    V.min∈x', return
 if x< V.min:
     swap(x,V.min)
+if V.cluster[c].min=∅
+    insert(V.summary,c)
+insert(V.cluster[c].i)
 ```
 
 
