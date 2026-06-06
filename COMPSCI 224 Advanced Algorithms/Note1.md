@@ -159,7 +159,9 @@ graph TD
 - For each level of tree, hash table store localtion of 1's.<br> 
    space θ(nw) (x-fast tries)
 - from x-fast to y-fast:
-    + use "indirection": each "θ(w)" use balanced binary search tree BST to store
+    + use "indirection":
+    + each "θ(w)" uses a balanced binary search tree BST to store
+    + each "θ(w)" contains somethere b/w, w/2 and 2w items
 ```mermaid
   graph TD
     A["x-fast trie on n/w items"]
@@ -169,4 +171,4 @@ graph TD
     A --> D["θ(w)"]
     A --> E["θ(w)"]
 ```
-linear space and search time is still lg lg u
+linear space and search time is still lglg u
