@@ -104,6 +104,12 @@ Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element 
  - insert(k,v) associates vak v w/ key k
  - Dynamic diction is possible w/ θ(n) space, θ(l) wprst case query, θ(l) constant expected insertion (with high possbility)
 
+Another solution bit array of legth u
+
+| A | B | C | D | A | B | C | D |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
 
 # Y-fast tries
 
