@@ -55,8 +55,9 @@ Fields of vEB_u (V).
  - x∈{0,...,u-1},
  - Write x in binary x=10010011, where 1001 is c and 001 is i, then x=<c,i>, c,i∈{0,...,u-1},
  - How to do a query for x? 按位与和位移运算在常数时间提取c, i
- - How to search for the predecessor of x in this recursive data structure? 1)insert i into the cluster c； if the c cluster happened to be empty, insert c into the summary. The summary keeps track of which is non-empty.
-2)look for the minimum element in c cluster; if mine is bigger, then my predecessor lives in the same cluster. Therefore, recursively do a predecessor in i cluster; if it is empty or bigger than or equal to min, then my predecessor does not live in the same cluster, it lives in the largest cluster before me that is non-empty. Therefore, do a predecessor in c cluster in the summary and return a max in that cluster.
+ - How to search for the predecessor of x in this recursive data structure?
+ - 1) Insert i into the cluster c； if the c cluster happened to be empty, insert c into the summary. The summary keeps track of which is non-empty.
+ - 2) Look for the minimum element in c cluster; if mine is bigger, then my predecessor lives in the same cluster. Therefore, recursively do a predecessor in i cluster; if it is empty or bigger than or equal to min, then my predecessor does not live in the same cluster, it lives in the largest cluster before me that is non-empty. Therefore, do a predecessor in c cluster in the summary and return a max in that cluster.
 
 ``` C
 pred (V, x=<c,i>)
@@ -87,9 +88,22 @@ insertion time T(u)<= 2*T(($\sqrt{u}$)+O(1).
                T(w)<= 1*T(w/2)+O(1).
                 ➜T(u)=O(lg lg u).
 
-Space of vEB
+### Space of vEB
 S(u)=($\sqrt{u}$+1)+ $O(1)$
 ➜S(u)=θ(u)
+Improve space in a vEB data structure, have a hash table
+ - keys are cluster Id's c,
+ - value is a pointer to the corresponding non-empty cluster
+
++ Claim vEB w/ hash table uses θ(u) space
+Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element of cluster c. Each x∈Sis change exactly once.
+(short aside)
+### Dictionary problem
+ - store (key, value)
+ - query(k) returns val associated w/ key k( or null if k is not associated
+ - insert(k,v) associates vak v w/ key k
+ - Dynamic diction is possible w/ θ(n) space, θ(l) wprst case query, θ(l) constant expected insertion
 
 
+# Y-fast tries
 
