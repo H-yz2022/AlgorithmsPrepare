@@ -181,4 +181,5 @@ linear space and search time is still lglg u
 - Query for all, $O(\log_w n)$
 
 ### Fusion tree
-- 
+ <!--图片 ![cat](https://example.com/cat.png)-->
+- this basic structure with k=θ(w^(1/5)) keys per node
