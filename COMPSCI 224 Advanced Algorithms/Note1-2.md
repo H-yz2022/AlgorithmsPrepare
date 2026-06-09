@@ -184,3 +184,9 @@ linear space and search time is still lglg u
  <!--图片 ![cat](https://example.com/cat.png)-->
 - this basic structure with k=θ(w^(1/5)) keys per node
 - height is $θ(\log_w^(1/5) n)$=$O((lg n)/(1/5 lg w))$
+- Basic issue: How do we search a single fusion tree node in constant time?
+  + Basic ingredient；
+    1.multiplication
+    sketchcompression
+    word-level parallelism
+    most signifian set bit (MSB)
