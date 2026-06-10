@@ -190,3 +190,4 @@ linear space and search time is still lglg u
     2. sketchcompression
     3. word-level parallelism
     4. most significant set bit (MSB) in θ1 time
+- Let's focus on representing a single fusion tree node containing x_0<x_1< ...<x_k-1
