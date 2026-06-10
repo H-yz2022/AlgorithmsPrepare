@@ -186,7 +186,7 @@ linear space and search time is still lglg u
 - height is $θ(\log_w^(1/5) n)$=$O((lg n)/(1/5 lg w))$
 - Basic issue: How do we search a single fusion tree node in constant time?
   + Basic ingredient；
-    1.multiplication
-    sketchcompression
-    word-level parallelism
-    most signifian set bit (MSB)
+    1. multiplication
+    2. sketchcompression
+    3. word-level parallelism
+    4. most significant set bit (MSB) in θ1 time
