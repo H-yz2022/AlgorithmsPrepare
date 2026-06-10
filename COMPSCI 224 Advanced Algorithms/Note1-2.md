@@ -221,7 +221,7 @@ graph TD
     I --> R["0➜0010➜01"]
     I --> S["0"]
     J --> T["0"]
-    J --> U["0"]
+    J --> U["0➜0101 ➜query q"]
     K --> V["0"]
     K --> W["0"]
     L --> X["0"]
@@ -233,3 +233,8 @@ graph TD
     O --> AD["0"]
     O --> AE["0➜1111➜11"]
 ```
+- Suppose sk(q) lies b(u) sk(x_i) and sk(x_i+1)
+- Let y be the first node where q falls off the highlighted paths
+- If q falls off to the right, set e=y 011...1<br> 
+   ➜ o/w if q falls to the left, let e=y| 0...1<br>
+- Claim: If we see where sk(e) fits amongst the sk(xi) that is the same as where q fits amongst the X_i
