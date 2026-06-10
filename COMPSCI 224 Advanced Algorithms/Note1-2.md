@@ -90,15 +90,15 @@ insertion time T(u)<= 2*T($\sqrt{u}$)+O(1)<br>
                 ➜T(u)=O(lg lg u)<br>
 
 ### Space of vEB
-S(u)=($\sqrt{u}$+1)+ $O(1)$
-➜S(u)=θ(u)
+S(u)=($\sqrt{u}$+1)+ $O(1)$<br> 
+➜S(u)=θ(u)<br> 
 Improve space in a vEB data structure, have a hash table
  - keys are cluster Id's c,
  - value is a pointer to the corresponding non-empty cluster
 
 + Claim vEB w/ hash table uses θ(u) space
-Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element of cluster c. Each x∈Sis change exactly once.
-(short aside)
+Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element of cluster c. Each x∈Sis change exactly once.<br> 
+(short aside)<br> 
 ### Dictionary problem
  - store (key, value)
  - query(k) returns val associated w/ key k( or null if k is not associated
@@ -191,3 +191,45 @@ linear space and search time is still lglg u
     3. word-level parallelism
     4. most significant set bit (MSB) in θ1 time
 - Let's focus on representing a single fusion tree node containing x_0<x_1< ...<x_k-1
+- Let r<k be the # of branch bits; Let their indices be b_0 < b_1 < ... < b_(r-1)
+- sketch sk(x) as keeping only the x_bi sk(|0111010)=11
+- each x_1 has sk(x_i) tking r=$O(w^(1/5))$ bits<br> 
+ ➜ can store all sk(x_i) in k*r=$O(w^(3/5))$ bits<br>
+```mermaid
+graph TD
+    A["0"]
+
+    A --> B["0"]
+    A --> C["0"]
+
+    B --> D["0"]
+    B --> E["0"]
+    C --> F["0"]
+    C --> G["0"]
+
+    D --> H["0"]
+    D --> I["0"]
+    E --> J["0"]
+    E --> K["0"]
+    F --> L["0"]
+    F --> M["0"]
+    G --> N["0"]
+    G --> O["0"]
+
+    H --> P["0"]
+    H --> Q["0"]
+    I --> R["0"]
+    I --> S["0"]
+    J --> T["0"]
+    J --> U["0"]
+    K --> V["0"]
+    K --> W["0"]
+    L --> X["0"]
+    L --> Y["0"]
+    M --> Z["0"]
+    M --> AA["0"]
+    N --> AB["0"]
+    N --> AC["0"]
+    O --> AD["0"]
+    O --> AE["0"]
+```
