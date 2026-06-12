@@ -238,3 +238,4 @@ graph TD
 - If q falls off to the right, set e=y 011...1<br> 
    ➜ o/w if q falls to the left, let e=y| 0...1<br>
 - Claim: If we see where sk(e) fits amongst the sk(xi) that is the same as where q fits amongst the X_i
+- pf Exercise:
