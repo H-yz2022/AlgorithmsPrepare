@@ -1,14 +1,14 @@
 # Intro
- SCRIBING 10%.
- P sets 60%.
- Final Project 30%.
+ SCRIBING 10%.<br>
+ P sets 60%.<br>
+ Final Project 30%.<br>
 
 - Goals: 
   - Increased ability to analyze and algorithms.
   - Looking at different models within which to analyze algorithms.
 
  ## Word RAM Model
-never faster than nlog(n)
+never faster than nlog(n)<br>
 
  ### Static predecessor
  - data structure represents set S of items {x<sub>1</sub>,...x<sub>n</sub>}
@@ -42,12 +42,12 @@ never faster than nlog(n)
     
  ### Word RAM Model (continue)
  Assume that given x,y fitting in a word each, we can do:<br>
-     + / * - ~ ^ | $ >>  <<   in constant time.
+     + / * - ~ ^ | $ >>  <<   in constant time.<br>
  
  
  ## Van Emde Boos tree (vEB tree)
  vEB tree defined recursively
-  - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_($\sqrt{n}$), the top have onevEB_(\sqrt{n}) and one minimum element in the tip<br>
+  - Triangle vEB_u tree bottom has $\sqrt{n}$ vEB_($\sqrt{n}$), the top have one vEB_(\sqrt{n}) and one minimum element in the tip<br>
  <!--图片 ![cat](https://example.com/cat.png)-->
 Fields of vEB_u (V)<br>
  - (\sqrt{n}) site array V.cluster[0], ..., V.cluster[($\sqrt{n}$)-1] for  V.cluster[] means for vEB(\sqrt{u}) data structure
