@@ -196,10 +196,11 @@ $\Theta(w^{1/5})$
     3. word-level parallelism (parallel comparison)
     4. the most significant set bit (MSB) in θ1 time
 - Let's focus on representing a single fusion tree node containing $x_0$ < $x_1$ < ...< $x_{k-1}$
-- Let r<k be the # of branch bits; Let their indices be b_0 < b_1 < ... < b_(r-1)
-- sketch sk(x) as keeping only the x_bi sk(|0111010)=11
-- each x_1 has sk(x_i) tking r=$O(w^(1/5))$ bits<br> 
- ➜ can store all sk(x_i) in k*r=$O(w^(3/5))$ bits<br>
+- Let r<k be the # of branch bits; Let their indices be $b_0$ < $b_1$ < ... < $b_{r-1}$
+- sketch sk(x) as keeping only the $x_{bi}$ sk(|0111010)=11
+- each $x_1$ has sk($x_i$) taking r=$O(w^{1/5})$ bits<br> 
+ ➜ can store all sk($x_i$) in k*r=$O(w^(2/5))$ bits<br>
+ 
 ```mermaid
 graph TD
     A["0"]
@@ -238,14 +239,28 @@ graph TD
     O --> AD["0"]
     O --> AE["0➜1111➜11"]
 ```
-- Suppose sk(q) lies b(u) sk(x_i) and sk(x_i+1)
+#### Searching
+- Suppose sk(q) lies b(u) sk($x_i$) and sk($x_{i+1}$)
 - Let y be the first node where q falls off the highlighted paths
 - If q falls off to the right, set e=y 011...1<br> 
-   ➜ o/w if q falls to the left, let e=y| 0...1<br>
-- Claim: If we see where sk(e) fits amongst the sk(xi) that is the same as where q fits amongst the X_i
-- pf Exercise: To find y, compute MSB(x_i  ^q) and MSB(x_i+1  ^q)<br> and take the more sig. bit b/w the two<br> 
+   ➜ otherwise if q falls to the left, let e=y| 0...1<br>
+- Claim: If we see where sk(e) fits amongst the sk($x_i$) that is the same as where q fits amongst the $x_i$
+- pf Exercise: To find y, compute MSB($x_i$  ^ q) and MSB($x_{i+1}$  ^ q)<br> and take the more significant bit b/w the two<br> 
 
 Problem: How do we from sketches?
-- we will compress down to $O(r^(4))$ bits
+- we will compress down to $O(r^4)$ bits
 - the important bit will be represented, <br>
-w/ some known amount O-soacing w b/w them
+with some known amount O-soacing w b/w them
+|Abbreviation	|Meaning|
+|----|----|
+|o/w	| otherwise |
+|w/	| with |
+|w/o	|without |
+|b/w	|between (sometimes "bandwidth" in networking contexts, but here it means between) |
+|pf	| proof |
+|w.r.t.	| with respect to |
+|s.t.	| such that |
+|wlog or WLOG	| without loss of generality |
+|iff	| if and only if |
+|w.h.p.	| with high probability |
+|asymp.	| asymptotically |
