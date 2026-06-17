@@ -258,7 +258,7 @@ with some known amount O-soacing w b/w them <br>
   1. All the $b_i$ + $m_j$ are distinct
   2. $b_0$ + $m_0$ < $b_1$ + $m_1$ < ... < $b_{r-1}$ + $m_{r-1}$
   3. $b_{r-1}+m_{r-1}$ - $b_0 + m_0$=$O(r^4)$
-- The point $x-m= \sum_{i=0}^{r-1} sum_{j=0}^{r-1} x_{b_i} 2^{b_i+m_j}$
+- The point $x-m= \sum_{i=0}^{r-1} \sum_{j=0}^{r-1} x_{b_i} 2^{b_i+m_j}$
 - We first mask the important bits from $x_i$ to get x
 - Then we do x*m, mask out ${b_i+ m_i}$ shift down so that $b_0+m_0$ maps to LSB
 
