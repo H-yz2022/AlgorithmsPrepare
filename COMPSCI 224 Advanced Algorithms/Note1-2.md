@@ -182,8 +182,14 @@ linear space and search time is still lglg u
 
 ### Fusion tree
  <!--图片 ![cat](https://example.com/cat.png)-->
-- this basic structure with k=θ(w^(1/5)) keys per node
-- height is $θ(\log_w^(1/5) n)$=$O((lg n)/(1/5 lg w))$
+- this basic structure with <br>
+\[
+k = \Theta(w^{1/5})
+\]
+
+keys per node, where w is the machine word size (e.g., 64 bits).
+- height is
+  <br> $θ(\log_w^(1/5) n)$=$O((lg n)/(1/5 lg w))$
 - Basic issue: How do we search a single fusion tree node in constant time?
   + Basic ingredient；
     1. multiplication
