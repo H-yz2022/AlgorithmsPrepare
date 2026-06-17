@@ -264,7 +264,7 @@ with some known amount O-soacing w b/w them <br>
 
 
 ### proof of Lemma
-- Part a: proof by induction. Suppose we have picked $x_n^'$
+- Part a: proof by induction. Suppose we have picked $m_1^{'}, m_2^{'}, ..., m_{t-1}^{'}$ s.t. all that sums $b_i+m_j$
 
 
 |Abbreviation	|Meaning|
