@@ -270,10 +270,16 @@ with some known amount O-soacing w b/w them <br>
                                 ➜ rounded down to the nearest multiple of $r^3$
 - picture: each block is r^3
 - Now that we have sketches: Suppose node has $x_0 < ... < x_{k-1}$
+- sk(node)= $| sk(x_0) | sk(x_1) | ... | sk(x_{k-1}$
+- $sk^k(q) = | OSK(q) | OSK(q) | ... | OSK(q) $<br>
+              1/o mmm
+  + mask  ➜  1/o 0 ... 0
+- The appearances of 1's is monotone ➜ can just count the  #1s to find index of the first 1 ( want MSB)
+- multiply by all the 1's contribute by adding to this position
 
   
 
-
+# Appendix
 |Abbreviation	|Meaning|
 |------|------|
 |o/w	| otherwise |
