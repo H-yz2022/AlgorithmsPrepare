@@ -183,10 +183,9 @@ linear space and search time is still lglg u
 ### Fusion tree
  <!--图片 ![cat](https://example.com/cat.png)-->
 - this basic structure with <br>
-\[
+$$
 k = \Theta(w^{1/5})
-\]
-
+$$
 keys per node, where w is the machine word size (e.g., 64 bits).
 - height is
   <br> $θ(\log_w^(1/5) n)$=$O((lg n)/(1/5 lg w))$
