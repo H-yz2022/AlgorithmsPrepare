@@ -195,7 +195,7 @@ $\Theta(w^{1/5})$
     2. sketchcompression
     3. word-level parallelism (parallel comparison)
     4. the most significant set bit (MSB) in θ1 time
-- Let's focus on representing a single fusion tree node containing x_0<x_1< ...<x_k-1
+- Let's focus on representing a single fusion tree node containing $x_0$ < $x_1$ < ...< $x_{k-1}$
 - Let r<k be the # of branch bits; Let their indices be b_0 < b_1 < ... < b_(r-1)
 - sketch sk(x) as keeping only the x_bi sk(|0111010)=11
 - each x_1 has sk(x_i) tking r=$O(w^(1/5))$ bits<br> 
