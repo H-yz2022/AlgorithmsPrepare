@@ -250,9 +250,14 @@ graph TD
 Problem: How do we from sketches?
 - we will compress down to $O(r^4)$ bits
 - the important bit will be represented, <br>
-with some known amount O-soacing w b/w them
+with some known amount O-soacing w b/w them <br>
+- Suppose we multiply x*m:
+  x=$\sum_{i=0}^{r-1} x_{b_i} \cdot 2^{b_i}$
+
+
+
 |Abbreviation	|Meaning|
-|----|----|
+|------|------|
 |o/w	| otherwise |
 |w/	| with |
 |w/o	|without |
