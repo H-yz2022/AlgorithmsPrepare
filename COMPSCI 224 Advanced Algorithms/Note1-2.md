@@ -266,6 +266,11 @@ with some known amount O-soacing w b/w them <br>
 ### proof of Lemma
 - Part a: proof by induction. Suppose we have picked $m_1^{'}, m_2^{'}, ..., m_{t-1}^{'}$ s.t.<br> all that sums $b_i+m_j$ are distict (mod r^3)<br> where t<r
 - Now we want to pick $m_2^{'}$, <br>$m_2^{'}$ must avoid $m_1^{'}+b_j+b_z$ (t^2 r<r^3 value)
+- Set $m_i = m_i^{'} + i r^3 + (lw - b_i)
+                                ➜ rounded down to the nearest multiple of $r^3$
+- picture: each block is r^3
+- Now that we have sketches: Suppose node has $x_0 < ... < x_{k-1}$
+
   
 
 
