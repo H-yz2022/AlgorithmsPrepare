@@ -188,8 +188,8 @@ linear space and search time is still lglg u
   + Basic ingredient；
     1. multiplication
     2. sketchcompression
-    3. word-level parallelism
-    4. most significant set bit (MSB) in θ1 time
+    3. word-level parallelism (parallel comparison)
+    4. the most significant set bit (MSB) in θ1 time
 - Let's focus on representing a single fusion tree node containing x_0<x_1< ...<x_k-1
 - Let r<k be the # of branch bits; Let their indices be b_0 < b_1 < ... < b_(r-1)
 - sketch sk(x) as keeping only the x_bi sk(|0111010)=11
@@ -240,4 +240,7 @@ graph TD
 - Claim: If we see where sk(e) fits amongst the sk(xi) that is the same as where q fits amongst the X_i
 - pf Exercise: To find y, compute MSB(x_i  ^q) and MSB(x_i+1  ^q)<br> and take the more sig. bit b/w the two<br> 
 
-Problem: How do we from sketch
+Problem: How do we from sketches?
+- we will compress down to $O(r^(4))$ bits
+- the important bit will be represented, <br>
+w/ some known amount O-soacing w b/w them
