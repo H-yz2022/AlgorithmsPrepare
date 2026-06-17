@@ -263,6 +263,9 @@ with some known amount O-soacing w b/w them <br>
 - Then we do x*m, mask out ${b_i+ m_i}$ shift down so that $b_0+m_0$ maps to LSB
 
 
+### proof of Lemma
+- Part a: proof by induction. Suppose we have picked $x_n^'$
+
 
 |Abbreviation	|Meaning|
 |------|------|
