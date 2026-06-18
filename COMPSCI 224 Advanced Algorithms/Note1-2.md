@@ -281,10 +281,10 @@ with some known amount O-soacing w b/w them <br>
 - MSB(x)
 - split x into $\sqrt{w}$ chunks of $\sqrt{w}$ bitss each<br>
   x = 0101 0000 1000 1101<br>
-  F = 1000 1000 1000 1000
-  x bitwise F = 0000 0000 1000 1000
-  x or ( x and F ) = 0101 0000 0000 0101
-  + mask  ➜  0000 1000 1000 0000
+  F = 1000 1000 1000 1000<br>
+  x bitwise F = 0000 0000 1000 1000<br>
+  x or ( x and F ) = 0101 0000 0000 0101<br>
+  + mask  ➜  0000 1000 1000 0000<br>
 
 # Appendix
 |Abbreviation	|Meaning|
