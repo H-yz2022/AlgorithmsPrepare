@@ -277,7 +277,14 @@ with some known amount O-soacing w b/w them <br>
 - The appearances of 1's is monotone ➜ can just count the  #1s to find index of the first 1 ( want MSB)
 - multiply by all the 1's contribute by adding to this position
 
-  
+#### MSB
+- MSB(x)
+- split x into $\sqrt{w}$ chunks of $\sqrt{w}$ bitss each<br>
+  x = 0101 0000 1000 1101<br>
+  F = 1000 1000 1000 1000
+  x bitwise F = 0000 0000 1000 1000
+  x or ( x and F ) = 0101 0000 0000 0101
+  + mask  ➜  0000 1000 1000 0000
 
 # Appendix
 |Abbreviation	|Meaning|
