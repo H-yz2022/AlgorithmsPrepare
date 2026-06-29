@@ -105,7 +105,7 @@ Pf: charge the cost of storing (c, piomter to cluster c) to the minimum element 
  - insert(k,v) associates vak v w/ key k
  - Dynamic diction is possible w/ θ(n) space, θ(l) wprst case query, θ(l) constant expected insertion (with high possbility)
 
-Another solution bit array of legth u
+Another solution bit array of length u
 ```mermaid
 graph TD
     A["1"]
@@ -285,6 +285,12 @@ with some known amount O-soacing w b/w them <br>
   x bitwise F = 0000 0000 1000 1000<br>
   x or ( x and F ) = 0101 0000 0000 0101<br>
   + mask  ➜  0000 1000 1000 0000<br>
+#### Lemma
+when the bi are i $\sqrt{w}$ + $\sqrt{w}$ -1<br>
+There is an m st, multiplying by m makes all the important bits consecutive w/ NO GAPS<br>
+#### Proof homework:<br>
+ ➜ can get 1011 in a mask in constant <br>
+- So do parallel comp b/w 1011
 
 # Appendix
 |Abbreviation	|Meaning|
