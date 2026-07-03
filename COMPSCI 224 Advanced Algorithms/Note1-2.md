@@ -290,7 +290,32 @@ when the bi are i $\sqrt{w}$ + $\sqrt{w}$ -1<br>
 There is an m st, multiplying by m makes all the important bits consecutive w/ NO GAPS<br>
 #### Proof homework:<br>
  ➜ can get 1011 in a mask in constant <br>
-- So do parallel comp b/w 1011
+- So do parallel comp b/w 1011 and
+- 0001
+- 0010
+- 0100
+- 1000
+- x first is 0101
+
+# Hashing
+1) lead balancing "负载均衡"
+2) k-wise independence
+3) dictionary
+  + perfect hashing
+  + linear probing
+4) retrieval
+  + cuckoo hashing
+  + bloomier filters
+5) membership: bloom filters
+6) simple tabulation
+
+## Family H of functions
+- mapping [u] ={0,1,...,u-1} --> [m]
+- There's some set S ⊆ [u] |S| =n, such that we want some h ∈ H, we pick to "behave nicely" on S
+- Example:
+    + we have n jobs that need to be assigned to m machines
+    + each job has some joB id in [u]
+    + 
 
 # Appendix
 |Abbreviation	|Meaning|
