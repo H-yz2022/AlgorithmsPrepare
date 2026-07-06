@@ -314,8 +314,13 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
 - There's some set S ⊆ [u] |S| =n, such that we want some h ∈ H, we pick to "behave nicely" on S
 - Example:
     + we have n jobs that need to be assigned to m machines
+    + usually called "balls and bins" randomly process
     + each job has some joB id in [u]
-    + 
+    + when a new jobs j ∈ [u] comes, have it  processed by machine h(j)
+    + we'd like to say P (existing machine receiving > k jobs) << something small ----> Chernoff bound<br>
+         + Theorem Chernoff bound: Suppose X_1, ... , X_n is independent, X_i ∈{0,1}
+         + 
+      
 
 # Appendix
 |Abbreviation	|Meaning|
