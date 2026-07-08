@@ -192,7 +192,7 @@ $\Theta(w^{1/5})$
 - Basic issue: How do we search a single fusion tree node in constant time?
   + Basic ingredient；
     1. multiplication
-    2. sketchcompression
+    2. sketch compression
     3. word-level parallelism (parallel comparison)
     4. the most significant set bit (MSB) in θ1 time
 - Let's focus on representing a single fusion tree node containing $x_0$ < $x_1$ < ...< $x_{k-1}$
@@ -319,8 +319,16 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
     + when a new jobs j ∈ [u] comes, have it  processed by machine h(j)
     + we'd like to say P (existing machine receiving > k jobs) << something small ----> Chernoff bound<br>
          + Theorem Chernoff bound: Suppose X_1, ... , X_n is independent, X_i ∈{0,1}
-         + 
-      
+         + E x_i = p_i, then X = ∑ n=1 x_i
+         + P(x >= (1+δ)Ex ≤ (e^δ / (1+δ)^(1+δ))^(ex)
+    + balls and bins:
+         + suppose e.g. m=n
+         + P(∃ machine > clgn/(lglgn) jobs) < 1/ polg(n)
+         + pf. Focus on some machine t
+         + x_i = 1 if h(i)= t ; 0 else --->x = # jobs assigned to mechine
+         + P(x ≥ clgn/(lglgn) ≤ 
+     
+         
 
 # Appendix
 |Abbreviation	|Meaning|
