@@ -339,12 +339,15 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
      + = ∑ (sets |T| =k) 1/n^k
      + = (n k)/n^k  < 1/k! = (1/k)^(k/2)
  - k- wise independence:
-     + definition X_1, ..., x_n are k-wise independent
+     + definition X_1, ..., x_n are k-wise independent/  all i_1 ≠ i_2 ≠ ... ≠ i_k ∈ [u]
      + if for any 1≤  i_1 < i_2 < ... < i_k ≤ n,
      + the random vaiables x_11, x_12, ..., x_1k are independent
-
-
-
+     + definition 1:  A set of hash functions H is a "k-wise family", if the set of random variables h(0), h(1), ..., h(u-1) are k-wise independent where h ∈ H uniformly at random. (random experiment)
+          + Example: H being the set of all functions from [u] to [m] is k-wise; needs (u log n) bits to store, more expensive to store
+          + Example: u=m=p prime. H={h(x): h(x)= ∑ k-1 i=0 a:x^i (mod p)}  
+          + ∈ {0, ..., p-1} ----> need (k log p) bits to store
+- what independence do we need?
+          + Example: m-p(prime)
 
 ## Common Algorithm Lecture Abbreviations
 
