@@ -342,3 +342,37 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
      + definition X_1, ..., x_n are k-wise independent
      + if for any 1≤  i_1 < i_2 < ... < i_k ≤ n,
      + the random vaiables x_11, x_12, ..., x_1k are independent
+
+
+
+
+## Common Algorithm Lecture Abbreviations
+
+| Abbreviation | Meaning | Example |
+|--------------|---------|---------|
+| `o/w` | otherwise | `o/w, return NIL` |
+| `w/` | with | `w/ compression` |
+| `w/o` | without | `BST w/o balancing` |
+| `b/w` | between | `Compare b/w x and y` |
+| `b/c` | because | `Fast b/c of caching` |
+| `s.t.` | such that | `Find x s.t. x > 0` |
+| `w.r.t.` | with respect to | `Sort w.r.t. key` |
+| `WLOG` | without loss of generality | `WLOG, assume n is even.` |
+| `iff` | if and only if | `A iff B` |
+| `pf` | proof | `Pf: By induction.` |
+| `def` | definition | `Def: Binary tree` |
+| `thm` | theorem | `Thm: Master Theorem` |
+| `lem` | lemma | `Lemma 2.1` |
+| `cor.` | corollary | `Cor. follows immediately.` |
+| `alg` | algorithm | `Greedy alg` |
+| `approx.` | approximately | `approx. O(n)` |
+| `asymp.` | asymptotically | `asymp. faster` |
+| `w.h.p.` | with high probability | `Succeeds w.h.p.` |
+| `MSB` | most significant bit | `Find the MSB.` |
+| `LSB` | least significant bit | `Check the LSB.` |
+| `XOR` (`^` or `\oplus`) | exclusive OR | `x XOR y` |
+| `LCA` | lowest common ancestor | `Find the LCA.` |
+| `BST` | binary search tree | `Balanced BST` |
+| `DS` | data structure | `Efficient DS` |
+| `avg.` | average | `avg. case` |
+| `amort.` | amortized | `amort. O(1)` |
