@@ -330,19 +330,15 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
          + solution to k^k = n^c k lnk = c ln n is k= θ(lgn / lglgn)
          + ---> P(∃ overloaded machine) < ∑ n t=1 P(t as overloaded) ≤ 1/n^(c'-1)
  - Lemma ( Markov's Ineq):    
-    +If x is a nonnegative random variable then  
-
-# Appendix
-|Abbreviation	|Meaning|
-|------|------|
-|o/w	| otherwise |
-|w/	| with |
-|w/o	|without |
-|b/w	|between (sometimes "bandwidth" in networking contexts, but here it means between) |
-|pf	| proof |
-|w.r.t.	| with respect to |
-|s.t.	| such that |
-|wlog or WLOG	| without loss of generality |
-|iff	| if and only if |
-|w.h.p.	| with high probability |
-|asymp.	| asymptotically |
+    + If x is a nonnegative random variable then  ∀ λ>0, P (X>λ) < EX/λ
+ - Proof of Chernoff:  P (X>λ) = P (e^(tx) > e^(tλ)< e^(-tλ)*e^(tx)
+     + (choose t- lb(1+δ)
+     + P(∃ overloaded machine) < n * P(machine 1 is overloaded)
+     + = P(∃ k items mapping to machine 1)
+     + ≤ ∑ (sets T of k items) P(T all maps to 1) ---> Expectation of Xi product i=T, E Π i=T Xi = Π i∈T E Xi
+     + = ∑ (sets |T| =k) 1/n^k
+     + = (n k)/n^k  < 1/k! = (1/k)^(k/2)
+ - k- wise independence:
+     + definition X_1, ..., x_n are k-wise independent
+     + if for any 1≤  i_1 < i_2 < ... < i_k ≤ n,
+     + the random vaiables x_11, x_12, ..., x_1k are independent
