@@ -326,9 +326,11 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
          + P(∃ machine > clgn/(lglgn) jobs) < 1/ polg(n)
          + pf. Focus on some machine t
          + x_i = 1 if h(i)= t ; 0 else --->x = # jobs assigned to mechine
-         + P(x ≥ clgn/(lglgn) ≤ 
-     
-         
+         + P(x ≥ clgn/(lglgn) ≤ (e/clhn/lglgn)*lglgn = (e/k)^k≤1/n^c
+         + solution to k^k = n^c k lnk = c ln n is k= θ(lgn / lglgn)
+         + ---> P(∃ overloaded machine) < ∑ n t=1 P(t as overloaded) ≤ 1/n^(c'-1)
+ - Lemma ( Markov's Ineq):    
+    +If x is a nonnegative random variable then  
 
 # Appendix
 |Abbreviation	|Meaning|
