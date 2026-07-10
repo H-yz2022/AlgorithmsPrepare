@@ -344,10 +344,21 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
      + the random vaiables x_11, x_12, ..., x_1k are independent
      + definition 1:  A set of hash functions H is a "k-wise family", if the set of random variables h(0), h(1), ..., h(u-1) are k-wise independent where h ∈ H uniformly at random. (random experiment)
           + Example: H being the set of all functions from [u] to [m] is k-wise; needs (u log n) bits to store, more expensive to store
-          + Example: u=m=p prime. H={h(x): h(x)= ∑ k-1 i=0 a:x^i (mod p)}  
-          + ∈ {0, ..., p-1} ----> need (k log p) bits to store
+          + Example: u=m=p prime. H = {h(x): h(x)= ∑ k-1 i=0 a:x^i (mod p)}  
+          + where a_i ∈ {0, ..., p-1} ----> need (k log p) bits to store
 - what independence do we need?
-          + Example: m-p(prime)
+  + Example: m-p(prime)
+  + H = { h(x): h(x) = ( ∑ k-1 i=0 a : x^i (mod p)) mod m }
+  + Look at x_1, ..., x_k  P( h(x_1)=y_1, ..., h(x_k)=y_k ) = 1/p^k
+  + if m < k, ∀ x_1, ..., x_k, y_1, ..., y_k
+  + P(h(x_1)=y_1, ..., h(X_2)=y_2) = (2/m)^k
+- Dictionary Problem:
+- 
+   
+   
+  
+  
+  
 
 ## Common Algorithm Lecture Abbreviations
 
