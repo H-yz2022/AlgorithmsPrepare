@@ -320,29 +320,30 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
     + we'd like to say P (existing machine receiving > k jobs) << something small ----> Chernoff bound<br>
          + Theorem Chernoff bound: Suppose X_1, ... , X_n is independent, X_i ∈{0,1}
          + E x_i = p_i, then X = ∑ n=1 x_i
-         + P(x >= (1+δ)Ex ≤ (e^δ / (1+δ)^(1+δ))^(ex)
+         + P(x ≥ (1+δ)Ex ≤ (e^δ / (1+δ)^(1+δ))^(ex)
     + balls and bins:
          + suppose e.g. m=n
          + P(∃ machine > clgn/(lglgn) jobs) < 1/ polg(n)
          + pf. Focus on some machine t
-         + x_i = 1 if h(i)= t ; 0 else --->x = # jobs assigned to mechine
+         + x_i = 1 if h(i)= t ; 0 else ---> x = # jobs assigned to mechine
          + P(x ≥ clgn/(lglgn) ≤ (e/clhn/lglgn)*lglgn = (e/k)^k≤1/n^c
          + solution to k^k = n^c k lnk = c ln n is k= θ(lgn / lglgn)
          + ---> P(∃ overloaded machine) < ∑ n t=1 P(t as overloaded) ≤ 1/n^(c'-1)
- - Lemma ( Markov's Ineq):    
-    + If x is a nonnegative random variable then  ∀ λ>0, P (X>λ) < EX/λ
- - Proof of Chernoff:  P (X>λ) = P (e^(tx) > e^(tλ)< e^(-tλ)*e^(tx)
-     + (choose t- lb(1+δ)
+### Lemma ( Markov's Ineq):  
+ If x is a nonnegative random variable then  ∀ λ>0, P (X>λ) < EX/λ
+### Proof of Chernoff:
+ - P (X>λ) = P (e^(tx) > e^(tλ)) < e^(-tλ)*e^(tx)
+     + (choose t= lb(1+δ)
      + P(∃ overloaded machine) < n * P(machine 1 is overloaded)
      + = P(∃ k items mapping to machine 1)
      + ≤ ∑ (sets T of k items) P(T all maps to 1) ---> Expectation of Xi product i=T, E Π i=T Xi = Π i∈T E Xi
      + = ∑ (sets |T| =k) 1/n^k
      + = (n k)/n^k  < 1/k! = (1/k)^(k/2)
- - k- wise independence:
-     + definition X_1, ..., x_n are k-wise independent/  all i_1 ≠ i_2 ≠ ... ≠ i_k ∈ [u]
-     + if for any 1≤  i_1 < i_2 < ... < i_k ≤ n,
+ ### k- wise independence
+ - definition X_1, ..., x_n are k-wise independent/  all i_1 ≠ i_2 ≠ ... ≠ i_k ∈ [u]
+     + if for any 1 ≤  i_1 < i_2 < ... < i_k ≤ n,
      + the random vaiables x_11, x_12, ..., x_1k are independent
-     + definition 1:  A set of hash functions H is a "k-wise family", if the set of random variables h(0), h(1), ..., h(u-1) are k-wise independent where h ∈ H uniformly at random. (random experiment)
+ - definition 1:  A set of hash functions H is a "k-wise family", if the set of random variables h(0), h(1), ..., h(u-1) are k-wise independent where h ∈ H uniformly at random. (random experiment)
           + Example: H being the set of all functions from [u] to [m] is k-wise; needs (u log n) bits to store, more expensive to store
           + Example: u=m=p prime. H = {h(x): h(x)= ∑ k-1 i=0 a:x^i (mod p)}  
           + where a_i ∈ {0, ..., p-1} ----> need (k log p) bits to store
@@ -352,15 +353,42 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
   + Look at x_1, ..., x_k  P( h(x_1)=y_1, ..., h(x_k)=y_k ) = 1/p^k
   + if m < k, ∀ x_1, ..., x_k, y_1, ..., y_k
   + P(h(x_1)=y_1, ..., h(X_2)=y_2) = (2/m)^k
-- Dictionary Problem:
-- 
-   
-   
-  
-  
-  
+ 
+## Dictionary Problem:
+- Data structure problem
+- update (k,v): associates key k with value v, k, v ∈ [u]
+- query(k): return v associated with k
 
-## Common Algorithm Lecture Abbreviations
+### How to solve? Dynamic dictionary
+   - hash tables/ chaining
+   - array A {0,..., m-1} k_1|v_1 ---> k_2|v_2 ---> k_3|v_3
+   - pick h ∈ H from a 2-wise family
+   - k maps tl P[ h(k) ]
+   - Runtime of operation is length of linked list at h(k)
+   - can show Expectation length of liat at h(k) = O(1)
+   - if m ≥ n
+   
+## linear probing
+  sequence accesses are much faster <br>
+  ---> linear probing is good
+- A array is {0, 1, ..., m-1}
+- h: [u] --> [m]
+- store h(k) until A is empty, store (k,v) there
+- suggested by (Samuel, Amdahl, Boehme 1954)
+- First analyzed by Knuth in 1963, assuming h is totally random
+- m = (1+ ε) n, Expectation ( time per operation) = θ (1/ε^2)
+   (Pagh, Pagh, Ruzic 2009)<br>
+- H swise indepedent --> expected time = O(1) (m≥c*n)
+   (Patrascu, Thorup, ICALP 2010)<br>
+- 4-wise does not guarantee O(1)
+- Claim: m ≥ c*n and H is 7-wise independent then expectation (query time) =O(1)
+- Definition: Given an interval I of cells in A, L(I)= |{i:h(i) ∈ L}| size of the set of I
+- Definition: I is "full", if |L(I)| ≥ I
+
+## 
+
+
+# Common Algorithm Lecture Abbreviations
 
 | Abbreviation | Meaning | Example |
 |--------------|---------|---------|
