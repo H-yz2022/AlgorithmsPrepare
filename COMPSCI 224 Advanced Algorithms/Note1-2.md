@@ -385,7 +385,10 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
 - Definition: Given an interval I of cells in A, L(I)= |{i:h(i) ∈ L}| size of the set of I
 - Definition: I is "full", if |L(I)| ≥ I
 
-## 
+### Lemma
+-  If query (x) makes k probes, then h(x) is in some full interval of length ≥k
+-  Proof: in an array, one block stores h(x), if some walks a space of k, h(x) also walks a space of k to its final destination (hash to  not move to)
+-  
 
 
 # Common Algorithm Lecture Abbreviations
