@@ -1,6 +1,6 @@
-#  网络编程解题笔记：TCP 远程过程调用 (RPC) 服务端实现
+#  Discussion 10
 
-##  题目背景与源码
+##  4.3 Primes
 
 > **Problem Description:**  
 > Edward realizes his previous solution was insufficient, so he decides to implement a slightly more complicated protocol.
