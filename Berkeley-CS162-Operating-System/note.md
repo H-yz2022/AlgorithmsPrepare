@@ -56,6 +56,7 @@ void release(Lock *thelock) {
         futex(thelock, FUTEX_WAKE, 1); // 唤醒 1 个睡眠中的线程
     }
 }
+```
 
 一、 为什么“三状态”设计是最佳解决方案？
 在 Try #2 中，使用独立的 int mylock 和 bool maybe_waiters 两个变量，会导致锁状态与等待状态脱节，从而引发数据竞态（Data Race）和唤醒丢失（Lost Wakeup）造成的死锁。
@@ -69,18 +70,20 @@ void release(Lock *thelock) {
 二、 核心代码逐行拆解
 1. acquire() —— 申请锁
 ① Fast Path（无竞争快速路径）
-C
+```C
 if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED)
     return;
+```
 原理解析：检查 *thelock 是否等于 UNLOCKED(0)，若是，原子的将其设为 LOCKED(1) 并返回旧值 UNLOCKED(0)。
 
 性能优势：在无竞争的理想情况下，仅执行一条硬件级 CPU 原子指令即完成加锁，完全不发起 futex 系统调用（Syscall-Free），耗时仅几纳秒。
 
 ② Slow Path（有竞争慢速路径）
-C
+```C
 while (swap(thelock, CONTESTED) != UNLOCKED) {
     futex(thelock, FUTEX_WAIT, CONTESTED);
 }
+```
 swap(thelock, CONTESTED)：无条件将 *thelock 设为 CONTESTED(2) 并返回旧值。
 
 旧值为 UNLOCKED(0)：说明在上一步和本步骤之间恰好有线程释放了锁，当前线程成功抢占锁，跳出循环。
@@ -92,12 +95,12 @@ futex(thelock, FUTEX_WAIT, CONTESTED)：
 内核级防死锁（Atomic Sleep Check）：内核会在让线程进入休眠前，原子地校验 *thelock 当前是否仍等于 CONTESTED。若在调用瞬间有人释放了锁并修改了状态，futex 将立即返回而非陷入休眠，避免了“丢失唤醒”。
 
 2. release() —— 释放锁
-C
+```C
 if (swap(thelock, UNLOCKED) == CONTESTED) {
     futex(thelock, FUTEX_WAKE, 1);
 }
 swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状态。
-
+```
 分支逻辑校验：
 
 释放前为 LOCKED(1)：说明在持锁期间无任何其他线程试图抢锁（否则状态会被抢锁线程修改为 2）。直接在用户态完成解锁，无需系统调用。
@@ -204,7 +207,7 @@ bytes_written += cur_written;
 close(socket_fd);
 }
 
-
+```
 
 一、 解题思路
 在网络编程中，基于 TCP 套接字 (Socket) 实现远程过程调用（RPC）时，必须克服 TCP 协议自身的两个核心特性：流式传输特性（半包/粘包） 与 网络字节序差异（Endianness）。
