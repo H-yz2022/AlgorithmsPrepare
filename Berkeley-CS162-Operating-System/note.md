@@ -1,3 +1,115 @@
+# 📚 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
+
+## 📝 源码解析与恢复
+
+> **Problem Description:**  
+> 在 Try #2 方案中，使用独立的 `bool maybe_waiters` 存在状态竞态（Data Race）和死锁风险。为了彻底解决这一问题，需要将“锁占用”与“等待状态”合并到一个原子变量中，采用 **三种状态（UNLOCKED, LOCKED, CONTESTED）** 实现高性能且绝对安全的用户态互斥锁（Mutex）。
+> 
+> *参考资料: Ulrich Drepper 经典论文 《Futexes Are Tricky》*
+
+---
+
+### 1. 状态定义与类型定义
+
+```c
+typedef enum { 
+    UNLOCKED = 0,  // 0: 锁空闲，无线程占用
+    LOCKED   = 1,  // 1: 锁被占用，但没有其他线程在休眠/等待
+    CONTESTED = 2  // 2: 锁被占用，且“可能有”其他线程已经在内核中休眠等待
+} Lock;
+
+Lock mylock = UNLOCKED;
+
+
+#include <linux/futex.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+/**
+ * @brief 申请锁操作 (Acquire)
+ * @param thelock 指向锁变量的指针
+ */
+void acquire(Lock *thelock) {
+    // 1. 【Fast Path 快速路径】：尝试从 UNLOCKED 直接抢占为 LOCKED
+    //    如果成功，说明完全无竞争，立刻返回！(无系统调用，性能极高)
+    if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED) {
+        return;
+    }
+
+    // 2. 【Slow Path 慢速路径】：有竞争，进入循环抢锁
+    //    原子的将锁状态强行设置为 CONTESTED (2)
+    while (swap(thelock, CONTESTED) != UNLOCKED) {
+        // 如果抢锁前它不是 UNLOCKED，说明锁仍被占用，必须陷入内核休眠
+        // 只有当 *thelock 的实际值仍然为 CONTESTED 时，内核才会让当前线程休眠
+        futex(thelock, FUTEX_WAIT, CONTESTED);
+    }
+}
+
+/**
+ * @brief 释放锁操作 (Release)
+ * @param thelock 指向锁变量的指针
+ */
+void release(Lock *thelock) {
+    // 原子地将锁重置为 UNLOCKED，并拿到释放前的值
+    // 如果释放前的值是 CONTESTED (2)，说明有人可能在休眠，必须唤醒
+    if (swap(thelock, UNLOCKED) == CONTESTED) {
+        futex(thelock, FUTEX_WAKE, 1); // 唤醒 1 个睡眠中的线程
+    }
+}
+
+一、 为什么“三状态”设计是最佳解决方案？
+在 Try #2 中，使用独立的 int mylock 和 bool maybe_waiters 两个变量，会导致锁状态与等待状态脱节，从而引发数据竞态（Data Race）和唤醒丢失（Lost Wakeup）造成的死锁。
+
+“三状态模型”的核心创新在于：
+
+将 “锁是否被占用” 与 “是否有线程在休眠（竞争）” 两个关键信息，压缩并合并到了同一个原子变量（thelock）中。
+
+通过这一设计，所有对锁和等待状态的修改均可通过 单条原子指令（CAS 或 Swap） 一步完成，彻底杜绝了状态不一致的问题。
+
+二、 核心代码逐行拆解
+1. acquire() —— 申请锁
+① Fast Path（无竞争快速路径）
+C
+if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED)
+    return;
+原理解析：检查 *thelock 是否等于 UNLOCKED(0)，若是，原子的将其设为 LOCKED(1) 并返回旧值 UNLOCKED(0)。
+
+性能优势：在无竞争的理想情况下，仅执行一条硬件级 CPU 原子指令即完成加锁，完全不发起 futex 系统调用（Syscall-Free），耗时仅几纳秒。
+
+② Slow Path（有竞争慢速路径）
+C
+while (swap(thelock, CONTESTED) != UNLOCKED) {
+    futex(thelock, FUTEX_WAIT, CONTESTED);
+}
+swap(thelock, CONTESTED)：无条件将 *thelock 设为 CONTESTED(2) 并返回旧值。
+
+旧值为 UNLOCKED(0)：说明在上一步和本步骤之间恰好有线程释放了锁，当前线程成功抢占锁，跳出循环。
+
+旧值为 LOCKED(1) 或 CONTESTED(2)：说明锁仍被占用。强制将锁状态标记为 CONTESTED，确保持锁线程解锁时知道有等待者存在。
+
+futex(thelock, FUTEX_WAIT, CONTESTED)：
+
+内核级防死锁（Atomic Sleep Check）：内核会在让线程进入休眠前，原子地校验 *thelock 当前是否仍等于 CONTESTED。若在调用瞬间有人释放了锁并修改了状态，futex 将立即返回而非陷入休眠，避免了“丢失唤醒”。
+
+2. release() —— 释放锁
+C
+if (swap(thelock, UNLOCKED) == CONTESTED) {
+    futex(thelock, FUTEX_WAKE, 1);
+}
+swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状态。
+
+分支逻辑校验：
+
+释放前为 LOCKED(1)：说明在持锁期间无任何其他线程试图抢锁（否则状态会被抢锁线程修改为 2）。直接在用户态完成解锁，无需系统调用。
+
+释放前为 CONTESTED(2)：说明存在线程因抢锁失败已陷入内核休眠，必须发起 futex(..., FUTEX_WAKE, 1) 系统调用唤醒等待队列中的一个线程。
+
+三状态 Futex 互斥锁 巧妙利用 UNLOCKED(0)、LOCKED(1)、CONTESTED(2) 三种状态，将锁状态与等待队列标记融合在一起：
+
+无竞争场景：完全在用户态（Userspace）完成，零系统调用开销。
+
+高竞争场景：依赖内核级 futex 系统调用精确控制线程休眠与唤醒，兼顾极致性能与并发安全性。
+
 #  Discussion 10
 
 ##  4.3 Primes
