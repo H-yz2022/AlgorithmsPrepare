@@ -387,20 +387,36 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
 
 ### Lemma
 -  If query (x) makes k probes, then h(x) is in some full interval of length ≥k
--  Proof: in an array, one block stores h(x), if some walks a space of k, h(x) also walks a space of k to its final destination (hash to  not move to)
--  Expectation(time to query(x))
--  ≤ Expectation( # full intervals containing x)
--  = ∑ infinite k=1 ∑ (intercals I |I|=k h(k)≤I) P (I full)
--  ≤ ∑ infinite k=1 k* (max |I|=k h(k)∈I) P (I full)
--  = O(1/k^3)
--  (m=2n), n = # different keys active
--  P(I full)
--  ≤ P ( |L(I) -E( L(I))|)
--  ≥ 1/2 E( L(I) )  -----> Chernoff bound but need independence
--  P ( | L(I)-E( L(I) ) |^6 > E( L(I)^6 ) ) ---> E( L(I)^6=k/2
--  < (k/2)^(-6) * E((L(I)-E( L(I) ))^4) ---> Markov
--  < O(1/K^3)
+-  Proof: in an array, one block stores h(x), <br>if some walks a space of k, h(x) also walks a space of k to its final destination (hash to  not move to)
+-  Expectation(time to query(x))<br>
+≤ Expectation( # full intervals containing x)<br>
+= ∑ infinite k=1 ∑ (intercals I |I|=k h(k)≤I) P (I full)<br>
+≤ ∑ infinite k=1 k* (max |I|=k h(k)∈I) P (I full)<br>
+= O(1/k^3)<br>
+(m=2n), n = # different keys active<br>
+-  P(I full)<br>
+≤ P ( |L(I) -E( L(I))|)<br>
+≥ 1/2 E( L(I) )  -----> Chernoff bound but need independence<br>
+-  P ( | L(I)-E( L(I) ) |^6 > E( L(I)^6 ) ) ---> E( L(I)^6=k/2<br>
+< (k/2)^(-6) * E((L(I)-E( L(I) ))^4) ---> Markov<br>
+< O(1/K^3)<br>
+
+≤ ≥
+# Hashing (2)
+1) Linear probing with 5-wise independent
+2) approx membership (Bloom filters)
+3) Cuckoo Hashing
+4) Bloomier filters
+5) power of 2 choices
+
+## Recap
+-  hash to array of size m=2n
+-  I interval of array locations L(I) = |{ j∈S : h(j)∈I }|
+-  Def: I is "full" if L(I) ≥ |I|
  
+ 
+## Cuckoo Hashing
+### Lemma
 
 # Common Algorithm Lecture Abbreviations
 
