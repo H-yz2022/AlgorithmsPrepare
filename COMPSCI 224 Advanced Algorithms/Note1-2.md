@@ -332,13 +332,15 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
 ### Lemma ( Markov's Ineq):  
  If x is a nonnegative random variable then  ∀ λ>0, P (X>λ) < EX/λ
 ### Proof of Chernoff:
- - P (X>λ) = P (e^(tx) > e^(tλ)) < e^(-tλ)*e^(tx)
-     + (choose t= lb(1+δ)
-     + P(∃ overloaded machine) < n * P(machine 1 is overloaded)
-     + = P(∃ k items mapping to machine 1)
-     + ≤ ∑ (sets T of k items) P(T all maps to 1) ---> Expectation of Xi product i=T, E Π i=T Xi = Π i∈T E Xi
-     + = ∑ (sets |T| =k) 1/n^k
-     + = (n k)/n^k  < 1/k! = (1/k)^(k/2)
+ - P (X>λ) = P (e^(tx) > e^(tλ)) < e^(-tλ)*e^(tx)<br>
+     + (choose t= lb(1+δ)<br>
+P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
+= P(∃ k items mapping to machine 1)<br>
+≤ ∑ (sets T of k items) P(T all maps to 1) ---> Expectation of Xi product i=T, E Π i=T Xi = Π i∈T E Xi<br>
+= ∑ (sets |T| =k) 1/n^k<br>
+= (n k)/n^k  < 1/k! = (1/k)^(k/2)<br>
+
+
  ### k- wise independence
  - definition X_1, ..., x_n are k-wise independent/  all i_1 ≠ i_2 ≠ ... ≠ i_k ∈ [u]
      + if for any 1 ≤  i_1 < i_2 < ... < i_k ≤ n,
@@ -401,18 +403,22 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
 < (k/2)^(-6) * E((L(I)-E( L(I) ))^4) ---> Markov<br>
 < O(1/K^3)<br>
 
-≤ ≥
 # Hashing (2)
 1) Linear probing with 5-wise independent
 2) approx membership (Bloom filters)
 3) Cuckoo Hashing
 4) Bloomier filters
 5) power of 2 choices
-
+≤ ≥
 ## Recap
 -  hash to array of size m=2n
 -  I interval of array locations L(I) = |{ j∈S : h(j)∈I }|
 -  Def: I is "full" if L(I) ≥ |I|
+-  Lemma: If inserting x takes k probs, then h(x) is contained in at least k full intervals each (if length ≥ k, not necessary)
+ <br>Pf: h(x) is in the middle of 
+-  # probes to insert x
+≤ # full intervals containing h(x)
+= ∑
  
  
 ## Cuckoo Hashing
