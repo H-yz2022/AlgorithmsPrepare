@@ -129,22 +129,14 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 > (b) Use identifier to allocate memory and set read size.  
 > (c) Read arguments.  
 
-### API 说明
+
 ```c
 /* Converts NETLONG from network byte order to host byte order. */
 uint32_t ntohl(uint32_t netlong);
 
 /* Converts NETLONG from host byte order to network byte order. */
 uint32_t htonl(uint32_t hostlong);
-2. Edward realizes his previous solution was insufficient, so he decide to implement a slightly more com
-plicated protocol.
-The client will perform the following.
-(a) Send an identifier for the function it wants as an integer (0 for ith_prime, 1 for is_coprime).
-(b) Send all bytes for all the arguments.
-The server will then perform the following.
-(a) Read identifier.
-(b) Use identifier to allocate memory and set read size.
-(c) Read arguments.
+
 /* Converts NETLONG from network byte order to host byte order. */
 uint32_t ntohl(uint32_t netlong);
 /* Converts NETLONG from host byte order to network byte order. */
