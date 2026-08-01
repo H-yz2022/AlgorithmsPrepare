@@ -1,4 +1,4 @@
-##CS61C
+## CS61C
 <img width="579" height="340" alt="image" src="https://github.com/user-attachments/assets/53a6f009-6dcf-452c-b9f4-2f33b8cc0c64" />
 1) Devices and l/O
 2) OS Boot Sequence and Operation
@@ -7,7 +7,7 @@
 <img width="296" height="176" alt="image" src="https://github.com/user-attachments/assets/2d30d3ac-e45d-4140-b66b-a48e92e6ee51" />
 <img width="285" height="177" alt="image" src="https://github.com/user-attachments/assets/d434ef89-4982-4554-ad76-f928afd04610" />
 <img width="290" height="161" alt="image" src="https://github.com/user-attachments/assets/fc16b492-0339-4782-8285-6089b1802925" />
-<img width="290" height="176" alt="image" src="https://github.com/user-attachments/assets/2b97e064-0ceb-477f-b2f2-762c54fa4e13" />
+<img width="290" height="176" alt="image" src="https://github.com/user-attachments/assets/2b97e064-0ceb-477f-b2f2-762c54fa4e13" /><br>
 ## polling
 <img width="299" height="173" alt="image" src="https://github.com/user-attachments/assets/d3526f86-e15b-48f0-b1d8-043b1de1ae91" />
 <img width="260" height="172" alt="image" src="https://github.com/user-attachments/assets/aef40aa7-467e-49f9-94c2-c3076598d453" />
