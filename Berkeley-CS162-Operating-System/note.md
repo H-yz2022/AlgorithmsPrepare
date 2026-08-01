@@ -82,7 +82,7 @@ Frequency of Polling Disk= 16 [MB/s]/16 [B/poll] = 1M [polls/s]
 
 
 
-#Discussion 01
+# Discussion 01
 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
 
 ### 源码解析与恢复
