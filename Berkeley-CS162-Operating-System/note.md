@@ -1,18 +1,29 @@
 ## CS61C
-<img width="579" height="340" alt="image" src="https://github.com/user-attachments/assets/53a6f009-6dcf-452c-b9f4-2f33b8cc0c64" />
+What does the OS do?
+- One of the first things that runs when your computer starts (right after firmware/bootloader)
+- Loads, runs and manages programs:
+ + Multiple programs at the same time (time-sharing)
+ + Isolate programs from each other (isolation)
+ + Multiplex resources between applications (e.g., devices)
+- Services: File System, Network stack, etc. 
+- Finds and controls all the devices in the machine in general way (using "device drivers")
+- Agenda
 1) Devices and l/O
 2) OS Boot Sequence and Operation
 3) Multiprogramming/time-sharing
 4) Introduction to Virtual Memory
-<img width="296" height="176" alt="image" src="https://github.com/user-attachments/assets/2d30d3ac-e45d-4140-b66b-a48e92e6ee51" />
-<img width="285" height="177" alt="image" src="https://github.com/user-attachments/assets/d434ef89-4982-4554-ad76-f928afd04610" />
-<img width="290" height="161" alt="image" src="https://github.com/user-attachments/assets/fc16b492-0339-4782-8285-6089b1802925" />
+<img width="296" height="176" alt="image" src="https://github.com/user-attachments/assets/2d30d3ac-e45d-4140-b66b-a48e92e6ee51" /><br>
+<img width="285" height="177" alt="image" src="https://github.com/user-attachments/assets/d434ef89-4982-4554-ad76-f928afd04610" /><br>
+<img width="290" height="161" alt="image" src="https://github.com/user-attachments/assets/fc16b492-0339-4782-8285-6089b1802925" /><br>
 <img width="290" height="176" alt="image" src="https://github.com/user-attachments/assets/2b97e064-0ceb-477f-b2f2-762c54fa4e13" /><br>
+
+
 ## polling
+
 <img width="299" height="173" alt="image" src="https://github.com/user-attachments/assets/d3526f86-e15b-48f0-b1d8-043b1de1ae91" />
 <img width="260" height="172" alt="image" src="https://github.com/user-attachments/assets/aef40aa7-467e-49f9-94c2-c3076598d453" />
 Cost of Polling?
-Assume for a processor with a 1GHz clock it takes400 clock cycles for a polling operation (call pollingroutine, accessing the device, and returning).Determine % of processor time for polling
+Assume for a processor with a 1GHz clock it takes400 clock cycles for a polling operation (calling polling routine, accessing the device, and returning). Determine % of processor time for polling
 movement
 - Mouse: polled 30 times/sec so as not to miss user
 - Floppy disk (Remember those?): transferred data in 2-Byte
