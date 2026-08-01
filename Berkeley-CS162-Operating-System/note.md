@@ -76,13 +76,24 @@ Frequency of Polling Disk= 16 [MB/s]/16 [B/poll] = 1M [polls/s]
     + Set timer, change to user mode, jump to the new PC.
 - Deciding what process to run is called scheduling.
 
+### Protection, Translation, Paging
+Supervisor mode does not fully isolate applications from each other or from the OS.
+- Application could overwrite another application's memory.
+- Remember your Project 1 linker: application assumes that code is in certain location. How to prevent overlaps?
+- May want to address more memory than we actually have (e.g., for sparse data structures).
+- Solution: Virtual Memory. Gives each process the illusion of a full memory address space that it has completely for itself.
+<img width="305" height="145" alt="image" src="https://github.com/user-attachments/assets/07873a58-8732-423c-8875-1ba00a222072" />
+
+- 
+
+# Discussion 0
 
 
 
+# Discussion 1
 
 
-
-# Discussion 01
+# Discussion 05
 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
 
 ### 源码解析与恢复
