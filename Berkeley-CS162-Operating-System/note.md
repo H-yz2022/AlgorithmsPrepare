@@ -82,10 +82,10 @@ Frequency of Polling Disk= 16 [MB/s]/16 [B/poll] = 1M [polls/s]
 
 
 
+#Discussion 01
+操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
 
-## 📚 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
-
-### 📝 源码解析与恢复
+### 源码解析与恢复
 
 > **Problem Description:**  
 > 在 Try #2 方案中，使用独立的 `bool maybe_waiters` 存在状态竞态（Data Race）和死锁风险。为了彻底解决这一问题，需要将“锁占用”与“等待状态”合并到一个原子变量中，采用 **三种状态（UNLOCKED, LOCKED, CONTESTED）** 实现高性能且绝对安全的用户态互斥锁（Mutex）。
