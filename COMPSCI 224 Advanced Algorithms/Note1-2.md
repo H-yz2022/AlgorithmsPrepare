@@ -1,4 +1,4 @@
-<img width="195" height="86" alt="image" src="https://github.com/user-attachments/assets/bcbabed8-232f-4240-a12f-6a04adc84a97" /># Intro
+# Intro
  SCRIBING 10%.<br>
  P sets 60%.<br>
  Final Project 30%.<br>
@@ -426,7 +426,9 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 ## Linear probing
 - what is
 - trick for such situation: symmetrization
-- 
+
+- <img width="383" height="209" alt="c6fb5bed0b59fc790089e44966c41344" src="https://github.com/user-attachments/assets/ba82961e-b34e-4289-9024-e4cd3d4feb7c" />
+
  ≤ ≥
 ## Cuckoo Hashing
 ### Lemma
