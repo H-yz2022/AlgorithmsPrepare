@@ -52,7 +52,19 @@ Frequency of Polling Disk= 16 [MB/s]/16 [B/poll] = 1M [polls/s]
 400*106[clocks/s]/1*10[clocks/s]=40%<br>
 -> Unacceptable <br>
 (Polling is only part of the problem - main problem is that accessing in small chunks is inefficient) <br>
+<img width="295" height="177" alt="image" src="https://github.com/user-attachments/assets/44014d5f-ae32-4bce-8c96-805137e39820" />
 
+Supervisor Mode
+- If something goes wrong in an application, it can
+crash the entire machine. What about malware, etc.?
+- The OS may need to enforce resource constraints to
+applications (e.g., access to devices).
+- To protect the OS from the application, CPUs have a
+supervisor mode bit (also need isolation, more later).
+ + You can only access a subset of instructions and (physical)
+memory when not in supervisor mode (user mode).
+ + You can change out of supervisor mode using a special
+instruction. but not into it (unless there is an interrupt)
 
 
 
