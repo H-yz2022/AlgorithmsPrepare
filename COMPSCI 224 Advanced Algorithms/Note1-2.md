@@ -1,4 +1,4 @@
-# Intro
+<img width="195" height="86" alt="image" src="https://github.com/user-attachments/assets/bcbabed8-232f-4240-a12f-6a04adc84a97" /># Intro
  SCRIBING 10%.<br>
  P sets 60%.<br>
  Final Project 30%.<br>
@@ -409,18 +409,25 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 3) Cuckoo Hashing
 4) Bloomier filters
 5) power of 2 choices
-≤ ≥
+
+
 ## Recap
 -  hash to array of size m=2n
 -  I interval of array locations L(I) = |{ j∈S : h(j)∈I }|
 -  Def: I is "full" if L(I) ≥ |I|
 -  Lemma: If inserting x takes k probs, then h(x) is contained in at least k full intervals each (if length ≥ k, not necessary)
  <br>Pf: h(x) is in the middle of 
--  # probes to insert x
-≤ # full intervals containing h(x)
-= ∑
- 
- 
+-  # probes to insert x<br>
+≤ # full intervals containing h(x)<br>
+= ∑ ∞ k=1 ∑ |I|=k h(x)∈I P( I is full)<br>
+≤ ∑ ∞ k-1 ∑ |I|=k h(x)∈I P(( L(I) - EL(I))^6 > EL(I)^6 )<br>
+< ∑ ∞ k-1 k * 1/(k/2)^6 * E( L(I) - K/2 )^6
+
+## Linear probing
+- what is
+- trick for such situation: symmetrization
+- 
+ ≤ ≥
 ## Cuckoo Hashing
 ### Lemma
 
