@@ -22,19 +22,28 @@ What does the OS do?
 
 <img width="299" height="173" alt="image" src="https://github.com/user-attachments/assets/d3526f86-e15b-48f0-b1d8-043b1de1ae91" />
 <img width="260" height="172" alt="image" src="https://github.com/user-attachments/assets/aef40aa7-467e-49f9-94c2-c3076598d453" />
-Cost of Polling?
-Assume for a processor with a 1GHz clock it takes400 clock cycles for a polling operation (calling polling routine, accessing the device, and returning). Determine % of processor time for polling
-movement
+### Cost of Polling?
+Assume for a processor with a 1GHz clock it takes400 clock cycles for a polling operation (calling polling routine, accessing the device, and returning).
+- Determine % of processor time for pollingmovement
 - Mouse: polled 30 times/sec so as not to miss user
-- Floppy disk (Remember those?): transferred data in 2-Byte
-units and had a data rate of 50 KB/second.
-No data transfer can be missed.
-- Hard disk: transfers data in 16-Byte chunks and cantransfer at 16 MB/second. Again, no transfer can be
-miccedwe
+- Floppy disk (Remember those?): transferred data in 2-Byte units and had a data rate of 50 KB/second.
+- No data transfer can be missed.
+- Hard disk: transfers data in 16-Byte chunks and can transfer at 16 MB/second. Again, no transfer can be missed
 
+#### % Processor time to poll
+- Mouse Polling [clocks/sec]<br>
+= 30 [polls/s]*400 [clocks/poll]=12K [clocks/s]
+-  % Processor for polling:<br>
+12*103[clocks/s]/1*109 [clocks/s]=0.0012%
+- Polling mouse little impact on processor
 
-
-
+- Clicker Time<br>
+Hard disk: transfers data in 16-Byte chunks and cantransfer at 16 MB/second. No transfer can be missed.What percentage of processor time is spent in polling?<br>
+. A:2%<br>
+· B:4%<br>
+· C:20%<br>
+· D:40%<br>
+· E:80%<br>
 
 
 
