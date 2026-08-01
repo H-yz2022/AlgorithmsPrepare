@@ -11,7 +11,7 @@ What does the OS do?
 1) Devices and l/O
 2) OS Boot Sequence and Operation
 3) Multiprogramming/time-sharing
-4) Introduction to Virtual Memory
+4) Introduction to Virtual Memory<br>
 <img width="296" height="176" alt="image" src="https://github.com/user-attachments/assets/2d30d3ac-e45d-4140-b66b-a48e92e6ee51" /><br>
 <img width="285" height="177" alt="image" src="https://github.com/user-attachments/assets/d434ef89-4982-4554-ad76-f928afd04610" /><br>
 <img width="290" height="161" alt="image" src="https://github.com/user-attachments/assets/fc16b492-0339-4782-8285-6089b1802925" /><br>
@@ -42,9 +42,16 @@ Hard disk: transfers data in 16-Byte chunks and cantransfer at 16 MB/second. No 
 . A:2%<br>
 · B:4%<br>
 · C:20%<br>
-· D:40%<br>
+· D:40% ---> right<br>
 · E:80%<br>
-
+- % Processor time to poll hard disk<br>
+Frequency of Polling Disk= 16 [MB/s]/16 [B/poll] = 1M [polls/s]
+- Disk Polling, Clocks/sec= 1M[polls/s]*400 [clocks/poll]<br>
+=400M[clocks/s]
+- % Processor for polling:<br>
+400*106[clocks/s]/1*10[clocks/s]=40%<br>
+-> Unacceptable <br>
+(Polling is only part of the problem - main problem is that accessing in small chunks is inefficient) <br>
 
 
 
