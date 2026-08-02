@@ -246,7 +246,30 @@ However, it is possible the fork doesn’t succeed as no such assumption was mad
 ### Example 2.1 Pintos Lists
 
 # Discussion 2 Threads, I/O
+##  Threads
+1. int pthread_create
+2. void pthread_exit
+3. int pthread_yield
+4. int pthread_join
 
+### Example Threads
+
+
+## I/O
+1. Low-Level API
+2. High-Level API
+### Example I/O
+1. What’s the difference between fopen and open?
+fopen is a high-level API, while open is a low-level API. fopen will return a FILE* type, while open will return an integer
+
+### Example2.2 File Descriptor Fun
+``` C
+
+```
+### Example 2.3 EchoServer
+``` C
+
+```
 
 
 # Discussion 3
