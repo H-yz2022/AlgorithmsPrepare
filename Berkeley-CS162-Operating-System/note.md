@@ -88,12 +88,56 @@ Supervisor mode does not fully isolate applications from each other or from the 
 
 # Discussion 0
 
+### Example 1.1 
+1. Consider a valid double pointer char** dbl.char in a 32-bit system. What is sizeof(*dbl char)?<br>
+     4. dbl_char is a double pointer, so dereferencing it once will still give a pointer. A 32-bit system means memory addresses will be 32 bits or equivalently 4 bytes.
 
+2. Consider strings initialized as<br>
+char* a = "162 is the best";<br>
+char b[] = "162 is the best";<br>
+Are a and b different?<br>
+Yes. Since it’s defined as a literal, a points to a string literal in a read only section of memory.<br>
+On the other hand, b resides on the stack. It is equivalent to declaring<br>
+char b[] = {'1', '6', '2', ' ', 'i', 's', ' ', 'b', 'e', 's', 't', 0}.<br>
+
+### Example 1.3 
+1. We want to debug the program using GDB. How should we compile the program?<br>
+gcc-g singer.c-o singer. We need a-g flag for debugging information. The-o simply controls the name of the executable that is created which defaults to a.out if not specified.<br>
+
+### Example 2 
+1. Between SP and BP, which has a higher memory address?<br>
+bp has a higher memory address. The stack grows downwards, meaning the top of the stack moves towards lower addresses.<br>
+
+2. Based on the differences of RISC and CISC, why might x86 have less GPRs compared to RISC-V?<br>
+The reduced instruction set of RISC-V means the processor requires less hardware space for transistors, leaving more room for GPRs.<br>
+
+4. True or False: Right before the caller jumps to the desired function,the stack must be 16-byte aligned<br>
+False. The stack needs to be 16-byte aligned right after the parameters have been pushed onto the stack. Return address is pushed right before jumping.
 
 # Discussion 1
 
+## Example 1.1
+1. What is the importance of address translation?<br>
+Address translation is necessary for the idea of virtual memory which provides an isolation abstraction. This gives the illusion that each process is the sole user of the address space. It also provides protection between different processes since virtual addresses will not translate to the same physical address, preventing processes from accessing and potentially corrupting each
+other’s memory. <br>
 
-# Discussion 05
+2. Similar to what’s done in the prologue at calling convention, what needs to happen before a mode transfer occurs? <br>
+The processor’s state (e.g. registers) need to be saved in the thread control block (TCB) because the kernel may overwrite the registers when it executes its own code.<br>
+
+## Example 2.1
+
+# Discussion 2
+
+
+
+# Discussion 3
+
+
+# Discussion 4
+
+
+
+# Discussion 5
 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
 
 ### 源码解析与恢复
