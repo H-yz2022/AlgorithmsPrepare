@@ -15,8 +15,15 @@ What does the OS do?
 <img width="296" height="176" alt="image" src="https://github.com/user-attachments/assets/2d30d3ac-e45d-4140-b66b-a48e92e6ee51" /><br>
 <img width="285" height="177" alt="image" src="https://github.com/user-attachments/assets/d434ef89-4982-4554-ad76-f928afd04610" /><br>
 <img width="290" height="161" alt="image" src="https://github.com/user-attachments/assets/fc16b492-0339-4782-8285-6089b1802925" /><br>
-<img width="290" height="176" alt="image" src="https://github.com/user-attachments/assets/2b97e064-0ceb-477f-b2f2-762c54fa4e13" /><br>
 
+
+## Processor-1/O Speed Mismatch
+- 1GHz microprocessor can execute 1B load or store instructions per second, or 4,000,000 KB/s data rate
+- 1/0 data rates range from 0.01 KB/s to 1,250,000 KB/s the processor loads it
+- Input: device may not be ready to send data as fast as
+- Also, might be waiting for human to act; processor stores it
+- Output: device not be ready to accept data as fast as
+- What to do?
 
 ## polling
 
