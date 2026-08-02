@@ -125,6 +125,32 @@ other’s memory. <br>
 The processor’s state (e.g. registers) need to be saved in the thread control block (TCB) because the kernel may overwrite the registers when it executes its own code.<br>
 
 ## Example 2.1
+1. How many new processes (not including the original process) are created when the following programis run? Assume all fork calls succeed.
+``` C
+int main(void) {
+    for (int i = 0; i < 3; i++)
+      pid_t fork_ret = fork();
+    return 0;
+ }
+```
+7.<br>
+Newly forked processes will continue to execute the loop from wherever the parent process left off.<br>
+
+2. What are the possible outputs when the following program is run?
+``` C
+int main(void) {
+       int stuff = 5;
+       pid_t fork_ret = fork();
+       printf("The last digit of pi is %d\n", stuff);
+       if (fork_ret == 0)
+          stuff = 6;
+       return 0;
+}
+```
+fork creates a new process, meaning the address spaces are identical but not shared. As a result, changing stuff in the child process will have no effect on the value of stuff in the parent process, regardless of the execution order of the two processes. This means the following will be printed.<br>
+The last digit of pi is 5.<br>
+The last digit of pi is 5.<br>
+However, it is possible the fork doesn’t succeed as no such assumption was made. As a result, the child process would never be created, only resulting in one statement being printed.<br>
 
 # Discussion 2
 
