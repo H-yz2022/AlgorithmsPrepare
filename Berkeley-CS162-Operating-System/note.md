@@ -12,8 +12,18 @@ What does the OS do?
 2) OS Boot Sequence and Operation
 3) Multiprogramming/time-sharing
 4) Introduction to Virtual Memory<br>
+
 <img width="296" height="176" alt="image" src="https://github.com/user-attachments/assets/2d30d3ac-e45d-4140-b66b-a48e92e6ee51" /><br>
-<img width="285" height="177" alt="image" src="https://github.com/user-attachments/assets/d434ef89-4982-4554-ad76-f928afd04610" /><br>
+
+## Instruction Set Architecture for 1/O
+- What must the processor do for 1/O?
+    + Input: reads a sequence of bytes
+    + Output: writes a sequence of bytes
+- Some processors have special input and output instructions
+- Alternative model (used by MIPS):- Use loads for input, stores for output (in small pieces)
+    + Called Memory Mapped Input/Output
+    + A portion of the address space dedicated to communication paths to Input or Output devices (no
+
 <img width="290" height="161" alt="image" src="https://github.com/user-attachments/assets/fc16b492-0339-4782-8285-6089b1802925" /><br>
 
 
@@ -29,9 +39,10 @@ What does the OS do?
 
 <img width="299" height="173" alt="image" src="https://github.com/user-attachments/assets/d3526f86-e15b-48f0-b1d8-043b1de1ae91" /><br>
 <img width="260" height="172" alt="image" src="https://github.com/user-attachments/assets/aef40aa7-467e-49f9-94c2-c3076598d453" /><br>
+
 ### Cost of Polling?
 Assume for a processor with a 1GHz clock it takes400 clock cycles for a polling operation (calling polling routine, accessing the device, and returning).
-- Determine % of processor time for pollingmovement
+- Determine % of processor time for polling movement
 - Mouse: polled 30 times/sec so as not to miss user
 - Floppy disk (Remember those?): transferred data in 2-Byte units and had a data rate of 50 KB/second.
 - No data transfer can be missed.
@@ -45,7 +56,7 @@ Assume for a processor with a 1GHz clock it takes400 clock cycles for a polling 
 - Polling mouse little impact on processor
 
 - Clicker Time<br>
-Hard disk: transfers data in 16-Byte chunks and cantransfer at 16 MB/second. No transfer can be missed.What percentage of processor time is spent in polling?<br>
+Hard disk: transfers data in 16-Byte chunks and can transfer at 16 MB/second. No transfer can be missed. What percentage of processor time is spent in polling?<br>
 . A:2%<br>
 · B:4%<br>
 · C:20%<br>
