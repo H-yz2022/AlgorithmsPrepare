@@ -106,14 +106,13 @@ Supervisor mode does not fully isolate applications from each other or from the 
 - Remember your Project 1 linker: application assumes that code is in certain location. How to prevent overlaps?
 - May want to address more memory than we actually have (e.g., for sparse data structures).
 - Solution: Virtual Memory. Gives each process the illusion of a full memory address space that it has completely for itself.
-<img width="305" height="145" alt="image" src="https://github.com/user-attachments/assets/07873a58-8732-423c-8875-1ba00a222072" />
+
 
 #### Simple Base and Bound Translation
 Base and bounds registers are visible/ accessible only when precessor is running in supervisor mode
-<img width="308" height="147" alt="image" src="https://github.com/user-attachments/assets/2275faca-81ee-4ed5-9e2a-835aef3e504a" /><br>
+
 
 #### Separate Areas for Program and Data
-<img width="305" height="169" alt="image" src="https://github.com/user-attachments/assets/20ba17e7-ec30-4957-89cb-fcb3e10509e3" /><br>
 - What is an advantage of this separation?<br>
 As users come and go, the storage is "fragmented". Therefore, at some stage programs have to be moved around to compact the storage.<br>
 Page Memory Systems: Processor-generated address can be split into: page number and offset.<br>
