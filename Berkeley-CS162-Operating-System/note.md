@@ -100,7 +100,7 @@ Frequency of Polling Disk= 16 [MB/s]/16 [B/poll] = 1M [polls/s]
     + Set timer, change to user mode, jump to the new PC.
 - Deciding what process to run is called scheduling.
 
-### Protection, Translation, Paging
+#### Protection, Translation, Paging
 Supervisor mode does not fully isolate applications from each other or from the OS.
 - Application could overwrite another application's memory.
 - Remember your Project 1 linker: application assumes that code is in certain location. How to prevent overlaps?
@@ -108,7 +108,23 @@ Supervisor mode does not fully isolate applications from each other or from the 
 - Solution: Virtual Memory. Gives each process the illusion of a full memory address space that it has completely for itself.
 <img width="305" height="145" alt="image" src="https://github.com/user-attachments/assets/07873a58-8732-423c-8875-1ba00a222072" />
 
-- 
+#### Simple Base and Bound Translation
+Base and bounds registers are visible/ accessible only when precessor is running in supervisor mode
+<img width="308" height="147" alt="image" src="https://github.com/user-attachments/assets/2275faca-81ee-4ed5-9e2a-835aef3e504a" /><br>
+
+#### Separate Areas for Program and Data
+<img width="305" height="169" alt="image" src="https://github.com/user-attachments/assets/20ba17e7-ec30-4957-89cb-fcb3e10509e3" /><br>
+- What is an advantage of this separation?<br>
+As users come and go, the storage is "fragmented". Therefore, at some stage programs have to be moved around to compact the storage.<br>
+Page Memory Systems: Processor-generated address can be split into: page number and offset.<br>
+A page table contains the physical address of the base of each page. Page tables make it possible to store the pages of a program non-contiguously.<br>
+- Where Should Page Tables Reside?
+Space required by the page tables (PT) is proportionalto the address space, number of users, ...<br>
+-----> Too large to keep in registers
+- Idea: Keep PTs in the main memoryanother to access the data word<br>
+- Needs one reference to retrieve the page base address and
+-----> doubles the number of memory references!
+
 
 # Discussion 0 C,x86
 
