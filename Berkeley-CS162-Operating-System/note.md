@@ -35,9 +35,15 @@ What does the OS do?
 - Output: device not be ready to accept data as fast as
 - What to do?
 
-## polling
+## Polling
 
-<img width="299" height="173" alt="image" src="https://github.com/user-attachments/assets/d3526f86-e15b-48f0-b1d8-043b1de1ae91" /><br>
+- Processor Checks Status before Acting
+    + Path to a device generally has 2 registers: Control Register, says it's OK to read/write (1/O ready) [think of a flagman on a road]
+    + Data Register, contains data
+- Processor reads from Control Register in loop, waiting for device to set Ready bit in Control reg (0--->1)to say it's OK
+- Processor then loads from (input) or writes to (output) data register
+    + Load from or Store into Data Register resets Ready bit (0--->1) of Control Register
+ - This is called "Polling'<br>
 <img width="260" height="172" alt="image" src="https://github.com/user-attachments/assets/aef40aa7-467e-49f9-94c2-c3076598d453" /><br>
 
 ### Cost of Polling?
