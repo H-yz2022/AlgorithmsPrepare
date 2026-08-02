@@ -110,7 +110,7 @@ Supervisor mode does not fully isolate applications from each other or from the 
 
 - 
 
-# Discussion 0
+# Discussion 0 C,x86
 
 ### Example 1.1 
 1. Consider a valid double pointer char** dbl.char in a 32-bit system. What is sizeof(*dbl char)?<br>
@@ -128,7 +128,7 @@ char b[] = {'1', '6', '2', ' ', 'i', 's', ' ', 'b', 'e', 's', 't', 0}.<br>
 1. We want to debug the program using GDB. How should we compile the program?<br>
 gcc-g singer.c-o singer. We need a-g flag for debugging information. The-o simply controls the name of the executable that is created which defaults to a.out if not specified.<br>
 
-### Example 2 
+### Example 2.1
 1. Between SP and BP, which has a higher memory address?<br>
 bp has a higher memory address. The stack grows downwards, meaning the top of the stack moves towards lower addresses.<br>
 
@@ -137,6 +137,58 @@ The reduced instruction set of RISC-V means the processor requires less hardware
 
 4. True or False: Right before the caller jumps to the desired function,the stack must be 16-byte aligned<br>
 False. The stack needs to be 16-byte aligned right after the parameters have been pushed onto the stack. Return address is pushed right before jumping.
+
+### Example 2
+``` C
+intp=0;
+
+ intbar(intx,inty,intz){
+    intw=x+y-z;
+    returnw+1;
+ }
+
+ void foo(inta,intb){
+    p=a+b+bar(3,4,5);
+}
+```
+``` stack frame
+1 p:
+2 .zero 4
+3 bar:
+4 pushl %ebp
+5 movl %esp,%ebp
+6 subl $16,%esp
+7 movl 8(%ebp),%edx
+8 movl 12(%ebp),%eax
+9 addl %edx,%eax
+10 subl 16(%ebp),%eax
+11 movl %eax,-4(%ebp)
+12 movl-4(%ebp),%eax
+13 addl $1,%eax
+14 leave
+15 ret
+16 foo:
+17 pushl %ebp
+18 movl %esp,%ebp
+19 pushl %ebx
+20 subl $4,%esp
+21 movl 8(%ebp),%edx
+22 movl 12(%ebp),%eax
+23 leal (%edx,%eax),%ebx
+24 subl $4,%esp
+25 pushl $5
+26 pushl $4
+27 pushl $3
+28 call bar
+29 addl $16,%esp
+30 addl %ebx,%eax
+31 movl %eax,p
+32 nop
+33 movl-4(%ebp),%ebx
+34leave
+35ret
+
+```
 
 # Discussion 1
 
@@ -176,7 +228,9 @@ The last digit of pi is 5.<br>
 The last digit of pi is 5.<br>
 However, it is possible the fork doesn’t succeed as no such assumption was made. As a result, the child process would never be created, only resulting in one statement being printed.<br>
 
-# Discussion 2
+### Example 2.1 Pintos Lists
+
+# Discussion 2 Threads, I/O
 
 
 
