@@ -20,8 +20,8 @@ What does the OS do?
 
 ## polling
 
-<img width="299" height="173" alt="image" src="https://github.com/user-attachments/assets/d3526f86-e15b-48f0-b1d8-043b1de1ae91" />
-<img width="260" height="172" alt="image" src="https://github.com/user-attachments/assets/aef40aa7-467e-49f9-94c2-c3076598d453" />
+<img width="299" height="173" alt="image" src="https://github.com/user-attachments/assets/d3526f86-e15b-48f0-b1d8-043b1de1ae91" /><br>
+<img width="260" height="172" alt="image" src="https://github.com/user-attachments/assets/aef40aa7-467e-49f9-94c2-c3076598d453" /><br>
 ### Cost of Polling?
 Assume for a processor with a 1GHz clock it takes400 clock cycles for a polling operation (calling polling routine, accessing the device, and returning).
 - Determine % of processor time for pollingmovement
