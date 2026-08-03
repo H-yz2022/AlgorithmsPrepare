@@ -278,13 +278,43 @@ However, it is possible the fork doesn’t succeed as no such assumption was mad
 
 
 ## I/O
-1. Low-Level API
+1. Low-Level API: 
 2. High-Level API
-### Example I/O
-1. What’s the difference between fopen and open?
-fopen is a high-level API, while open is a low-level API. fopen will return a FILE* type, while open will return an integer
+3. Interprocess Communication IPC <br>
+Pipes are one-way communication channels between processes on the same physical machine.<br>
+Sockets are two-way communication channels between processes. <br>
 
-### Example2.2 File Descriptor Fun
+### Example I/O
+1. What’s the difference between fopen and open?<br>
+fopen is a high-level API, while open is a low-level API. fopen will return a FILE* type, while open will return an integer<br>
+<br>
+2. What will the test.txt file look like after this program is run? You may assume read and write fully succeed (i.e. read/write the specified number of bytes).<br>
+For reference, SEEK_SET will set the offset to offset bytes, while SEEK
+CUR will set the offset to its current location plus offset bytes. Seeking past the end of a file will set the bytes to 0.<br>
+
+``` C
+int main() {
+    char buffer[200];
+    memset(buffer, 'a', 200);
+    int fd = open("test.txt", O_CREAT|O_RDWR);
+    write(fd, buffer, 200);
+    lseek(fd, 0, SEEK_SET);
+    read(fd, buffer, 100);
+    lseek(fd, 500, SEEK_CUR);
+    write(fd, buffer, 100);
+}
+```
+Step-by-Step Execution Trace<br>
+1. open("test.txt", O_CREAT|O_RDWR): Creates/opens test.txt. File size: 0 bytes. Initial offset: 0.
+2. write(fd, buffer, 200): Writes 200 'a' characters.File size: 200 bytes. Current offset: 200.
+3. lseek(fd, 0, SEEK_SET): Moves offset to 0 (beginning of the file).
+4. read(fd, buffer, 100): Reads 100 bytes of 'a'.Current offset advances from 0 to 100.
+5. lseek(fd, 500, SEEK_CUR): Moves the offset forward by 500 bytes from current position 100. New offset: $100 + 500 = \mathbf{600}$. Since offset 600 is past the end of the file (which was 200 bytes), bytes 200 to 599 are unallocated gap space filled with literal null bytes (\0).
+6. write(fd, buffer, 100): Writes 100 bytes of 'a' starting at offset 600.Final file size: 700 bytes.
+
+
+
+### Example 2.2 File Descriptor Fun
 ``` C
 
 ```
@@ -294,7 +324,7 @@ fopen is a high-level API, while open is a low-level API. fopen will return a FI
 ```
 
 
-# Discussion 3
+# Discussion 3 MutualExclusion,ConditionVariables
 
 
 # Discussion 4
