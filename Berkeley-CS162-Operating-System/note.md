@@ -1,5 +1,5 @@
-## CS61C
-What does the OS do?
+# CS61C
+## What does the OS do?
 - One of the first things that runs when your computer starts (right after firmware/bootloader)
 - Loads, runs and manages programs:
  + Multiple programs at the same time (time-sharing)
@@ -123,6 +123,28 @@ Space required by the page tables (PT) is proportionalto the address space, numb
 - Idea: Keep PTs in the main memoryanother to access the data word<br>
 - Needs one reference to retrieve the page base address and
 -----> doubles the number of memory references!
+
+## Precise Traps
+- Trap handler's view of machine state is that everyinstruction prior to the trapped one has completed, andno instruction after the trap has executed.
+- Implies that handler can return from an interrupt by restoring user registers and jumping to EPC
+     + Interrupt handler software doesn't need to understand the pipeline of the machine, or what program was doing!
+     + More complex to handle trap caused by an exception
+- Providing precise traps is tricky in a pipelined superscalar out-of-order processor!
+     + But handling imprecise interrupts in software is even worse
+
+ 
+### Trap Handling in 5-stage Pipeline
+<img width="401" height="128" alt="image" src="https://github.com/user-attachments/assets/c95d39e3-82e0-410b-9ecd-dbac75d45380" />
+
+### Save Exception Until Commit
+<img width="375" height="182" alt="image" src="https://github.com/user-attachments/assets/e76f27c3-c06d-4faf-b67f-6af99d22b1bf" />
+
+### Dynamic Address Translation
+- Motivation
+     + In early machines, I/O operations were slow andeach word transferred involved the CPU
+     + Higher throughput if CPU and 1/O of 2 or more programs were overlapped.
+     + How?= multiprogramming with DMA I/O devices, interrupts
+
 
 
 # Discussion 0 C,x86
