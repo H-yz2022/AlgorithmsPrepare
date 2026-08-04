@@ -315,16 +315,30 @@ Step-by-Step Execution Trace<br>
 
 
 ### Example 2.2 File Descriptor Fun
+2. What does the following program print to standard output?
+``` C
+int main(int argc, char **argv) {
+    int fd;
+    if ((fd = open("out.txt", O_CREAT|O_TRUNC|O_WRONLY, 0644)) < 0)
+    exit(1);
+    printf("Thelastdigitofpiis ...");
+    fflush(stdout);
+    dup2(fd,1);
+    printf("five");
+    exit(0);
+}
+```
+Standard out will only print
+The last digit of pi is...
+since we replaced the file descriptor 1 was remapped to correspond to the file descriptor corresponding to the open out.txt. "five" will end up in out.txt.
+
+### Example 2.3 Echo Server
 ``` C
 
 ```
-### Example 2.3 EchoServer
-``` C
-
-```
 
 
-# Discussion 3 MutualExclusion,ConditionVariables
+# Discussion 3 Mutual Exclusion, Condition Variables
 
 
 # Discussion 4
