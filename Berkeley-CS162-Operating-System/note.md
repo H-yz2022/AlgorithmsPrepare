@@ -368,7 +368,12 @@ since we replaced the file descriptor 1 was remapped to correspond to the file d
 ```
 
 
-# Discussion 3 Mutual Exclusion, Condition Variables
+# Discussion 3 
+## Echo Server 
+
+## Mutual Exclusion
+
+## Condition Variables
 
 
 # Discussion 4
