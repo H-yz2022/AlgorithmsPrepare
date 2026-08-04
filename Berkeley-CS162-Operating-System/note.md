@@ -141,13 +141,27 @@ Space required by the page tables (PT) is proportionalto the address space, numb
 
 ### Dynamic Address Translation
 - Motivation
-     + In early machines, I/O operations were slow andeach word transferred involved the CPU
+     + In early machines, I/O operations were slow and each word transferred involved the CPU
      + Higher throughput if CPU and 1/O of 2 or more programs were overlapped.
      + How?= multiprogramming with DMA I/O devices, interrupts
-
+- Location-independent programs
+     + Programming and storage management ease
+     + ----> need for a base register
+- Protection
+     + Independent programs should not affect each other inadvertently
+     + ----> need for a bound register
+- Multiprogramming drives requirement for resident supervisor (os) software to manage context switches between multiple programs
 
 
 # Discussion 0 C,x86
+A typical C program’s memory is divided into five segments.
+| Segment | Purpose |
+| :--- | :--- |
+| **Text** | Machine code of the compiled program |
+| **Initialized Data** | Initialized global and static memory |
+| **Uninitialized Data** | Uninitialized global and static memory |
+| **Heap** | Dynamically allocated memory |
+| **Stack** | Local variables and argument passing |
 
 ### Example 1.1 
 1. Consider a valid double pointer char** dbl.char in a 32-bit system. What is sizeof(*dbl char)?<br>
