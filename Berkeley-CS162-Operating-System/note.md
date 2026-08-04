@@ -134,9 +134,9 @@ Space required by the page tables (PT) is proportionalto the address space, numb
 
  
 ### Trap Handling in 5-stage Pipeline
-<img width="401" height="128" alt="image" src="https://github.com/user-attachments/assets/c95d39e3-82e0-410b-9ecd-dbac75d45380" />
 
-### Save Exception Until Commit
+Save Exception Until Commit
+
 <img width="375" height="182" alt="image" src="https://github.com/user-attachments/assets/e76f27c3-c06d-4faf-b67f-6af99d22b1bf" />
 
 ### Dynamic Address Translation
@@ -151,7 +151,23 @@ Space required by the page tables (PT) is proportionalto the address space, numb
      + Independent programs should not affect each other inadvertently
      + ----> need for a bound register
 - Multiprogramming drives requirement for resident supervisor (os) software to manage context switches between multiple programs
-
+- Atlas Demand Paging Scheme
+- On a page fault:
+    + Input transfer into a free page is initiated
+    + The Page Address Register (PAR) is updated
+    + If no free page is left, a page is selected to be replaced(based on usage)
+    + The replaced page is written on the drum
+    + The page table is updated to point to the new location of the page on the drum
+- Size of Linear Page Table<br>
+With 32-bit addresses, 4-KB pages & 4-byte PTEs:<br>
+  ----> 2^20 PTEs, i.e, 4 MB page table per user<br>
+  ----> 4 GB of swap needed to back up full virtual address space<br>
+- Hierarchical Page Table
+- Translation Lookaside Buffers (TLB)
+    + Address translation is very expensive! In a two-level page table, each reference becomes several memory accesses
+    + Solution: Cache translations in TLB
+    + TLB hit = Single-Cycle Translation
+    + TLB miss = Page-Table Walk to refill
 
 # Discussion 0 C,x86
 A typical C program’s memory is divided into five segments.
