@@ -436,18 +436,25 @@ since we replaced the file descriptor 1 was remapped to correspond to the file d
 ## Echo Server 
 
 ## Mutual Exclusion
-Critical section(临界区)<br>
-临界区是指进程中的一段需要访问共享资源并且当另一个进程处于相应代码区域时便不会被执行的代码区域<br>
+
 <br>
 Mutual exclusion (互)<br>
 当一个进程处于临界区并访问共享资源时，没有其他进程会处于临界区并且访问任何相同的共享资源<br>
 <br>
-Dead lock (死锁)<br>
+Deadlock (死锁)<br>
 两个或以上的进程，在相互等待完成特定任务，而最终没法将自身任务进行下去<br>
 <br>
 Starvation (饥饿)<br>
 一个可执行的进程，被调度器持续忽略，以至于虽然处于可执行状态却不被执行<br>
+- 可能导致没有线程去买面包：错误时间的上下文切换可能会导致每个线程都认为另外一个线程回去买面包<br>
+- 最难处理的:极其不可能发生的事情也会发生在糟糕的时间；就像UNIX中的一些事情<br>
 <br>
+1. 解决方法 1：它有效，但是真的不够好。因为太复杂了 -即使对这个简单的例子而言，难以说服你自己它真的有效。A和B的代码不同，每个线程的代码也会略有不同，如果线程过多怎么办?当A在等待的时候，其实是在消耗CPU的时间。这种情况叫做“忙等待(busy-waiting)<br>
+2. 解决方法 2：
+3. 解决方法 3：Critical section(临界区)<br>
+临界区是指进程中的一段需要访问共享资源并且当另一个进程处于相应代码区域时便不会被执行的代码区域<br>
+
+
 ## Condition Variables
 
 
