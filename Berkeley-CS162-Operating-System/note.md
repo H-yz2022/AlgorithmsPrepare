@@ -305,6 +305,35 @@ However, it is possible the fork doesn’t succeed as no such assumption was mad
 4. int pthread_join
 
 ### Example Threads
+<img width="332" height="254" alt="3ed8e30d6d0b79a428df1b345a1dc478" src="https://github.com/user-attachments/assets/15dd3f4e-bef6-4e62-8ab5-4ffca5b7740e" />
+<img width="290" height="264" alt="6a605c271584efc02299e069baa1ed50" src="https://github.com/user-attachments/assets/210a1c80-7679-4118-b5f6-cce673ddddbb" /><br>
+假设所有进程在时刻 $0$ 同时到达，初始队首顺序为 $P_1, P_2, P_3, P_4$：<br>
+进程 CPU 运行时间（Burst Time）：$P_1 = 53$$P_2 = 8$$P_3 = 68$$P_4 = 24$<br>
+一、 FCFS（先来先服务）计算每个进程的等待时间 = 调度开始时间 - 到达时间（0）。
+1. Best FCFS（最佳顺序 / 短作业优先 SJF）最佳到达顺序（按执行时间从小到大）：$P_2 (8) \to P_4 (24) \to P_1 (53) \to P_3 (68)$$P_2$ 等待时间： $0$$P_4$ 等待时间： $8$$P_1$ 等待时间： $8 + 24 = 32$$P_3$ 等待时间： $8 + 24 + 53 = 85$平均等待时间： $(0 + 8 + 32 + 85) / 4 = 31.25$
+2. Worst FCFS（最差顺序 / 长作业优先 LJF）最差到达顺序（按执行时间从大到小）：$P_3 (68) \to P_1 (53) \to P_4 (24) \to P_2 (8)$$P_3$ 等待时间： $0$$P_1$ 等待时间： $68$$P_4$ 等待时间： $68 + 53 = 121$$P_2$ 等待时间： $68 + 53 + 24 = 145$平均等待时间： $(0 + 145 + 0 + 121) / 4 = 83.5$<br>
+二、 RR（时间片轮转）计算RR 的进程等待时间 = 进程完成时间（Completion Time） 
+- 运行时间（Burst Time）。以时间片 $q = 8$ 为例：各进程执行过程分析：$P_2$ 需要 8 个单位时间，在第一轮轮到它时（$t=8$ 到 $t=16$）刚好全部执行完毕。完成时间 $T_{finish}(P_2) = 16$$P_2$ 等待时间 $= 16
+- 8 = 8$$P_4$ 需要 24 个单位时间，经过 3 轮调度（每次 8）：完成时间 $T_{finish}(P_4) = 80$$P_4$ 等待时间 $= 80 - 24 = 56$$P_1$ 需要 53 个单位时间：完成时间 $T_{finish}(P_1) = 133$$P_1$ 等待时间 $= 133
+- 53 = 80$$P_3$ 需要 68 个单位时间：完成时间 $T_{finish}(P_3) = 153$$P_3$ 等待时间 $= 153 - 68 = 85$平均等待时间： $(80 + 8 + 85 + 56) / 4 = 57.25$<br>
+三、 完整结果汇总对比调度策略 / 时间片P1​ 等待时间P2​ 等待时间P3​ 等待时间P4​ 等待时间平均等待时间RR ($q=1$)8422855762.00RR ($q=5$)8220855861.25RR ($q=8$)808855657.25RR ($q=10$)8210856861.25RR ($q=20$)7220858866.25Best FCFS (SJF)32085831.25Worst FCFS68
+<br>
+fork()<br>
+<img width="359" height="212" alt="35f376c96d80af7249b033c6e0eba777" src="https://github.com/user-attachments/assets/d04627ec-2428-4388-bad4-a3e2359740da" />
+<img width="317" height="204" alt="37b2398a546abb03604e071b744b3c02" src="https://github.com/user-attachments/assets/7515eaee-d3a0-4751-b5be-1c22d408e667" />
+<br>
+- Atomic Operation<br>
+  + 原子操作是指一次不存在任何中断或者失败的执行<br>
+  + 该执行成功结束
+  + 或者根本没有执行
+  + 并且不应该发现任何部分执行的状态
+- 实际上操作往往不是原子的
+  + 有些看上去是原子操作，实际上不是
+  + 连x++这样的简单语句，实际上是由3条指令构成的
+  + 有时候甚至连单条机器指令都不是院子的
+        +    Pipeline, super-scalar, out-of-order, page fault<br>
+<img width="305" height="212" alt="fcee1b192a7b55a27cd65e3280bb7fed" src="https://github.com/user-attachments/assets/b6ae34c9-cd60-4468-89bc-2831ffdfc09c" />
+<br>
 
 
 ## I/O
