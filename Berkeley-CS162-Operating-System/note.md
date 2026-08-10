@@ -436,7 +436,18 @@ since we replaced the file descriptor 1 was remapped to correspond to the file d
 ## Echo Server 
 
 ## Mutual Exclusion
-
+Critical section(临界区)<br>
+临界区是指进程中的一段需要访问共享资源并且当另一个进程处于相应代码区域时便不会被执行的代码区域<br>
+<br>
+Mutual exclusion (互)<br>
+当一个进程处于临界区并访问共享资源时，没有其他进程会处于临界区并且访问任何相同的共享资源<br>
+<br>
+Dead lock (死锁)<br>
+两个或以上的进程，在相互等待完成特定任务，而最终没法将自身任务进行下去<br>
+<br>
+Starvation (饥饿)<br>
+一个可执行的进程，被调度器持续忽略，以至于虽然处于可执行状态却不被执行<br>
+<br>
 ## Condition Variables
 
 
