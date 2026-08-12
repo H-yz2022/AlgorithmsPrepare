@@ -393,9 +393,9 @@ int main(int argc, char **argv) {
     exit(0);
 }
 ```
-Standard out will only print
-The last digit of pi is...
-since we replaced the file descriptor 1 was remapped to correspond to the file descriptor corresponding to the open out.txt. "five" will end up in out.txt.
+Standard out will only print<br>
+The last digit of pi is...<br>
+since we replaced the file descriptor 1 was remapped to correspond to the file descriptor corresponding to the open out.txt. "five" will end up in out.txt.<br>
 
 ## Echo Server 
 ### Example 2.3 Echo Server
@@ -433,6 +433,42 @@ Starvation (饥饿)<br>
 3. Broadcast
 
 ### Infinite Synchronized Buffer
+### Semantics
+
+
+### Example 2.1
+ Will this program compile/run?
+``` C
+ pthread_mutex_t lock;
+ int hello = 0;
+void print_hello() {
+hello += 1;
+
+printf("First line (hello=%d)\n", hello);
+pthread_cond_signal(&cv);
+pthread_exit(0);
+
+}
+
+void main() {
+pthread_t thread;
+pthread_create(&thread, NULL, (void *) &print_hello, NULL);
+while (hello < 1)
+pthread_cond_wait(&cv, &lock);
+printf("Second line (hello=%d)\n", hello);
+cv hello.c
+}
+
+
+```
+This program will not run because the thread needs to be holding a lock before performing a
+condition variable operation like wait or signal.<br>
+Moreover, the lock and condition variable was never initialized, which would lead to undefined
+behavior.<br>
+
+
+### Example 2.2 Office Hours Queue
+
 
 # Discussion 4
 ## Scheduling
