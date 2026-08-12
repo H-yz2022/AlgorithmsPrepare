@@ -337,37 +337,7 @@ However, it is possible the fork doesn’t succeed as no such assumption was mad
 ### Example Threads
 <img width="332" height="254" alt="3ed8e30d6d0b79a428df1b345a1dc478" src="https://github.com/user-attachments/assets/15dd3f4e-bef6-4e62-8ab5-4ffca5b7740e" />
 <img width="290" height="264" alt="6a605c271584efc02299e069baa1ed50" src="https://github.com/user-attachments/assets/210a1c80-7679-4118-b5f6-cce673ddddbb" /><br>
-假设所有进程在时刻 $0$ 同时到达，初始队首顺序为 $P_1, P_2, P_3, P_4$：<br>
-进程 CPU 运行时间（Burst Time）：$P_1 = 53$ $P_2 = 8$ $P_3 = 68$ $P_4 = 24$<br>
-一、 FCFS（先来先服务）计算每个进程的等待时间 = 调度开始时间 - 到达时间（0）。
-1. Best FCFS（最佳顺序 / 短作业优先 SJF）最佳到达顺序（按执行时间从小到大）：
-   $P_2 (8) \to P_4 (24) \to P_1 (53) \to P_3 (68)$$P_2$
-   等待时间： $0$$P_4$
-   等待时间： $8$$P_1$
-   等待时间： $8 + 24 = 32$$P_3$
-   等待时间： $8 + 24 + 53 = 85$
-   平均等待时间： $(0 + 8 + 32 + 85) / 4 = 31.25$
-2. Worst FCFS（最差顺序 / 长作业优先 LJF）最差到达顺序（按执行时间从大到小）：
-   $P_3 (68) \to P_1 (53) \to P_4 (24) \to P_2 (8)$$P_3$
-   等待时间： $0$$P_1$
-   等待时间： $68$$P_4$
-   等待时间： $68 + 53 = 121$$P_2$
-   等待时间： $68 + 53 + 24 = 145$
-   平均等待时间： $(0 + 145 + 0 + 121) / 4 = 83.5$<br>
-   
-二、 RR（时间片轮转）计算RR 的进程等待时间 = 进程完成时间（Completion Time） 
-- 运行时间（Burst Time）。以时间片 $q = 8$ 为例：
-- 各进程执行过程分析：
-  $P_2$ 需要 8 个单位时间，在第一轮轮到它时（$t=8$ 到 $t=16$）刚好全部执行完毕。
-  完成时间 $T_{finish}(P_2) = 16$$P_2$
-  等待时间 $= 16- 8 = 8$ $P_4$ 需要 24 个单位时间，经过 3 轮调度（每次 8）：
-  完成时间 $T_{finish}(P_4) = 80$$P_4$
-  等待时间 $= 80 - 24 = 56$$P_1$ 需要 53 个单位时间：
-  完成时间 $T_{finish}(P_1) = 133$$P_1$
-  等待时间 $= 133- 53 = 80$$P_3$ 需要 68 个单位时间：
-  完成时间 $T_{finish}(P_3) = 153$$P_3$
-  等待时间 $= 153 - 68 = 85$
-  平均等待时间： $(80 + 8 + 85 + 56) / 4 = 57.25$<br>
+
 
 
 
@@ -427,6 +397,7 @@ Standard out will only print
 The last digit of pi is...
 since we replaced the file descriptor 1 was remapped to correspond to the file descriptor corresponding to the open out.txt. "five" will end up in out.txt.
 
+## Echo Server 
 ### Example 2.3 Echo Server
 ``` C
 
@@ -434,7 +405,7 @@ since we replaced the file descriptor 1 was remapped to correspond to the file d
 
 
 # Discussion 3 
-## Echo Server 
+
 
 ## Mutual Exclusion
 
@@ -442,8 +413,7 @@ since we replaced the file descriptor 1 was remapped to correspond to the file d
 Mutual exclusion (互)<br>
 当一个进程处于临界区并访问共享资源时，没有其他进程会处于临界区并且访问任何相同的共享资源<br>
 <br>
-Deadlock (死锁)<br>
-两个或以上的进程，在相互等待完成特定任务，而最终没法将自身任务进行下去<br>
+
 <br>
 Starvation (饥饿)<br>
 一个可执行的进程，被调度器持续忽略，以至于虽然处于可执行状态却不被执行<br>
@@ -455,9 +425,14 @@ Starvation (饥饿)<br>
 3. 解决方法 3：Critical section(临界区)<br>
 临界区是指进程中的一段需要访问共享资源并且当另一个进程处于相应代码区域时便不会被执行的代码区域<br>
 
+###Locks
 
 ## Condition Variables
+1. Wait
+2. Signal
+3. Broadcast
 
+### Infinite Synchronized Buffer
 
 # Discussion 4
 ## Scheduling
@@ -472,12 +447,14 @@ Starvation (饥饿)<br>
 # Starvation
 ## Strict Policy
 ## Deadlock
-限制申请方式
-互斥-共享资源不是必须的，必须占用非共享资源。
-占用并等待-必须保证当一个进程请求的资源，它不持有任何其他资源。
-需要进程请求并分配其所有资源，它开始执行之前或允许进程请求资源仅当进
-程没有资源。
-资源利用率低;可能发生饥饿。
+Deadlock (死锁)<br>
+两个或以上的进程，在相互等待完成特定任务，而最终没法将自身任务进行下去<br>
+
+限制申请方式<br>
+互斥-共享资源不是必须的，必须占用非共享资源。<br>
+占用并等待-必须保证当一个进程请求的资源，它不持有任何其他资源。<br>
+需要进程请求并分配其所有资源，它开始执行之前或允许进程请求资源仅当进程没有资源。<br>
+资源利用率低;可能发生饥饿。<br>
 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
 
 ### Example 1.1 Round Robin T/F
@@ -758,15 +735,9 @@ close(sock_fd)：正确关闭通信套接字。（注：原题伪代码中 close
 
 三、 代码间强关联与链条关系
 各个步骤构成一个紧密耦合的逻辑链条，前一步骤的正确性直接决定后续步骤的执行：
+<img width="578" height="132" alt="image" src="https://github.com/user-attachments/assets/c0f6588a-ed23-456b-a9eb-878d5986e707" />
 
-Plaintext
-┌────────────────┐      转换正确 id      ┌─────────────┐      得到 Payload 边界      ┌─────────────────┐
-│ read id 4 字节 │ ───────────────────> │  ntohl(id)  │ ───────────────────────> │ get_sizes(...)  │
-└────────────────┘                      └─────────────┘                          └─────────┬───────┘
-                                                                                           │
-┌────────────────┐       清空缓冲区      ┌─────────────┐      填充 rets 完毕      ┌────────┴────────┐
-│ close(sock_fd) │ <─────────────────── │ write rets  │ <──────────────────────── │ call_server_stub│
-└────────────────┘                      └─────────────┘                           └─────────────────┘
+
 read id 决定 ntohl 的有效性：只有在读满 4 字节后，ntohl 转换出来的数字才具有业务意义，否则会将垃圾数据进行字节序转换。
 
 ntohl 决定 get_sizes 的正确性：若遗漏字节序转换，大端序下的数值 1 在小端序机器上会被解析为 16,777,216，导致 get_sizes 尝试申请内存巨幅超载，引发崩溃。
