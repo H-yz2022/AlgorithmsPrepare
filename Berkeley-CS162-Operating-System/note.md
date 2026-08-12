@@ -20,7 +20,8 @@
     + Input: reads a sequence of bytes
     + Output: writes a sequence of bytes
 - Some processors have special input and output instructions
-- Alternative model (used by MIPS):- Use loads for input, stores for output (in small pieces)
+- Alternative model (used by MIPS):
+    + Use loads for input, stores for output (in small pieces)
     + Called Memory Mapped Input/Output
     + A portion of the address space dedicated to communication paths to Input or Output devices (no
 
@@ -459,13 +460,27 @@ Starvation (饥饿)<br>
 
 
 # Discussion 4
+## Scheduling
+### Example 1.1 Round Robin T/F
+### Example 1.2 Life Ain’t Fair
+### Example 1.3 Bitcoin Mining
 
 
 
 # Discussion 5
+
+# Starvation
+## Strict Policy
+## Deadlock
+限制申请方式
+互斥-共享资源不是必须的，必须占用非共享资源。
+占用并等待-必须保证当一个进程请求的资源，它不持有任何其他资源。
+需要进程请求并分配其所有资源，它开始执行之前或允许进程请求资源仅当进
+程没有资源。
+资源利用率低;可能发生饥饿。
 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
 
-### 源码解析与恢复
+### Example 1.1 Round Robin T/F
 
 > **Problem Description:**  
 > 在 Try #2 方案中，使用独立的 `bool maybe_waiters` 存在状态竞态（Data Race）和死锁风险。为了彻底解决这一问题，需要将“锁占用”与“等待状态”合并到一个原子变量中，采用 **三种状态（UNLOCKED, LOCKED, CONTESTED）** 实现高性能且绝对安全的用户态互斥锁（Mutex）。
