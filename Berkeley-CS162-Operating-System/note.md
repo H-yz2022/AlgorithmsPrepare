@@ -3,7 +3,7 @@
 - One of the first things that runs when your computer starts (right after firmware/bootloader)
 - Loads, runs and manages programs:
  + Multiple programs at the same time (time-sharing)
- + Isolate programs from each other (isolation)
+ + Isolates programs from each other (isolation)
  + Multiplex resources between applications (e.g., devices)
 - Services: File System, Network stack, etc. 
 - Finds and controls all the devices in the machine in general way (using "device drivers")
@@ -625,7 +625,48 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 
 高竞争场景：依赖内核级 futex 系统调用精确控制线程休眠与唤醒，兼顾极致性能与并发安全性。
 
-#  Discussion 10
+
+
+
+
+# Discussion 6 Paging, Caches
+
+
+# Discussion 7 I/O
+
+
+# Discussion 8 Queueing Theory, File Systems
+## Queuing Theory
+### IPC
+1. 概述 进程通信的机制及同步;
+      + 不使用共享变量的进程通信;
+      + IPC facility 提供2个操作:send(message)-消息大小固定或者可变 receive(message);
+      + 如果P和Q想通信，需要: 在它们之间建立通信链路通过 send/receive交换消息
+      + 通信链路的实现物理(例如，共享内存，硬件总线),逻辑(例如，逻辑属性)
+2. 通信模型
+3. 直接及间接通信       
+      + 进程必须正确的命名对方:sendmessage)
+            + send(P,message)-发送信息到进程P
+            + receive(Q,message)- 从进程Q接受消息
+      + 通信链路的属性
+            - 自动建立链路
+        
+        
+4. 阻塞与非阻塞
+      + 
+5. 通信链路缓冲
+6. 信号
+7. 管道
+8. 消息队列
+9. 共享内存
+
+##  File Systems
+
+# Discussion 9 File Systems, Reliability
+
+
+
+#  Discussion 10 Distributed Systems
 
 ##  4.3 Primes
 
