@@ -743,19 +743,22 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
       4)链接可以是单向的，但通常为双向的<br>
 <br>        
 4. 阻塞与非阻塞<br>
-      + 消息传递可以是阻塞或非阻塞<br>
+      + 消息传递可以是阻塞或非阻塞
       + 阻断被认为是同步的<br>
-      +    1)Blocking send has the sender block until the message is received<br>
-      +    2)Blocking receive has the receiver block until a message is available<br>
-      + 非阻塞被认为是异步的<br>
-      +    1)Non-blocking send has the sender send the message and continue<br>
-      +    2)Non-blocking receive has the receiver receive a valid message or null<br>
+          1)Blocking send has the sender block until the message is received<br>
+          2)Blocking receive has the receiver block until a message is available<br>
+      + 非阻塞被认为是异步的      
+          1)Non-blocking send has the sender send the message and continue<br>
+          2)Non-blocking receive has the receiver receive a valid message or null<br>
+       
 5. 通信链路缓冲
-      + 队列的消息被附加到链路;可以是以下3种方式之一:
-      +    1. 0容量-0messages<br>发送方必须等待接收方(rendezvous)<br>
-      +    2.有限容量-nmessages的有限长度<br>发送方必须等待，如果队列满<br>
-      +    3.无限容量-无限长度<br>发送方不需要等待<br>
-
+     + 队列的消息被附加到链路;可以是以下3种方式之一:
+      1. 0容量-0messages<br>发送方必须等待接收方(rendezvous)
+      2. 有限容量-nmessages的有限长度<br>发送方必须等待，如果队列满
+      3. 无限容量-无限长度<br>发送方不需要等待
+     
+      
+      
 ### IPC 
 6. 信号 Signal(信号) 
       + 软件中断通知事件处理<br>
@@ -797,7 +800,7 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 ##  File Systems
 1. 基本概念
 - 文件系统和文件
-      + 文件系统:一种用于持久性存储的系统抽象<br>
+      - 文件系统:一种用于持久性存储的系统抽象 <br>
       + 在存储器上:组织、控制、导航、访问和检索数据，大多数计算机系统包含文件系统；个人电脑、服务器、笔记本电脑；iPod、Tivo /机顶盒、手机/掌上电脑；Google可能是由一个文件系统构成的<br>
       + 文件:文件系统中一个单元的相关数据在操作系统中的抽象<br>
 - 文件系统功能
