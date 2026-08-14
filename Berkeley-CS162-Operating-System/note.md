@@ -570,43 +570,40 @@ void release(Lock *thelock) {
 }
 ```
 
-一、 为什么“三状态”设计是最佳解决方案？
-在 Try #2 中，使用独立的 int mylock 和 bool maybe_waiters 两个变量，会导致锁状态与等待状态脱节，从而引发数据竞态（Data Race）和唤醒丢失（Lost Wakeup）造成的死锁。
-
-“三状态模型”的核心创新在于：
-
-将 “锁是否被占用” 与 “是否有线程在休眠（竞争）” 两个关键信息，压缩并合并到了同一个原子变量（thelock）中。
-
-通过这一设计，所有对锁和等待状态的修改均可通过 单条原子指令（CAS 或 Swap） 一步完成，彻底杜绝了状态不一致的问题。
-
-二、 核心代码逐行拆解
-1. acquire() —— 申请锁
-① Fast Path（无竞争快速路径）
+一、 为什么“三状态”设计是最佳解决方案？<br>
+在 Try #2 中，使用独立的 int mylock 和 bool maybe_waiters 两个变量，会导致锁状态与等待状态脱节，从而引发数据竞态（Data Race）和唤醒丢失（Lost Wakeup）造成的死锁。<br>
+<br>
+“三状态模型”的核心创新在于：<br>
+将 “锁是否被占用” 与 “是否有线程在休眠（竞争）” 两个关键信息，压缩并合并到了同一个原子变量（thelock）中。<br>
+通过这一设计，所有对锁和等待状态的修改均可通过 单条原子指令（CAS 或 Swap） 一步完成，彻底杜绝了状态不一致的问题。<br>
+<br>
+二、 核心代码逐行拆解<br>
+1. acquire() —— 申请锁<br>
+① Fast Path（无竞争快速路径）<br>
 ```C
 if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED)
     return;
 ```
-原理解析：检查 *thelock 是否等于 UNLOCKED(0)，若是，原子的将其设为 LOCKED(1) 并返回旧值 UNLOCKED(0)。
-
-性能优势：在无竞争的理想情况下，仅执行一条硬件级 CPU 原子指令即完成加锁，完全不发起 futex 系统调用（Syscall-Free），耗时仅几纳秒。
-
-② Slow Path（有竞争慢速路径）
+原理解析：检查 *thelock 是否等于 UNLOCKED(0)，若是，原子的将其设为 LOCKED(1) 并返回旧值 UNLOCKED(0)。<br>
+性能优势：在无竞争的理想情况下，仅执行一条硬件级 CPU 原子指令即完成加锁，完全不发起 futex 系统调用（Syscall-Free），耗时仅几纳秒。<br>
+<br>
+② Slow Path（有竞争慢速路径）<br>
 ```C
 while (swap(thelock, CONTESTED) != UNLOCKED) {
     futex(thelock, FUTEX_WAIT, CONTESTED);
 }
 ```
 swap(thelock, CONTESTED)：无条件将 *thelock 设为 CONTESTED(2) 并返回旧值。
-
+<br>
 旧值为 UNLOCKED(0)：说明在上一步和本步骤之间恰好有线程释放了锁，当前线程成功抢占锁，跳出循环。
-
+<br>
 旧值为 LOCKED(1) 或 CONTESTED(2)：说明锁仍被占用。强制将锁状态标记为 CONTESTED，确保持锁线程解锁时知道有等待者存在。
-
+<br>
 futex(thelock, FUTEX_WAIT, CONTESTED)：
-
-内核级防死锁（Atomic Sleep Check）：内核会在让线程进入休眠前，原子地校验 *thelock 当前是否仍等于 CONTESTED。若在调用瞬间有人释放了锁并修改了状态，futex 将立即返回而非陷入休眠，避免了“丢失唤醒”。
-
-2. release() —— 释放锁
+<br>
+内核级防死锁（Atomic Sleep Check）：内核会在让线程进入休眠前，原子地校验 *thelock 当前是否仍等于 CONTESTED。若在调用瞬间有人释放了锁并修改了状态，futex 将立即返回而非陷入休眠，避免了“丢失唤醒”。<br>
+<br>
+2. release() —— 释放锁<br>
 ```C
 if (swap(thelock, UNLOCKED) == CONTESTED) {
     futex(thelock, FUTEX_WAKE, 1);
@@ -614,16 +611,16 @@ if (swap(thelock, UNLOCKED) == CONTESTED) {
 swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状态。
 ```
 分支逻辑校验：
+<br>
+释放前为 LOCKED(1)：说明在持锁期间无任何其他线程试图抢锁（否则状态会被抢锁线程修改为 2）。直接在用户态完成解锁，无需系统调用。<br>
 
-释放前为 LOCKED(1)：说明在持锁期间无任何其他线程试图抢锁（否则状态会被抢锁线程修改为 2）。直接在用户态完成解锁，无需系统调用。
-
-释放前为 CONTESTED(2)：说明存在线程因抢锁失败已陷入内核休眠，必须发起 futex(..., FUTEX_WAKE, 1) 系统调用唤醒等待队列中的一个线程。
-
+释放前为 CONTESTED(2)：说明存在线程因抢锁失败已陷入内核休眠，必须发起 futex(..., FUTEX_WAKE, 1) 系统调用唤醒等待队列中的一个线程。<br>
+<br>
 三状态 Futex 互斥锁 巧妙利用 UNLOCKED(0)、LOCKED(1)、CONTESTED(2) 三种状态，将锁状态与等待队列标记融合在一起：
 
-无竞争场景：完全在用户态（Userspace）完成，零系统调用开销。
+无竞争场景：完全在用户态（Userspace）完成，零系统调用开销。<br>
 
-高竞争场景：依赖内核级 futex 系统调用精确控制线程休眠与唤醒，兼顾极致性能与并发安全性。
+高竞争场景：依赖内核级 futex 系统调用精确控制线程休眠与唤醒，兼顾极致性能与并发安全性。<br>
 
 
 
@@ -637,7 +634,7 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 
 # Discussion 8 Queueing Theory, File Systems
 ## Queuing Theory
-### IPC
+### IPC 概述
 1. 概述 进程通信的机制及同步;
       + 不使用共享变量的进程通信;
       + IPC facility 提供2个操作:send(message)-消息大小固定或者可变 receive(message);
@@ -645,19 +642,51 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
       + 通信链路的实现物理(例如，共享内存，硬件总线),逻辑(例如，逻辑属性)
 2. 通信模型
 3. 直接及间接通信       
-      + 进程必须正确的命名对方:sendmessage)
-            + send(P,message)-发送信息到进程P
-            + receive(Q,message)- 从进程Q接受消息
-      + 通信链路的属性
-            - 自动建立链路
-        
-        
+      + 进程必须正确的命名对方:sendmessage)<br>
+            1) send(P,message)-发送信息到进程P
+            2) receive(Q,message)- 从进程Q接受消息
+      + 通信链路的属性<br>
+      1)自动建立链路<br>
+      2)一条链路恰好对应一对通信进程<br>
+      3)每对进程之间只有一个链接存在<br>
+      4)链接可以是单向的，但通常为双向的
+<br>        
 4. 阻塞与非阻塞
-      + 
+      + 消息传递可以是阻塞或非阻塞
+      + 阻断被认为是同步的
+      + 1)Blocking send has the sender block until the message is received
+      + 2)Blocking receive has the receiver block until a message is available
+      + 非阻塞被认为是异步的
+      + 1)Non-blocking send has the sender send the message and continue
+      + 2)Non-blocking receive has the receiver receive a valid message or null
 5. 通信链路缓冲
-6. 信号
+      + 队列的消息被附加到链路;可以是以下3种方式之一:
+      + 1. 0容量-0messages<br>
+发送方必须等待接收方(rendezvous)<br>
+      + 2.有限容量-nmessages的有限长度<br>
+发送方必须等待，如果队列满<br>
+      + 3.无限容量-无限长度<br>
+发送方不需要等待<br>
+### IPC 
+6. 信号 Signal(信号) 
+      + 软件中断通知事件处理
+      + Examples: SIGFPE, SIGKILL, SIGUSR1, SIGSTOP, SIGCONT
+      + 接收到信号时会发生什么
+      + 1) Catch:指定信号处理函数被调用
+        2) Ignore:依靠操作系统的默认操作Example: Abort, memory dump, suspend or resume process
+        3) Mask:闭塞信号因此不会传送,可能是暂时的(当处理同样类型的信号)
+      + 不足:不能传输要交换的任何数据
+<img width="580" height="316" alt="image" src="https://github.com/user-attachments/assets/b22aa9cc-b057-40c1-aa0e-96d1a991730a" />
+
 7. 管道
+      + 子进程从父进程继承文件描述符: file descriptor 0 stdin, 1 stdout, 2 stderr
+      + 进程不知道(或不关心!)从键盘，文件，程序读取，或写入到终端，文件，程序。
+      + % ls | more
+<img width="400" height="141" alt="image" src="https://github.com/user-attachments/assets/366c272e-d7b7-465e-a675-a1ddefd3e939" />
+
 8. 消息队列
+
+
 9. 共享内存
 
 ##  File Systems
