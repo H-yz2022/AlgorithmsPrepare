@@ -653,20 +653,17 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 <br>        
 4. 阻塞与非阻塞
       + 消息传递可以是阻塞或非阻塞
-      + 阻断被认为是同步的
-   1)Blocking send has the sender block until the message is received
-   2)Blocking receive has the receiver block until a message is available
-      + 非阻塞被认为是异步的
-   1)Non-blocking send has the sender send the message and continue
-   2)Non-blocking receive has the receiver receive a valid message or null
+      + 阻断被认为是同步的<br>
+   1)Blocking send has the sender block until the message is received<br>
+   2)Blocking receive has the receiver block until a message is available<br>
+      + 非阻塞被认为是异步的<br>
+   1)Non-blocking send has the sender send the message and continue<br>
+   2)Non-blocking receive has the receiver receive a valid message or null<br>
 5. 通信链路缓冲
       + 队列的消息被附加到链路;可以是以下3种方式之一:
-   1. 0容量-0messages<br>
-发送方必须等待接收方(rendezvous)<br>
-   2.有限容量-nmessages的有限长度<br>
-发送方必须等待，如果队列满<br>
-   3.无限容量-无限长度<br>
-发送方不需要等待<br>
+      +    1. 0容量-0messages<br>发送方必须等待接收方(rendezvous)<br>
+      +    2.有限容量-nmessages的有限长度<br>发送方必须等待，如果队列满<br>
+      +    3.无限容量-无限长度<br>发送方不需要等待<br>
 
 ### IPC 
 6. 信号 Signal(信号) 
@@ -687,9 +684,23 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 <img width="400" height="141" alt="image" src="https://github.com/user-attachments/assets/366c272e-d7b7-465e-a675-a1ddefd3e939" />
 
 8. 消息队列
-
+消息队列按FIFO的来管理消息
+      + Mlessage:作为一个字节序列存储
+      + Message Queues:消息数组
+      + FIFO & FILO configuration
+<img width="837" height="327" alt="image" src="https://github.com/user-attachments/assets/9b1672aa-2309-4e65-bfb7-356fba64e67e" />
 
 9. 共享内存
+      + 进程: 每个进程都有私有地址空间;在每个地址空间内，明确地设置了共享内存段
+      + 优点:快速、方便地共享数据
+      + 不足:必须同步数据访问
+<img width="837" height="391" alt="image" src="https://github.com/user-attachments/assets/7dc66f17-608d-4d6d-90a5-f0b4cc14a34b" />
+      + 最快的方法
+      + 一个进程写另外一个进程立即可见
+      + 没有系统调用干预
+      + 没有数据复制
+      + 不提供同步
+      + 由程序员提供同步
 
 ##  File Systems
 
