@@ -649,34 +649,36 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
       1)自动建立链路<br>
       2)一条链路恰好对应一对通信进程<br>
       3)每对进程之间只有一个链接存在<br>
-      4)链接可以是单向的，但通常为双向的
+      4)链接可以是单向的，但通常为双向的<br>
 <br>        
 4. 阻塞与非阻塞
       + 消息传递可以是阻塞或非阻塞
       + 阻断被认为是同步的
-      + 1)Blocking send has the sender block until the message is received
-      + 2)Blocking receive has the receiver block until a message is available
+   1)Blocking send has the sender block until the message is received
+   2)Blocking receive has the receiver block until a message is available
       + 非阻塞被认为是异步的
-      + 1)Non-blocking send has the sender send the message and continue
-      + 2)Non-blocking receive has the receiver receive a valid message or null
+   1)Non-blocking send has the sender send the message and continue
+   2)Non-blocking receive has the receiver receive a valid message or null
 5. 通信链路缓冲
       + 队列的消息被附加到链路;可以是以下3种方式之一:
-      + 1. 0容量-0messages<br>
+   1. 0容量-0messages<br>
 发送方必须等待接收方(rendezvous)<br>
-      + 2.有限容量-nmessages的有限长度<br>
+   2.有限容量-nmessages的有限长度<br>
 发送方必须等待，如果队列满<br>
-      + 3.无限容量-无限长度<br>
+   3.无限容量-无限长度<br>
 发送方不需要等待<br>
+
 ### IPC 
 6. 信号 Signal(信号) 
-      + 软件中断通知事件处理
+      + 软件中断通知事件处理<br>
       + Examples: SIGFPE, SIGKILL, SIGUSR1, SIGSTOP, SIGCONT
       + 接收到信号时会发生什么
-      + 1) Catch:指定信号处理函数被调用
-        2) Ignore:依靠操作系统的默认操作Example: Abort, memory dump, suspend or resume process
-        3) Mask:闭塞信号因此不会传送,可能是暂时的(当处理同样类型的信号)
-      + 不足:不能传输要交换的任何数据
-<img width="580" height="316" alt="image" src="https://github.com/user-attachments/assets/b22aa9cc-b057-40c1-aa0e-96d1a991730a" />
+        1) Catch:指定信号处理函数被调用<br>
+        2) Ignore:依靠操作系统的默认操作Example: Abort, memory dump, suspend or resume process<br>
+        3) Mask:闭塞信号因此不会传送,可能是暂时的(当处理同样类型的信号)<br>
+      + 不足:不能传输要交换的任何数据<br>
+      <br>
+<img width="580" height="316" alt="image" src="https://github.com/user-attachments/assets/b22aa9cc-b057-40c1-aa0e-96d1a991730a" /><br>
 
 7. 管道
       + 子进程从父进程继承文件描述符: file descriptor 0 stdin, 1 stdout, 2 stderr
