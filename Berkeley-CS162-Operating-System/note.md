@@ -745,11 +745,11 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 4. 阻塞与非阻塞<br>
       + 消息传递可以是阻塞或非阻塞<br>
       + 阻断被认为是同步的<br>
-   1)Blocking send has the sender block until the message is received<br>
-   2)Blocking receive has the receiver block until a message is available<br>
+      +    1)Blocking send has the sender block until the message is received<br>
+      +    2)Blocking receive has the receiver block until a message is available<br>
       + 非阻塞被认为是异步的<br>
-   1)Non-blocking send has the sender send the message and continue<br>
-   2)Non-blocking receive has the receiver receive a valid message or null<br>
+      +    1)Non-blocking send has the sender send the message and continue<br>
+      +    2)Non-blocking receive has the receiver receive a valid message or null<br>
 5. 通信链路缓冲
       + 队列的消息被附加到链路;可以是以下3种方式之一:
       +    1. 0容量-0messages<br>发送方必须等待接收方(rendezvous)<br>
