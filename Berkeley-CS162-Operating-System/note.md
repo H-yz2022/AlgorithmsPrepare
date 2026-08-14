@@ -410,20 +410,12 @@ since we replaced the file descriptor 1 was remapped to correspond to the file d
 ## Mutual Exclusion
 
 <br>
-Mutual exclusion (互)<br>
+Mutual exclusion (互斥)<br>
 当一个进程处于临界区并访问共享资源时，没有其他进程会处于临界区并且访问任何相同的共享资源<br>
 <br>
 
 <br>
-Starvation (饥饿)<br>
-一个可执行的进程，被调度器持续忽略，以至于虽然处于可执行状态却不被执行<br>
-- 可能导致没有线程去买面包：错误时间的上下文切换可能会导致每个线程都认为另外一个线程回去买面包<br>
-- 最难处理的:极其不可能发生的事情也会发生在糟糕的时间；就像UNIX中的一些事情<br>
-<br>
-1. 解决方法 1：它有效，但是真的不够好。因为太复杂了 -即使对这个简单的例子而言，难以说服你自己它真的有效。A和B的代码不同，每个线程的代码也会略有不同，如果线程过多怎么办?当A在等待的时候，其实是在消耗CPU的时间。这种情况叫做“忙等待(busy-waiting)<br>
-2. 解决方法 2：
-3. 解决方法 3：Critical section(临界区)<br>
-临界区是指进程中的一段需要访问共享资源并且当另一个进程处于相应代码区域时便不会被执行的代码区域<br>
+
 
 ###Locks
 
@@ -481,6 +473,105 @@ behavior.<br>
 # Discussion 5
 
 # Starvation
+Starvation (饥饿)<br>
+一个可执行的进程，被调度器持续忽略，以至于虽然处于可执行状态却不被执行<br>
+- 可能导致没有线程去买面包：错误时间的上下文切换可能会导致每个线程都认为另外一个线程回去买面包<br>
+- 最难处理的:极其不可能发生的事情也会发生在糟糕的时间；就像UNIX中的一些事情<br>
+互斥:同一时间临界区中最多存在一个线程<br>
+Progress:如果一个线程想要进入临界区，那么它最终会成功<br>
+有限等待:如果一个线程i处于入口区，那么在i的请求被接受之前其他线程进入临界区的时间是有限制的<br>
+无忙等待(可选):如果一个进程在等待进入临界区，那么在它可以进入之前会被挂起<br>
+<br>
+1. 解决方法 1 禁用硬件中断：它有效，但是真的不够好。因为太复杂了 -即使对这个简单的例子而言，难以说服你自己它真的有效。A和B的代码不同，每个线程的代码也会略有不同，如果线程过多怎么办?当A在等待的时候，其实是在消耗CPU的时间。这种情况叫做“忙等待(busy-waiting)<br>
+2. 解决方法 2 基于软件的解决方法：没有中断，没有上下文切换，因此没有并发————硬件将中断处理延迟到中断被启用之后。>大多数现代计算机体系结构都提供指令来完成
+- 进入临界区>禁用中断
+- 离开临界区》开启中断
+3. 解决方法 3 更高级的抽象：Critical section(临界区)<br>
+临界区是指进程中的一段需要访问共享资源并且当另一个进程处于相应代码区域时便不会被执行的代码区域<br>
+
+- 两个线程，TO和T1<br>
+``` C Ti的通常结构
+do{
+enter section 进入区域
+critical section临界区exit section 离开区域reminder section 提醒区域
+} while (1); 
+
+```
+- 线程可能共享一些共有的变量来同步他们的行为<br>
+
+
+``` C 共享变量 - 初始化
+int turn =0;
+turn==i//表示该谁进入临界区
+Thread Ti
+do{
+    while (turn != i) ;
+    critical section
+    turn = j;
+    reminder section
+) while (1);
+
+```
+- 满足互斥，但是有时不满足progress
+- (Ti做其他的事情，Tj想要继续运行，但是必须等待Ti处理临界区)
+
+``` C 进程Pi的算法
+do {
+     flag[i] = TRUE;
+     turn = j;
+     while ( flag[j] && turn == j);
+     CRITICAL SECTION
+     flag[i]= FALSE;
+     REMAINDER SECTION
+}while (TRUE);
+
+```
+
+- 满足进程Pi和Pi之间互斥的经典的基于软件的解决方法(1981年)
+- Use two shared data items
+``` C 使用两个共享数据项
+intturn;//指示该谁进入临界区
+boolean flag[];//指示进程是否准备好进入临界区
+```
+``` C Code for ENTER CRITICAL SECTION
+flag[i] = TRUE;
+turn = j;
+while (flag[j] && turn == j)
+```
+``` C Code for EXIT CRITICAL SECTION
+flag[i] = FALSE;
+```
+``` C 进程Pi 的算法
+flag[0]:= false flag[1]:= false turn := 0// or 1
+do{
+    flaglil = TRUE;
+    while flagli) == true {
+        if turn≠i{
+            flagl[i] := false
+            while turn ≠i{}
+            flag[i] := TRUE
+        }
+    }
+    CRITICAL SECTION
+    turn :=j
+    flag[i] = FALSE;
+    EMAINDER SECTION
+} while (TRUE);
+```
+
+- Bakery 算法
+N个进程的临界区
+    + 0进入临界区之前，进程接收一个数字
+    + 得到的数字最小的进入临界区
+    + 如果进程Pi和Pj收到相同的数字，那么如果ij，Pi先进入临界区，否则Pj先进入临界区
+    + 编号方案总是按照枚举的增加顺序生成数字
+- Dekker算法(1965):第一个针对双线程例子的正确解决方案
+- Bakery算法(Lamport1979):针对n线程的临界区问题解决方案
+- 复杂:需要两个进程间的共享数据项
+- 需要忙等待:浪费CPU时间
+- 没有硬件保证的情况下无真正的软件解决方案: Peterson算法需要原子的LOAD和STORE指令
+Critical section (临界区) 临界区是指进程中的一段需要访问共享资源并且当另一个进程处于相应代码区域时便不会被执行的代码区域
+
 ## Strict Policy
 ## Deadlock
 Deadlock (死锁)<br>
@@ -489,7 +580,7 @@ Deadlock (死锁)<br>
 限制申请方式<br>
  - 互斥-共享资源不是必须的，必须占用非共享资源。<br>
  - 占用并等待-必须保证当一个进程请求的资源，它不持有任何其他资源。<br>
-    + 需要进程请求并分配其所有资源，它开始执行之前或允许进程请求资源仅当进程没有资源。<br>
+    + 需要进程请求并分配其所有资源，在它开始执行之前，或允许进程请求资源，仅当进程没有资源。<br>
     + 资源利用率低;可能发生饥饿。<br>
     + 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现
 
@@ -675,7 +766,7 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
         3) Mask:闭塞信号因此不会传送,可能是暂时的(当处理同样类型的信号)<br>
       + 不足:不能传输要交换的任何数据<br>
       <br>
-<img width="580" height="316" alt="image" src="https://github.com/user-attachments/assets/b22aa9cc-b057-40c1-aa0e-96d1a991730a" /><br>
+      + <img width="580" height="316" alt="image" src="https://github.com/user-attachments/assets/b22aa9cc-b057-40c1-aa0e-96d1a991730a" /><br>
 
 7. 管道
       + 子进程从父进程继承文件描述符: file descriptor 0 stdin, 1 stdout, 2 stderr
@@ -688,22 +779,58 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
       + Mlessage:作为一个字节序列存储
       + Message Queues:消息数组
       + FIFO & FILO configuration
-<img width="837" height="327" alt="image" src="https://github.com/user-attachments/assets/9b1672aa-2309-4e65-bfb7-356fba64e67e" />
+      + <img width="837" height="327" alt="image" src="https://github.com/user-attachments/assets/9b1672aa-2309-4e65-bfb7-356fba64e67e" />
 
 9. 共享内存
       + 进程: 每个进程都有私有地址空间;在每个地址空间内，明确地设置了共享内存段
       + 优点:快速、方便地共享数据
       + 不足:必须同步数据访问
-<img width="837" height="391" alt="image" src="https://github.com/user-attachments/assets/7dc66f17-608d-4d6d-90a5-f0b4cc14a34b" />
+      + <img width="837" height="391" alt="image" src="https://github.com/user-attachments/assets/7dc66f17-608d-4d6d-90a5-f0b4cc14a34b" />
+      <br>
       + 最快的方法
-      + 一个进程写另外一个进程立即可见
-      + 没有系统调用干预
-      + 没有数据复制
-      + 不提供同步
-      + 由程序员提供同步
+      + 一个进程写另外一个进程立即可见<br>
+      + 没有系统调用干预<br>
+      + 没有数据复制<br>
+      + 不提供同步<br>
+      + 由程序员提供同步<br>
 
 ##  File Systems
+1. 基本概念
+- 文件系统和文件
++ 文件系统:一种用于持久性存储的系统抽象
++ 在存储器上:组织、控制、导航、访问和检索数据，大多数计算机系统包含文件系统；个人电脑、服务器、笔记本电脑；iPod、Tivo /机顶盒、手机/掌上电脑；Google可能是由一个文件系统构成的
++ 文件:文件系统中一个单元的相关数据在操作系统中的抽象
+- 文件系统功能
+ + 分配文件磁盘空间：1）管理文件块(哪一块属于哪一个文件)2）管理空闲空间(哪一块是空闲的)3）分配算法(策略)
+ + 管理文件集合1）定位文件及其内容2）命名:通过名字找到文件的接口3）最常见:分层文件系统4）文件系统类型(组织文件的不同方式)
+ + 提供的便利及特征
+ + 1）保护:分层来保护数据安全
+ + 2）可靠性/持久性:保持文件的持久即使发生崩溃、媒体错误、攻击等
+- 文件属性：名称、类型、位置、大小、保护、创建者、创建时间、最近修改时间、...
+- 文件头
+ + 在存储元数据中保存了每个文件的信息
+ + 保存文件的属性
+ + 跟踪哪一块存储块属于逻辑上文件结构的哪个偏移
+- 文件描述符
 
+
+
+- 目录
+
+
+- 文件别名
+
+
+- 文件系统种类
+
+
+2. 虚拟文件系统
+3. 数据块缓存
+4. 打开文件的数据结构文件分配
+5. 空闲空间列表
+6. 多磁盘管理-
+7. RAID
+8. 磁盘调度
 # Discussion 9 File Systems, Reliability
 
 
