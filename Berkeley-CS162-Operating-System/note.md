@@ -955,6 +955,10 @@ Backpointers使用菊花链管理
 特殊/虚拟文件系统
 <br>
 
+
+
+# Discussion 9 File Systems, Reliability
+
 2. 虚拟文件系统
 
 
@@ -988,10 +992,6 @@ Backpointers使用菊花链管理
 8. 磁盘调度
 
 <br>
-
-# Discussion 9 File Systems, Reliability
-
-
 
 #  Discussion 10 Distributed Systems
 
