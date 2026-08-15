@@ -922,11 +922,9 @@ swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状
 - 当前工作目录
 - 每个进程都会指向一个文件目录用于解析文件名
 - 允许用户指定相对路径来代替绝对路径
-
 <br>
 
-
-8) 文件别名<br>
+7) 文件别名<br>
 <img width="774" height="643" alt="1fee8813902de41ad0d5181e17571431" src="https://github.com/user-attachments/assets/4ed8bde1-a883-4b31-98e3-3e686135fcf1" />
 <br>
 
@@ -942,7 +940,7 @@ Backpointers使用菊花链管理
 <br><img width="884" height="639" alt="86ac8aca7447d3fe667bcafcd1383d44" src="https://github.com/user-attachments/assets/7f949d51-9942-45b5-b418-f4956b370cb1" />
 <br>
 
-9) 文件系统种类<br>
+8) 文件系统种类<br>
 - 磁盘文件系统
 >文件存储在数据存储设备上，如磁盘.
 例: FAT, NTFS, ext2/3, IS09660,
