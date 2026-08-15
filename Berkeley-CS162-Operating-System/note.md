@@ -951,27 +951,69 @@ Backpointers使用菊花链管理
 >记录文件系统的修改/事件
 例:journaling file system
 - 网络/分布式文件系统
-例:NFS,SMB,AFS,GFS¥
-特殊/虚拟文件系统
+>例:NFS,SMB,AFS,GFS¥
+- 特殊/虚拟文件系统
 <br>
 
 
 
 # Discussion 9 File Systems, Reliability
 
-2. 虚拟文件系统
+2. 虚拟文件系统<br>
+
+- 文件可以通过网络被共享
+>文件位于远程服务器
+客户端远程挂载服务器文件系统
+标准系统文件访问被转换成远程访问
+> 标准文件共享协议:NFS for Unix,CIFS for Windows
+- 分布式文件系统的问题
+>客户端和客户端上的用户辨别起来很复杂
+例如，NFS是不安全的
+一致性问题
+错误处理模式
+
+<br><img width="1125" height="738" alt="e9d97ba759b5ec12227453832890811d" src="https://github.com/user-attachments/assets/774e1dba-28ef-4477-aa27-1703ecefa819" />
+- 分层结构
+>上层:虚拟(逻辑)文件系统
+底层:特定文件系统模块
+<img width="1011" height="616" alt="99046cb28bb7959d260dee6d0974e331" src="https://github.com/user-attachments/assets/bfbd91f1-a6e2-4a3c-9813-a2b5be56a89b" /><br>
+<br>
+
+3. 数据块缓存<br>
+
 
 
 <br>
-
-3. 数据块缓存
-
+<img width="962" height="355" alt="a0a1965c990c9ed63a96fb11ad650b01" src="https://github.com/user-attachments/assets/12eb645c-c013-415c-980a-7beac7cfdc0a" />
+- 数据块按需读入内存
+>提供readO 操作
+预读:预选读取后面的数据块
+- 数据块使用后被缓存
+>假设数据将会再次被使用
+写操作可能被缓存和延迟写入
+- 两种数据块缓存方式
+>普通缓冲区缓存
+页缓存:统一缓存数据块和内存页
+- 分页要求
+>当需要一个页时才将其载入内存
+- 支持存储
+>一个页(在虚拟地址空间中)可以被映射到一个本地文件中(在二级存储中)
 
 <br>
 
-4. 打开文件的数据结构文件分配
+
+4. 打开文件的数据结构文件分配<br>
 
 
+- 打开文件描述
+>每个被打开的文件一个
+>文件状态信息
+目录项、当前文件指针、文件操作设置等
+- 打开文件表
+>一个进程一个
+一个系统级的
+每个卷控制块也会保存一个列表
+所以如果有文件被打开将不能被卸载
 <br>
 
 5. 空闲空间列表
