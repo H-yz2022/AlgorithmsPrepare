@@ -257,9 +257,12 @@ intp=0;
 35ret
 
 ```
+# Overview
+## User_Kernel Virtualization
+
+## Four Fundamental OS Concepts
 
 # Discussion 1
-
 ## Example 1.1
 1. What is the importance of address translation?<br>
 Address translation is necessary for the idea of virtual memory which provides an isolation abstraction. This gives the illusion that each process is the sole user of the address space. It also provides protection between different processes since virtual addresses will not translate to the same physical address, preventing processes from accessing and potentially corrupting each
@@ -296,7 +299,9 @@ The last digit of pi is 5.<br>
 The last digit of pi is 5.<br>
 However, it is possible the fork doesn’t succeed as no such assumption was made. As a result, the child process would never be created, only resulting in one statement being printed.<br>
 
-##fork()
+## System Calls
+
+## fork()
 - 程序可以调用函数fork(来创建一个新的进程
   + 操作系统需要分配一个新的并且唯一的进程ID
   + 因此在内核中，这个系统调用会运行
@@ -311,21 +316,19 @@ However, it is possible the fork doesn’t succeed as no such assumption was mad
 
 <img width="317" height="204" alt="37b2398a546abb03604e071b744b3c02" src="https://github.com/user-attachments/assets/7515eaee-d3a0-4751-b5be-1c22d408e667" />
 <br>
-- Atomic Operation<br>
-- 原子操作是指一次不存在任何中断或者失败的执行<br>
-  + 该执行成功结束
-  + 或者根本没有执行
-  + 并且不应该发现任何部分执行的状态
-- 实际上操作往往不是原子的
-  + 有些看上去是原子操作，实际上不是
-  + 连x++这样的简单语句，实际上是由3条指令构成的
-  + 有时候甚至连单条机器指令都不是院子的
-        +    Pipeline, super-scalar, out-of-order, page fault<br>
-<img width="305" height="212" alt="fcee1b192a7b55a27cd65e3280bb7fed" src="https://github.com/user-attachments/assets/b6ae34c9-cd60-4468-89bc-2831ffdfc09c" />
-<br>
 
+
+## Processes
 
 ### Example 2.1 Pintos Lists
+
+
+# Process Management
+
+## Fork
+
+## IPC
+
 
 # Discussion 2 Threads, I/O
 ##  Threads
@@ -407,7 +410,7 @@ since we replaced the file descriptor 1 was remapped to correspond to the file d
 # Discussion 3 
 
 
-## Mutual Exclusion
+## Mutual Exclusion Synchronization 1- Concurrency
 
 <br>
 Mutual exclusion (互斥)<br>
@@ -417,7 +420,20 @@ Mutual exclusion (互斥)<br>
 <br>
 
 
-###Locks
+### Locks
+
+### - Atomic Operation<br>
+- 原子操作是指一次不存在任何中断或者失败的执行<br>
+  + 该执行成功结束
+  + 或者根本没有执行
+  + 并且不应该发现任何部分执行的状态
+- 实际上操作往往不是原子的
+  + 有些看上去是原子操作，实际上不是
+  + 连x++这样的简单语句，实际上是由3条指令构成的
+  + 有时候甚至连单条机器指令都不是院子的
+        +    Pipeline, super-scalar, out-of-order, page fault<br>
+<img width="305" height="212" alt="fcee1b192a7b55a27cd65e3280bb7fed" src="https://github.com/user-attachments/assets/b6ae34c9-cd60-4468-89bc-2831ffdfc09c" />
+<br>
 
 ## Condition Variables
 1. Wait
@@ -464,15 +480,134 @@ behavior.<br>
 
 # Discussion 4
 ## Scheduling
+### Scheduling 1- Concepts and Classic Policies
+### Scheduling 2- Classic Policies
+
+
 ### Example 1.1 Round Robin T/F
+
+### Example 1.1 Round Robin T/F
+
+> **Problem Description:**  
+> 在 Try #2 方案中，使用独立的 `bool maybe_waiters` 存在状态竞态（Data Race）和死锁风险。为了彻底解决这一问题，需要将“锁占用”与“等待状态”合并到一个原子变量中，采用 **三种状态（UNLOCKED, LOCKED, CONTESTED）** 实现高性能且绝对安全的用户态互斥锁（Mutex）。
+> 
+> *参考资料: Ulrich Drepper 经典论文 《Futexes Are Tricky》*
+
+---
+
+### 1. 状态定义与类型定义
+
+```c
+typedef enum { 
+    UNLOCKED = 0,  // 0: 锁空闲，无线程占用
+    LOCKED   = 1,  // 1: 锁被占用，但没有其他线程在休眠/等待
+    CONTESTED = 2  // 2: 锁被占用，且“可能有”其他线程已经在内核中休眠等待
+} Lock;
+
+Lock mylock = UNLOCKED;
+
+
+#include <linux/futex.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+/**
+ * @brief 申请锁操作 (Acquire)
+ * @param thelock 指向锁变量的指针
+ */
+void acquire(Lock *thelock) {
+    // 1. 【Fast Path 快速路径】：尝试从 UNLOCKED 直接抢占为 LOCKED
+    //    如果成功，说明完全无竞争，立刻返回！(无系统调用，性能极高)
+    if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED) {
+        return;
+    }
+
+    // 2. 【Slow Path 慢速路径】：有竞争，进入循环抢锁
+    //    原子的将锁状态强行设置为 CONTESTED (2)
+    while (swap(thelock, CONTESTED) != UNLOCKED) {
+        // 如果抢锁前它不是 UNLOCKED，说明锁仍被占用，必须陷入内核休眠
+        // 只有当 *thelock 的实际值仍然为 CONTESTED 时，内核才会让当前线程休眠
+        futex(thelock, FUTEX_WAIT, CONTESTED);
+    }
+}
+
+/**
+ * @brief 释放锁操作 (Release)
+ * @param thelock 指向锁变量的指针
+ */
+void release(Lock *thelock) {
+    // 原子地将锁重置为 UNLOCKED，并拿到释放前的值
+    // 如果释放前的值是 CONTESTED (2)，说明有人可能在休眠，必须唤醒
+    if (swap(thelock, UNLOCKED) == CONTESTED) {
+        futex(thelock, FUTEX_WAKE, 1); // 唤醒 1 个睡眠中的线程
+    }
+}
+```
+
+一、 为什么“三状态”设计是最佳解决方案？<br>
+在 Try #2 中，使用独立的 int mylock 和 bool maybe_waiters 两个变量，会导致锁状态与等待状态脱节，从而引发数据竞态（Data Race）和唤醒丢失（Lost Wakeup）造成的死锁。<br>
+<br>
+“三状态模型”的核心创新在于：<br>
+将 “锁是否被占用” 与 “是否有线程在休眠（竞争）” 两个关键信息，压缩并合并到了同一个原子变量（thelock）中。<br>
+通过这一设计，所有对锁和等待状态的修改均可通过 单条原子指令（CAS 或 Swap） 一步完成，彻底杜绝了状态不一致的问题。<br>
+<br>
+二、 核心代码逐行拆解<br>
+1. acquire() —— 申请锁<br>
+① Fast Path（无竞争快速路径）<br>
+```C
+if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED)
+    return;
+```
+原理解析：检查 *thelock 是否等于 UNLOCKED(0)，若是，原子的将其设为 LOCKED(1) 并返回旧值 UNLOCKED(0)。<br>
+性能优势：在无竞争的理想情况下，仅执行一条硬件级 CPU 原子指令即完成加锁，完全不发起 futex 系统调用（Syscall-Free），耗时仅几纳秒。<br>
+<br>
+② Slow Path（有竞争慢速路径）<br>
+```C
+while (swap(thelock, CONTESTED) != UNLOCKED) {
+    futex(thelock, FUTEX_WAIT, CONTESTED);
+}
+```
+swap(thelock, CONTESTED)：无条件将 *thelock 设为 CONTESTED(2) 并返回旧值。
+<br>
+旧值为 UNLOCKED(0)：说明在上一步和本步骤之间恰好有线程释放了锁，当前线程成功抢占锁，跳出循环。
+<br>
+旧值为 LOCKED(1) 或 CONTESTED(2)：说明锁仍被占用。强制将锁状态标记为 CONTESTED，确保持锁线程解锁时知道有等待者存在。
+<br>
+futex(thelock, FUTEX_WAIT, CONTESTED)：
+<br>
+内核级防死锁（Atomic Sleep Check）：内核会在让线程进入休眠前，原子地校验 *thelock 当前是否仍等于 CONTESTED。若在调用瞬间有人释放了锁并修改了状态，futex 将立即返回而非陷入休眠，避免了“丢失唤醒”。<br>
+<br>
+2. release() —— 释放锁<br>
+```C
+if (swap(thelock, UNLOCKED) == CONTESTED) {
+    futex(thelock, FUTEX_WAKE, 1);
+}
+swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状态。
+```
+分支逻辑校验：
+<br>
+释放前为 LOCKED(1)：说明在持锁期间无任何其他线程试图抢锁（否则状态会被抢锁线程修改为 2）。直接在用户态完成解锁，无需系统调用。<br>
+
+释放前为 CONTESTED(2)：说明存在线程因抢锁失败已陷入内核休眠，必须发起 futex(..., FUTEX_WAKE, 1) 系统调用唤醒等待队列中的一个线程。<br>
+<br>
+三状态 Futex 互斥锁 巧妙利用 UNLOCKED(0)、LOCKED(1)、CONTESTED(2) 三种状态，将锁状态与等待队列标记融合在一起：
+
+无竞争场景：完全在用户态（Userspace）完成，零系统调用开销。<br>
+
+高竞争场景：依赖内核级 futex 系统调用精确控制线程休眠与唤醒，兼顾极致性能与并发安全性。<br>
+
+
+
+
 ### Example 1.2 Life Ain’t Fair
 ### Example 1.3 Bitcoin Mining
 
 
 
 # Discussion 5
-
-# Starvation
+### Scheduling 3-  Realtime, Starvation
+### Scheduling 4- Deadlock
+## Starvation
 Starvation (饥饿)<br>
 一个可执行的进程，被调度器持续忽略，以至于虽然处于可执行状态却不被执行<br>
 - 可能导致没有线程去买面包：错误时间的上下文切换可能会导致每个线程都认为另外一个线程回去买面包<br>
@@ -602,116 +737,6 @@ Deadlock (死锁)<br>
     + 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现如果Pi,资源的需求不是立即可用，那么Pi,可以等到所有P,完成。
     + 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现当Pi+1,完成后，P.可以得到所需要的资源，执行，返回所分配的资源，并终
     + 操作系统与并发编程：基于 3-State Futex 的高效互斥锁实现用同样的方法，Pi+2，Pi+3和Pn。能获得其所需的资源。
-
-### Example 1.1 Round Robin T/F
-
-> **Problem Description:**  
-> 在 Try #2 方案中，使用独立的 `bool maybe_waiters` 存在状态竞态（Data Race）和死锁风险。为了彻底解决这一问题，需要将“锁占用”与“等待状态”合并到一个原子变量中，采用 **三种状态（UNLOCKED, LOCKED, CONTESTED）** 实现高性能且绝对安全的用户态互斥锁（Mutex）。
-> 
-> *参考资料: Ulrich Drepper 经典论文 《Futexes Are Tricky》*
-
----
-
-### 1. 状态定义与类型定义
-
-```c
-typedef enum { 
-    UNLOCKED = 0,  // 0: 锁空闲，无线程占用
-    LOCKED   = 1,  // 1: 锁被占用，但没有其他线程在休眠/等待
-    CONTESTED = 2  // 2: 锁被占用，且“可能有”其他线程已经在内核中休眠等待
-} Lock;
-
-Lock mylock = UNLOCKED;
-
-
-#include <linux/futex.h>
-#include <sys/syscall.h>
-#include <unistd.h>
-
-/**
- * @brief 申请锁操作 (Acquire)
- * @param thelock 指向锁变量的指针
- */
-void acquire(Lock *thelock) {
-    // 1. 【Fast Path 快速路径】：尝试从 UNLOCKED 直接抢占为 LOCKED
-    //    如果成功，说明完全无竞争，立刻返回！(无系统调用，性能极高)
-    if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED) {
-        return;
-    }
-
-    // 2. 【Slow Path 慢速路径】：有竞争，进入循环抢锁
-    //    原子的将锁状态强行设置为 CONTESTED (2)
-    while (swap(thelock, CONTESTED) != UNLOCKED) {
-        // 如果抢锁前它不是 UNLOCKED，说明锁仍被占用，必须陷入内核休眠
-        // 只有当 *thelock 的实际值仍然为 CONTESTED 时，内核才会让当前线程休眠
-        futex(thelock, FUTEX_WAIT, CONTESTED);
-    }
-}
-
-/**
- * @brief 释放锁操作 (Release)
- * @param thelock 指向锁变量的指针
- */
-void release(Lock *thelock) {
-    // 原子地将锁重置为 UNLOCKED，并拿到释放前的值
-    // 如果释放前的值是 CONTESTED (2)，说明有人可能在休眠，必须唤醒
-    if (swap(thelock, UNLOCKED) == CONTESTED) {
-        futex(thelock, FUTEX_WAKE, 1); // 唤醒 1 个睡眠中的线程
-    }
-}
-```
-
-一、 为什么“三状态”设计是最佳解决方案？<br>
-在 Try #2 中，使用独立的 int mylock 和 bool maybe_waiters 两个变量，会导致锁状态与等待状态脱节，从而引发数据竞态（Data Race）和唤醒丢失（Lost Wakeup）造成的死锁。<br>
-<br>
-“三状态模型”的核心创新在于：<br>
-将 “锁是否被占用” 与 “是否有线程在休眠（竞争）” 两个关键信息，压缩并合并到了同一个原子变量（thelock）中。<br>
-通过这一设计，所有对锁和等待状态的修改均可通过 单条原子指令（CAS 或 Swap） 一步完成，彻底杜绝了状态不一致的问题。<br>
-<br>
-二、 核心代码逐行拆解<br>
-1. acquire() —— 申请锁<br>
-① Fast Path（无竞争快速路径）<br>
-```C
-if (compare_and_swap(thelock, UNLOCKED, LOCKED) == UNLOCKED)
-    return;
-```
-原理解析：检查 *thelock 是否等于 UNLOCKED(0)，若是，原子的将其设为 LOCKED(1) 并返回旧值 UNLOCKED(0)。<br>
-性能优势：在无竞争的理想情况下，仅执行一条硬件级 CPU 原子指令即完成加锁，完全不发起 futex 系统调用（Syscall-Free），耗时仅几纳秒。<br>
-<br>
-② Slow Path（有竞争慢速路径）<br>
-```C
-while (swap(thelock, CONTESTED) != UNLOCKED) {
-    futex(thelock, FUTEX_WAIT, CONTESTED);
-}
-```
-swap(thelock, CONTESTED)：无条件将 *thelock 设为 CONTESTED(2) 并返回旧值。
-<br>
-旧值为 UNLOCKED(0)：说明在上一步和本步骤之间恰好有线程释放了锁，当前线程成功抢占锁，跳出循环。
-<br>
-旧值为 LOCKED(1) 或 CONTESTED(2)：说明锁仍被占用。强制将锁状态标记为 CONTESTED，确保持锁线程解锁时知道有等待者存在。
-<br>
-futex(thelock, FUTEX_WAIT, CONTESTED)：
-<br>
-内核级防死锁（Atomic Sleep Check）：内核会在让线程进入休眠前，原子地校验 *thelock 当前是否仍等于 CONTESTED。若在调用瞬间有人释放了锁并修改了状态，futex 将立即返回而非陷入休眠，避免了“丢失唤醒”。<br>
-<br>
-2. release() —— 释放锁<br>
-```C
-if (swap(thelock, UNLOCKED) == CONTESTED) {
-    futex(thelock, FUTEX_WAKE, 1);
-}
-swap(thelock, UNLOCKED)：将锁恢复为 UNLOCKED(0)，并返回释放前的状态。
-```
-分支逻辑校验：
-<br>
-释放前为 LOCKED(1)：说明在持锁期间无任何其他线程试图抢锁（否则状态会被抢锁线程修改为 2）。直接在用户态完成解锁，无需系统调用。<br>
-
-释放前为 CONTESTED(2)：说明存在线程因抢锁失败已陷入内核休眠，必须发起 futex(..., FUTEX_WAKE, 1) 系统调用唤醒等待队列中的一个线程。<br>
-<br>
-三状态 Futex 互斥锁 巧妙利用 UNLOCKED(0)、LOCKED(1)、CONTESTED(2) 三种状态，将锁状态与等待队列标记融合在一起：
-
-无竞争场景：完全在用户态（Userspace）完成，零系统调用开销。<br>
-
-高竞争场景：依赖内核级 futex 系统调用精确控制线程休眠与唤醒，兼顾极致性能与并发安全性。<br>
 
 
 
