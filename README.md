@@ -1,10 +1,10 @@
-算法 系统结构等课程自学
+算法 系统结构等课程自学<br>
 
 
-[NYU Courant MSCS 毕业心得](https://instant.1point3acres.cn/thread/1064170) 
-[NYU Courant MSCS/MSIS 一年感受](https://instant.1point3acres.cn/thread/989574)
-[NYU Courant MSCS 毕业心得 2](https://instant.1point3acres.cn/thread/1064170?__cf_chl_tk=3s1xRV5wpBcLdx9oMsME9j_EFaG4JL_Tt1fC_CgcqMs-1786855366-1.0.1.1-XnYqFkHD1bXDq6w6Q1VvCWhhNiGKWK0pZEN4xc5z5nA)
-[NYU CS@GSAS(Courant) 院系介绍](https://instant.1point3acres.cn/thread/184850)
+[NYU Courant MSCS 毕业心得](https://instant.1point3acres.cn/thread/1064170) <br>
+[NYU Courant MSCS/MSIS 一年感受](https://instant.1point3acres.cn/thread/989574)<br>
+[NYU Courant MSCS 毕业心得 2](https://instant.1point3acres.cn/thread/1064170?__cf_chl_tk=3s1xRV5wpBcLdx9oMsME9j_EFaG4JL_Tt1fC_CgcqMs-1786855366-1.0.1.1-XnYqFkHD1bXDq6w6Q1VvCWhhNiGKWK0pZEN4xc5z5nA)<br>
+[NYU CS@GSAS(Courant) 院系介绍](https://instant.1point3acres.cn/thread/184850)<br>
 
 | # | Note | Fold | Link | Difficulcty |
 |------|------|------|------|------|
