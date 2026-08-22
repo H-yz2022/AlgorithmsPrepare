@@ -14,3 +14,4 @@
 | 4 | Deep Learning | []() | [link](https://www.deeplearningbook.org/lecture_slides.html)  |  |
 | 5 | NYU Machine Learning | []() | [link](https://cims.nyu.edu/ai/areas/machine-learning/)  |  |
 | 5 | CS61A: Structure and Interpretation of Computer Programs | []() | [link](https://csdiy.wiki/%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/Python/CS61A/#_3)  [solution](https://web.archive.org/web/20230701000000*/https://cs61a.org/) [text book](https://www.composingprograms.com/) |  |
+| 6 | NYU PL, Fall 2018 | []() | [link](https://cs.nyu.edu/~wies/teaching/pl-fa18/) |  |  
