@@ -5,14 +5,154 @@
 平台使用是Oracler软件设置 虚拟机内 Linux Ubuntu
 
 ## 前期准备需要的部分terminal 中的指令：
+1. VirtualBox 双向剪贴板
+2. 使用镜像
+3. 保存并提交代码
 
+```
+git clone https://github.com/yusong-shen/mooc_os_lab.git
+```
+```
+cd ~/mooc_os_lab/labcodes/lab1
+git add .
+git commit -m "complete lab1 code"
+```
 ## Exercise Code
+```
+lab1 中包含一个bootloader 和一个OS。这个bootloader可以切换到X86保护模式，能够读磁盘
 
-### Step 1
+并加载ELF执行文件格式，并显示字符。而这lab1中的OS只是一个可以处理时钟中断和显示字符
 
-### Step 2
-### Step 3
+的幼儿园级别OS。
+```
+
+```
+cd mooc_os_lab/labcodes/lab1
+ls
+grep -rn "YOUR CODE" .
+make grade
+nano kern/trap/trap.c
+gedit kern/trap/trap.c &
+```
+### Step 1 打印函数调用栈部分
+
+```
+void
+print_stackframe(void) {
+     /* LAB1 YOUR CODE : STEP 1 */
+     // 1. 读取当前的 ebp 和 eip 寄存器值
+     uint32_t ebp = read_ebp();
+     uint32_t eip = read_eip();
+
+     int i, j;
+     // 3. 最多遍历 STACKFRAME_DEPTH (20) 层栈帧，且当 ebp 为 0 时终止（到达最外层）
+     for (i = 0; i < STACKFRAME_DEPTH && ebp != 0; i++) {
+         // (3.1) 打印当前栈帧的 ebp 和 eip
+         cprintf("ebp:0x%08x eip:0x%08x ", ebp, eip);
+
+         // (3.2) 打印函数的 4 个参数
+         // 参数存放在 [ebp + 8] 开始的内存区域，即 (uint32_t *)ebp + 2 偏移处
+         uint32_t *args = (uint32_t *)ebp + 2;
+         cprintf("args:");
+         for (j = 0; j < 4; j++) {
+             cprintf("0x%08x ", args[j]);
+         }
+         cprintf("\n");
+
+         // (3.4) 打印源码中的函数名、文件名及行号信息
+         // 注意：传入 eip - 1 是为了防止 eip 正好指向指令边界而定位到下一行代码
+         print_debuginfo(eip - 1);
+
+         // (3.5) 弹出当前栈帧，更新 eip 和 ebp 以追踪上一级函数
+         // [ebp + 4] 存放的是返回地址 (eip)
+         // [ebp] 存放的是上一级函数的帧指针 (ebp)
+         eip = ((uint32_t *)ebp)[1];
+         ebp = ((uint32_t *)ebp)[0];
+     }
+}
+```
+
+
+
+### Step 2 修改 idt_init 函数中断处理逻辑部分
+
+```
+/* idt_init - initialize IDT to each of the entry points in kern/trap/vectors.S */
+void
+idt_init(void) {
+     /* LAB1 YOUR CODE : STEP 2 */
+     // 1. 声明外部变量 __vectors，它保存了 vectors.S 中所有 ISR 的入口地址
+     extern uintptr_t __vectors[];
+
+     // 2. 遍历并填充 IDT 表项 (共 256 项)
+     // 参数说明：SETGATE(gate, istrap, sel, off, dpl)
+     // istrap: 0 表示中断门，1 表示陷阱门
+     // GD_KTEXT: 内核代码段选择子
+     // __vectors[i]: 第 i 个中断服务例程的入口地址
+     // DPL_KERNEL: 内核权限 (0)
+     int i;
+     for (i = 0; i < sizeof(idt) / sizeof(struct gatedesc); i++) {
+         SETGATE(idt[i], 0, GD_KTEXT, __vectors[i], DPL_KERNEL);
+     }
+     
+     // 特别设置：把系统调用/切换权限的中断门 DPL 设置为用户态权限 DPL_USER (3)，允许用户态发起
+     SETGATE(idt[T_SYSCALL], 1, GD_KTEXT, __vectors[T_SYSCALL], DPL_USER);
+
+     // 3. 告诉 CPU IDT 的位置和大小
+     lidt(&idt_pd);
+}
+```
+声明 __vectors[] 数组，将中断入口填充到 IDT 表中，并用 lidt 指令载入 IDT 描述符
+
+### Step 3 修改 trap_dispatch 函数中的时钟中断部分
+```
+case IRQ_OFFSET + IRQ_TIMER:
+        /* LAB1 YOUR CODE : STEP 3 */
+        /* handle the timer interrupt */
+        // 1. 静态累加器记录时钟中断触发次数
+        static size_t ticks = 0;
+        ticks++;
+        
+        // 2. 每达到 TICK_NUM (100) 次，调用 print_ticks() 打印提示
+        if (ticks % TICK_NUM == 0) {
+            print_ticks();
+        }
+        break;
+```
+定义一个静态变量 ticks 记录时钟中断次数，每达到 TICK_NUM（100 次）就打印一次信息
+
+
 ### Challenge
+
+``` kern/init/init.c
+// 取消这几行的注释（去掉前面的 //）：
+    lab1_switch_to_user();
+    lab1_switch_to_kernel();
+static void
+lab1_switch_to_user(void) {
+    // LAB1 CHALLENGE 1 : TODO
+    // 触发 T_SWITCH_TOU (120) 中断，由内核中断处理逻辑切换到用户态
+    asm volatile (
+        "sub $0x8, %%esp \n"          // 预留栈空间模拟中断压栈
+        "int %0 \n"                    // 发起 T_SWITCH_TOU 软中断
+        "movl %%ebp, %%esp"            // 恢复栈指针
+        : 
+        : "i"(T_SWITCH_TOU)
+    );
+}
+
+static void
+lab1_switch_to_kernel(void) {
+    // LAB1 CHALLENGE 1 : TODO
+    // 触发 T_SWITCH_TOK (121) 中断，由中断处理逻辑切换回内核态
+    asm volatile (
+        "int %0 \n"                    // 发起 T_SWITCH_TOK 软中断
+        "movl %%ebp, %%esp \n"         // 恢复栈指针
+        : 
+        : "i"(T_SWITCH_TOK)
+    );
+}
+```
 ```
 case T_SWITCH_TOU:
     // 1. 修改代码段和数据段选择子为用户态 (RPL=3)
@@ -88,6 +228,34 @@ case T_SWITCH_TOK:
 ```
 
 ## 遇到的问题/错误
+```
+case T_SWITCH_TOU:
+        if (tf->tf_cs != USER_CS) {
+            // 设置用户态数据段和代码段选择子
+            tf->tf_cs = USER_CS;
+            tf->tf_ds = USER_DS;
+            tf->tf_es = USER_DS;
+            tf->tf_ss = USER_DS;
+            // 设置 EFLAGS 允许中断 (IF位)
+            tf->tf_eflags |= FL_IF;
+            cprintf("+++ switch to  user  mode +++\n");
+            print_trapframe(tf);
+        }
+        break;
+
+    case T_SWITCH_TOK:
+        if (tf->tf_cs != KERNEL_CS) {
+            // 设置内核态数据段和代码段选择子
+            tf->tf_cs = KERNEL_CS;
+            tf->tf_ds = KERNEL_DS;
+            tf->tf_es = KERNEL_DS;
+            cprintf("+++ switch to kernel mode +++\n");
+            print_trapframe(tf);
+        }
+        break;
+```
+
+
 
 ## 知识点总结
 
