@@ -30,13 +30,12 @@ lab1 中包含一个bootloader 和一个OS。这个bootloader可以切换到X86�
 cd mooc_os_lab/labcodes/lab1
 ls
 grep -rn "YOUR CODE" .
-make grade
-nano kern/trap/trap.c
-gedit kern/trap/trap.c &
+//nano kern/trap/trap.c
+gedit kern/trap/trap.c kern/debug/kdebug.c
 ```
 ### Step 1 打印函数调用栈部分
 
-```
+``` kern/debug/kdebug.c
 void
 print_stackframe(void) {
      /* LAB1 YOUR CODE : STEP 1 */
@@ -76,7 +75,7 @@ print_stackframe(void) {
 
 ### Step 2 修改 idt_init 函数中断处理逻辑部分
 
-```
+``` kern/trap/trap.c 
 /* idt_init - initialize IDT to each of the entry points in kern/trap/vectors.S */
 void
 idt_init(void) {
@@ -105,7 +104,7 @@ idt_init(void) {
 声明 __vectors[] 数组，将中断入口填充到 IDT 表中，并用 lidt 指令载入 IDT 描述符
 
 ### Step 3 修改 trap_dispatch 函数中的时钟中断部分
-```
+``` kern/trap/trap.c 
 case IRQ_OFFSET + IRQ_TIMER:{
         /* LAB1 YOUR CODE : STEP 3 */
         /* handle the timer interrupt */
@@ -173,65 +172,39 @@ case T_SWITCH_TOU:
     print_trapframe(tf);
     break;
 ```
-
-在进入 T_SWITCH_TOU 之前，CPU 并没有在栈上为你留出 esp 和 ss 的空间，直接向 tf->tf_esp 写入数据会破坏其他内存数据（踩内存）。
-
-```
+``` kern/trap/trap.c
 case T_SWITCH_TOU:
-    if (tf->tf_cs != USER_CS) {
-        // 1. 设置用户态段选择子
-        tf->tf_cs = USER_CS;
-        tf->tf_ds = USER_DS;
-        tf->tf_es = USER_DS;
-        tf->tf_ss = USER_DS;
+        if (tf->tf_cs != USER_CS) {
+            switchk2u = *tf;
+            switchk2u.tf_cs = USER_CS;
+            switchk2u.tf_ds = switchk2u.tf_es = switchk2u.tf_ss = USER_DS;
+            switchk2u.tf_esp = (uint32_t)tf + sizeof(struct trapframe) - 8;
 
-        // 2. 设置用户态栈指针 esp
-        // 确保 iret 弹栈后 esp 指向一个安全的地址
-        tf->tf_esp = (uintptr_t)tf + sizeof(struct trapframe) - 8;
+            // set eflags, make sure ucore can use io under user mode.
+            // if CPL > IOPL, then cpu will generate a general protection.
+            switchk2u.tf_eflags |= FL_IOPL_MASK;
 
-        // 3. 允许用户态进行 IO 操作（如 cprintf 打印），避免触发 GPF 异常
-        tf->tf_eflags |= FL_IOPL_MASK;
-
-        // 4. (可选) 保证中断响应开启
-        tf->tf_eflags |= FL_IF;
-        cprintf("+++ switch to user mode +++\n");
-        print_trapframe(tf);
-    }
-    break;
-```
-```
-case T_SWITCH_TOK:
-    if (tf->tf_cs != KERNEL_CS) {
-        // 1. 恢复内核态段选择子
-        tf->tf_cs = KERNEL_CS; // 0x08
-        tf->tf_ds = KERNEL_DS; // 0x10
-        tf->tf_es = KERNEL_DS;
-
-        // 2. 恢复内核态 EFLAGS（清空 IOPL）
-        tf->tf_eflags &= ~FL_IOPL_MASK;
-
-        // 3. 打印调试信息（注意：必须在修改 tf->tf_esp 或平移栈之前打印）
-        cprintf("+++ switch to kernel mode +++\n");
-        print_trapframe(tf);
-
-        // 4. 【核心点】由于从 Ring 3 切回 Ring 0，原本硬件压入了 esp 和 ss。
-        // 但 iret 发现返回目标是 Ring 0 时，不会弹出 esp 和 ss。
-        // 我们需要把整个 trapframe 结构体在栈上向高地址平移 8 字节（覆盖掉 tf_esp 和 tf_ss 的位置），
-        // 或者直接调整 esp，确保 iret 正确对齐。
-        
-        /* 简易平移方式（或在 init.c 中处理栈）： */
-        struct trapframe *tf_new = (struct trapframe *)((uintptr_t)tf + 8);
-        memmove(tf_new, tf, sizeof(struct trapframe) - 8);
-        
-        // 修改当前中断处理函数的栈帧指针，让 iret 从平移后的 tf_new 弹栈
-        *((struct trapframe **)&tf - 1) = tf_new;
-    }
-    break;
+            // set temporary stack
+            // then iret will jump to the right stack
+            *((uint32_t *)tf - 1) = (uint32_t)&switchk2u;
+        }
+        break;
+    case T_SWITCH_TOK:
+        if (tf->tf_cs != KERNEL_CS) {
+            tf->tf_cs = KERNEL_CS;
+            tf->tf_ds = tf->tf_es = KERNEL_DS;
+            tf->tf_eflags &= ~FL_IOPL_MASK;
+            switchu2k = (struct trapframe *)(tf->tf_esp - (sizeof(struct trapframe) - 8));
+            memmove(switchu2k, tf, sizeof(struct trapframe) - 8);
+            *((uint32_t *)tf - 1) = (uint32_t)switchu2k;
+        }
+        break;
 
 ```
+
 
 ## 遇到的问题/错误
-```
+``` GEMINI VERSION --WRONG
 case T_SWITCH_TOU:
         if (tf->tf_cs != USER_CS) {
             // 设置用户态数据段和代码段选择子
@@ -257,7 +230,15 @@ case T_SWITCH_TOU:
         }
         break;
 ```
+Why it crashes
 
+When int T_SWITCH_TOU executes from kernel code (CPL 0), the CPU trap gate pushes only EFLAGS, CS, EIP (3 words) — it does not push ESP/SS, because no ring change happened going in. So those fields don't exist on the stack at all; whatever bytes sit past your trapframe's tf_eflags are just leftover stack garbage.
+
+Now on the way out, your handler sets tf_cs = USER_CS. When trapentry.S eventually executes iret, the CPU sees the target CS has RPL 3 while the current CPL is 0 — that's a ring change, and hardware-mandated iret behavior is to also pop ESP/SS in that case, whether or not you intended it. It pops them from whatever garbage lies past your frame. You get a bogus stack pointer/segment loaded into the CPU → instant triple fault (VirtualBox/QEMU just silently reboots, which is almost certainly what you're seeing).
+
+The reverse direction has a mirror-image bug: going ring3→ring0, hardware did push ESP/SS (5 words) on entry. If you just flip tf_cs to KERNEL_CS and leave the frame as-is, iret now sees CS RPL 0 == current CPL 0 → no ring change → it only pops 3 words and leaves ESP wherever it happens to be, which is now sitting 8 bytes into the middle of your trapframe instead of back at the correct kernel stack location. Stack corruption follows immediately.
+
+So the fix isn't just editing field values — you have to physically reshape the trapframe to match what iret will actually consume, and repoint the frame that trapentry.S restores from.
 
 
 ## 知识点总结
