@@ -321,7 +321,6 @@ Protected mode + GDT define what privilege levels exist → IDT defines how the 
 ``` bash
 cd ../lab2
 
-cgit checkout lab2
 ```
 
 ``` bash
