@@ -519,7 +519,7 @@ default_free_pages(struct Page *base, size_t n) {
     + 找到位置：第 350 行附近的 get_pte() 函数。
     + 任务目标：根据给定的页表基址和虚拟地址，建立或查找二级页表结构，返回对应的 PTE 指针。需要注意内存分配失败以及页表项存在位的处理。
 
-```
+``` C
 pte_t *
 get_pte(pde_t *pgdir, uintptr_t la, bool create) {
     pde_t *pdep = &pgdir[PDX(la)];        // 1. 查找页目录项 (PDE)
