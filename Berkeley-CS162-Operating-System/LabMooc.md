@@ -124,7 +124,9 @@ case IRQ_OFFSET + IRQ_TIMER:{
 
 
 ### Challenge
-
+```
+grep -rn "LAB1 CHALLENGE 1" 
+```
 ``` kern/init/init.c
 // 取消这几行的注释（去掉前面的 //）：
     lab1_switch_to_user();
