@@ -351,8 +351,9 @@ cp ../lab1/kern/debug/kdebug.c kern/debug/kdebug.c
 cp ../lab1/kern/trap/trap.c kern/trap/trap.c
 ```
 ``` bash
-nano kern/mm/default_pmm.c
-nano kern/mm/pmm.c
+gedit kern/mm/default_pmm.c kern/mm/pmm.c
+```
+```
 make clean
 make grade
 make qemu
