@@ -15,7 +15,7 @@ git clone https://github.com/yusong-shen/mooc_os_lab.git
 ```
 cd ~/mooc_os_lab/labcodes/lab1
 git add .
-git commit -m "complete lab1 code"
+git commit -m "YOUR CODE"
 ```
 ## Exercise Code
 ```
