@@ -106,7 +106,7 @@ idt_init(void) {
 
 ### Step 3 修改 trap_dispatch 函数中的时钟中断部分
 ```
-case IRQ_OFFSET + IRQ_TIMER:
+case IRQ_OFFSET + IRQ_TIMER:{
         /* LAB1 YOUR CODE : STEP 3 */
         /* handle the timer interrupt */
         // 1. 静态累加器记录时钟中断触发次数
@@ -118,6 +118,7 @@ case IRQ_OFFSET + IRQ_TIMER:
             print_ticks();
         }
         break;
+}
 ```
 定义一个静态变量 ticks 记录时钟中断次数，每达到 TICK_NUM（100 次）就打印一次信息
 
