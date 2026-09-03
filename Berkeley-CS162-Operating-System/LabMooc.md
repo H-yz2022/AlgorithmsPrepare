@@ -959,19 +959,10 @@ bad_fork_cleanup_proc:
 ## 遇到的问题/错误
 
 ## 知识点总结
-1. ELF loading / load_icode — Your initproc doesn't just print text anymore; it loads an ELF binary (parses the ELF header, program headers, copies each PT_LOAD segment into freshly-allocated pages at the right virtual addresses) and sets up a fresh mm_struct for it. This is literally what execve() does on a real OS.
-2. do_execve — Replaces the current process's memory image with a new program, without creating a new process (unlike fork). It tears down the old mm, builds a new one via load_icode, and rewrites the trapframe so that when this process returns to user mode, it starts executing the new program's entry point instead of resuming where it left off.
-3. Ring 0 vs. Ring 3 (privilege levels) — The CPU's protection mechanism. Kernel code runs at ring 0 (can touch hardware, page tables, anything); user code runs at ring 3 (restricted — no direct I/O, no arbitrary memory access). This is enforced by segment descriptors in the GDT (USER_CS, USER_DS vs. KERNEL_CS, KERNEL_DS) that get loaded into the trapframe.
-4. Trapframe & the ring3 "return" — To actually start a user process, the kernel builds a trapframe as if an interrupt had just landed from user mode (tf_cs = USER_CS, tf_ss/tf_ds = USER_DS, tf_esp = USTACKTOP, tf_eip = elf entry point), then executes iret. iret is the x86 instruction that pops that frame and drops the CPU into ring 3 — this is the one trick that makes "returning from an interrupt" double as "launching a user program."
-5. TSS (Task State Segment) / esp0 — When user-mode code takes a trap (syscall, page fault, timer interrupt), the CPU needs to know which kernel stack to switch to, since it can't trust the user's stack pointer. That address (kstack + KSTACKSIZE) is stashed in the TSS's esp0 field ahead of time (load_esp0, which you'll notice proc_run already calls) — this is why every process needed its own kernel stack back in lab4, and it's what makes ring3→ring0 transitions safe.
-6. System call interface (int 0x80/T_SYSCALL + syscall.c) — User code can't just call kernel functions directly (wrong privilege level). Instead, user-space wrapper stubs (user/libs/syscall.c) load syscall number + args into registers and execute a software interrupt; trap.c's dispatcher catches that specific trap number and routes it into kern/syscall/syscall.c, which fans out to sys_fork, sys_exec, sys_wait, sys_exit, etc.
-7. Real do_fork (address-space duplication) — In lab4, copy_mm was a stub ("do nothing in this project") because kernel threads share the kernel's address space. Now that processes have their own user memory, copy_mm/copy_mmap has to actually duplicate the parent's mm_struct, walk its VMAs, and copy the underlying page-table mappings (often via copy_range/dup_mmap) so parent and child have independent (but initially identical) memory.
-8. do_wait / do_exit for real processes — Lab4's do_exit was just panic(...). Now it has real work: free the process's user memory (exit_mmap, put_pgdir), mark itself PROC_ZOMBIE, and wake its parent. do_wait is the parent-side counterpart — it blocks until a specific (or any) child becomes a zombie, then reaps it. This is the actual fork()/wait()/exit() triangle from Unix.
-9. The ancestor chain (idleproc → initproc → user sh/test programs) — initproc (still a kernel thread) now forks and execs into a real user program (often a tiny shell or a batch of test binaries compiled under user/), which is the first time the machine runs code the kernel didn't write itself.
+
 
 ### How they link together (the actual causal chain)
 
-load_icode (parse ELF, build mm) → needs real copy_mm/page-table plumbing to exist, because a process launched by fork+exec first duplicates the parent's address space (do_fork) before do_execve replaces it → needs the trapframe/ring3 machinery to actually run that address space in user mode → which needs the TSS esp0 set correctly, or the very first trap/syscall the new process makes will crash the kernel → which needs the int 0x80 syscall dispatcher wired up, because a user process that can't syscall can't exit(), can't do anything except loop forever → which needs do_exit/do_wait to be real, or the process has no way to ever terminate cleanly and get reaped by its parent. Every piece is a prerequisite for the next one actually being testable — this is why lab5 tends to feel like "nothing works until everything works," more than earlier labs did.
 <br>
 
 # Lab5 in MOOC
@@ -1057,6 +1048,7 @@ make clean && make
 
 ## 知识点总结
 
+<br>
 # Lab6 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
 ## Exercise Code
@@ -1070,3 +1062,5 @@ make clean && make
 ## 遇到的问题/错误
 
 ## 知识点总结
+
+<br>
