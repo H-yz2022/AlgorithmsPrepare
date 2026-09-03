@@ -749,7 +749,18 @@ _fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick
 }
 ```
 
+``` trap.c 
+static void
+trap_dispatch(struct trapframe *tf) {
+    char c;
 
+    int ret;
+    static struct trapframe switchk2u, *switchu2k;
+...
+```
+static volatile int in_swap_tick_event = 0;
+extern struct mm_struct *check_mm_struct;
+```
 
 ### Challenge
 
