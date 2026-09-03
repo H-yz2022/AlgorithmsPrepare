@@ -498,9 +498,9 @@ get_pte(pde_t *pgdir, uintptr_t la, bool create) {
             return NULL;
         }
         struct Page *page = alloc_page(); // 4. 分配一个物理页用来作为页表 (PT)
-        if (page == NULL) {
-            return NULL;
-        }
+        //if (page == NULL) {
+        //    return NULL;
+        //}
         set_page_ref(page, 1);            // 5. 设置该页被引用次数为 1
         uintptr_t pa = page2pa(page);     // 6. 获取该物理页的物理地址
         memset(KADDR(pa), 0, PGSIZE);     // 7. 将页表内容清零 (注意必须用内核虚拟地址)
@@ -532,7 +532,6 @@ page_remove_pte(pde_t *pgdir, uintptr_t la, pte_t *ptep) {
         *ptep = 0;                        // 5. 清空该页表项 (解除映射)
         tlb_invalidate(pgdir, la);        // 6. 刷新 TLB 快表
     }
-}
 }
 ```
 
