@@ -21,7 +21,7 @@ git commit -m "YOUR CODE"
  gedit $(grep -rl "YOUR CODE" .) &
 
 ```
-···
+```
 make clean
 make grade
 make qemu
