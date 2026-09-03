@@ -840,7 +840,7 @@ grep -rn "YOUR CODE" .
 ``` bash
 grep -rn "LAB4" .
 ```
-同步 Lab 1& 2 代码到 Lab 3
+同步 Lab 1-3 代码到 Lab 4
 ``` bash 
 #sudo apt install -y meld   # one-time, if not already installed
 meld ~/mooc_os_lab/labcodes/lab1/kern/debug/kdebug.c ~/mooc_os_lab/labcodes/lab4/kern/debug/kdebug.c
@@ -850,6 +850,7 @@ meld ~/mooc_os_lab/labcodes/lab2/kern/mm/pmm.c          ~/mooc_os_lab/labcodes/l
 meld ~/mooc_os_lab/labcodes/lab3/kern/mm/vmm.c          ~/mooc_os_lab/labcodes/lab4/kern/mm/vmm.c
 meld ~/mooc_os_lab/labcodes/lab3/kern/mm/swap_fifo.c    ~/mooc_os_lab/labcodes/lab4/kern/mm/swap_fifo.c
 ```
+同步 Lab 3 代码到 Lab 4
 faster to survey everything at once, diff the two kern/ trees as folders:
 ```
 meld ~/mooc_os_lab/labcodes/lab3/kern ~/mooc_os_lab/labcodes/lab4/kern
@@ -958,8 +959,20 @@ bad_fork_cleanup_proc:
 ## 遇到的问题/错误
 
 ## 知识点总结
+1. ELF loading / load_icode — Your initproc doesn't just print text anymore; it loads an ELF binary (parses the ELF header, program headers, copies each PT_LOAD segment into freshly-allocated pages at the right virtual addresses) and sets up a fresh mm_struct for it. This is literally what execve() does on a real OS.
+2. do_execve — Replaces the current process's memory image with a new program, without creating a new process (unlike fork). It tears down the old mm, builds a new one via load_icode, and rewrites the trapframe so that when this process returns to user mode, it starts executing the new program's entry point instead of resuming where it left off.
+3. Ring 0 vs. Ring 3 (privilege levels) — The CPU's protection mechanism. Kernel code runs at ring 0 (can touch hardware, page tables, anything); user code runs at ring 3 (restricted — no direct I/O, no arbitrary memory access). This is enforced by segment descriptors in the GDT (USER_CS, USER_DS vs. KERNEL_CS, KERNEL_DS) that get loaded into the trapframe.
+4. Trapframe & the ring3 "return" — To actually start a user process, the kernel builds a trapframe as if an interrupt had just landed from user mode (tf_cs = USER_CS, tf_ss/tf_ds = USER_DS, tf_esp = USTACKTOP, tf_eip = elf entry point), then executes iret. iret is the x86 instruction that pops that frame and drops the CPU into ring 3 — this is the one trick that makes "returning from an interrupt" double as "launching a user program."
+5. TSS (Task State Segment) / esp0 — When user-mode code takes a trap (syscall, page fault, timer interrupt), the CPU needs to know which kernel stack to switch to, since it can't trust the user's stack pointer. That address (kstack + KSTACKSIZE) is stashed in the TSS's esp0 field ahead of time (load_esp0, which you'll notice proc_run already calls) — this is why every process needed its own kernel stack back in lab4, and it's what makes ring3→ring0 transitions safe.
+6. System call interface (int 0x80/T_SYSCALL + syscall.c) — User code can't just call kernel functions directly (wrong privilege level). Instead, user-space wrapper stubs (user/libs/syscall.c) load syscall number + args into registers and execute a software interrupt; trap.c's dispatcher catches that specific trap number and routes it into kern/syscall/syscall.c, which fans out to sys_fork, sys_exec, sys_wait, sys_exit, etc.
+7. Real do_fork (address-space duplication) — In lab4, copy_mm was a stub ("do nothing in this project") because kernel threads share the kernel's address space. Now that processes have their own user memory, copy_mm/copy_mmap has to actually duplicate the parent's mm_struct, walk its VMAs, and copy the underlying page-table mappings (often via copy_range/dup_mmap) so parent and child have independent (but initially identical) memory.
+8. do_wait / do_exit for real processes — Lab4's do_exit was just panic(...). Now it has real work: free the process's user memory (exit_mmap, put_pgdir), mark itself PROC_ZOMBIE, and wake its parent. do_wait is the parent-side counterpart — it blocks until a specific (or any) child becomes a zombie, then reaps it. This is the actual fork()/wait()/exit() triangle from Unix.
+9. The ancestor chain (idleproc → initproc → user sh/test programs) — initproc (still a kernel thread) now forks and execs into a real user program (often a tiny shell or a batch of test binaries compiled under user/), which is the first time the machine runs code the kernel didn't write itself.
 
+### How they link together (the actual causal chain)
 
+load_icode (parse ELF, build mm) → needs real copy_mm/page-table plumbing to exist, because a process launched by fork+exec first duplicates the parent's address space (do_fork) before do_execve replaces it → needs the trapframe/ring3 machinery to actually run that address space in user mode → which needs the TSS esp0 set correctly, or the very first trap/syscall the new process makes will crash the kernel → which needs the int 0x80 syscall dispatcher wired up, because a user process that can't syscall can't exit(), can't do anything except loop forever → which needs do_exit/do_wait to be real, or the process has no way to ever terminate cleanly and get reaped by its parent. Every piece is a prerequisite for the next one actually being testable — this is why lab5 tends to feel like "nothing works until everything works," more than earlier labs did.
+<br>
 
 # Lab5 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
@@ -995,26 +1008,32 @@ grep -rn "YOUR CODE" .
 ./kern/trap/trap.c:236:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
 ```
 ``` bash
-grep -rn "LAB4" .
+grep -rn "LAB5" .
 ```
 ```
-./kern/process/proc.c:90:    //LAB4:EXERCISE1 YOUR CODE
 ./kern/process/proc.c:106:     //LAB5 YOUR CODE : (update LAB4 steps)
-./kern/process/proc.c:373:    //LAB4:EXERCISE2 YOUR CODE
+./kern/process/proc.c:108:     * below fields(add in LAB5) in proc_struct need to be initialized	
 ./kern/process/proc.c:399:	//LAB5 YOUR CODE : (update LAB4 steps)
-
+./kern/process/proc.c:596:    /* LAB5:EXERCISE1 YOUR CODE
+./kern/mm/vmm.c:474:     * LAB5 CHALLENGE ( the implmentation Copy on Write)
+./kern/mm/vmm.c:488:    //(4) [NOTICE]: you myabe need to update your lab3's implementation for LAB5's normal execution.
+./kern/mm/pmm.c:511:        /* LAB5:EXERCISE2 YOUR CODE
+./kern/trap/trap.c:56:     /* LAB5 YOUR CODE */ 
+./kern/trap/trap.c:222:        /* LAB5 YOUR CODE */
 ```
-同步 Lab 1& 2 代码到 Lab 3
-``` bash 
-#sudo apt install -y meld   # one-time, if not already installed
-meld lab1/kern/debug/kdebug.c   lab3/kern/debug/kdebug.c
-meld lab1/kern/trap/trap.c      lab3/kern/trap/trap.c
-meld lab2/kern/mm/default_pmm.c lab3/kern/mm/default_pmm.c
-meld lab2/kern/mm/pmm.c         lab3/kern/mm/pmm.c
+同步 Lab 1-4 代码到 Lab 5
+faster to survey everything at once, diff the two kern/ trees as folders:
+```
+meld ~/mooc_os_lab/labcodes/lab4/kern ~/mooc_os_lab/labcodes/lab5/kern
 ```
 
 ``` bash 
-gedit $(grep -rl "LAB4" .) &
+gedit $(grep -rl "LAB5" .) &
+```
+Sanity build before touching proc.c, to confirm the port didn't break anything:
+```
+   cd ~/mooc_os_lab/labcodes/lab5
+   make
 ```
 ``` bash 
 find . -name "*~" -type f
