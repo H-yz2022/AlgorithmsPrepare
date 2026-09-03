@@ -583,7 +583,7 @@ grep -rn "YOUR CODE" .
 ./kern/trap/trap.c:198:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
 ```
 
-同步 Lab1& 2 代码到 Lab 3
+同步 Lab 1& 2 代码到 Lab 3
 ``` bash 
 sudo apt install -y meld   # one-time, if not already installed
 meld lab1/kern/debug/kdebug.c   lab3/kern/debug/kdebug.c
@@ -624,11 +624,133 @@ make qemu
 
 
 ## Exercise Code
+```
+#if 0
+    /*LAB3 EXERCISE 1: YOUR CODE*/
+    ptep = ???              //(1) try to find a pte, if pte's PT(Page Table) isn't existed, then create a PT.
+    if (*ptep == 0) {
+                            //(2) if the phy addr isn't exist, then alloc a page & map the phy addr with logical addr
 
+    }
+    else {
+    /*LAB3 EXERCISE 2: YOUR CODE
+    * Now we think this pte is a  swap entry, we should load data from disk to a page with phy addr,
+    * and map the phy addr with logical addr, trigger swap manager to record the access situation of this page.
+    *
+    *  Some Useful MACROs and DEFINEs, you can use them in below implementation.
+    *  MACROs or Functions:
+    *    swap_in(mm, addr, &page) : alloc a memory page, then according to the swap entry in PTE for addr,
+    *                               find the addr of disk page, read the content of disk page into this memroy page
+    *    page_insert ： build the map of phy addr of an Page with the linear addr la
+    *    swap_map_swappable ： set the page swappable
+    */
+        if(swap_init_ok) {
+            struct Page *page=NULL;
+                                    //(1）According to the mm AND addr, try to load the content of right disk page
+                                    //    into the memory which page managed.
+                                    //(2) According to the mm, addr AND page, setup the map of phy addr <---> logical addr
+                                    //(3) make the page swappable.
+        }
+        else {
+            cprintf("no swap_init_ok but ptep is %x, failed\n",*ptep);
+            goto failed;
+        }
+   }
+#endif
+```
 ### Step 1
+``` vmm.c
+ if ((ptep = get_pte(mm->pgdir, addr, 1)) == NULL) {
+        cprintf("get_pte in do_pgfault failed\n");
+        goto failed;
+    }
+    
+    if (*ptep == 0) { // if the phy addr isn't exist, then alloc a page & map the phy addr with logical addr
+        if (pgdir_alloc_page(mm->pgdir, addr, perm) == NULL) {
+            cprintf("pgdir_alloc_page in do_pgfault failed\n");
+            goto failed;
+        }
+    }
+    else { // if this pte is a swap entry, then load data from disk to a page with phy addr
+           // and call page_insert to map the phy addr with logical addr
+        if(swap_init_ok) {
+            struct Page *page=NULL;
+            if ((ret = swap_in(mm, addr, &page)) != 0) {
+                cprintf("swap_in in do_pgfault failed\n");
+                goto failed;
+            }    
+            page_insert(mm->pgdir, page, addr, perm);
+            swap_map_swappable(mm, addr, page, 1);
+        }
+        else {
+            cprintf("no swap_init_ok but ptep is %x, failed\n",*ptep);
+            goto failed;
+        }
+   }
+   ret = 0;
+failed:
 
+```
 ### Step 2
-### Step 3
+``` vmm.c
+
+        if(swap_init_ok) {
+            struct Page *page=NULL;
+            if ((ret = swap_in(mm, addr, &page)) != 0) {
+                cprintf("swap_in in do_pgfault failed\n");
+                goto failed;
+            }    
+            page_insert(mm->pgdir, page, addr, perm);
+            swap_map_swappable(mm, addr, page, 1);
+        }
+        else {
+            cprintf("no swap_init_ok but ptep is %x, failed\n",*ptep);
+            goto failed;
+        }
+```
+
+
+``` swap_fifo.c
+static int
+_fifo_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int swap_in)
+{
+    list_entry_t *head=(list_entry_t*) mm->sm_priv;
+    list_entry_t *entry=&(page->pra_page_link);
+ 
+    assert(entry != NULL && head != NULL);
+    //record the page access situlation
+    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+    //(1)link the most recent arrival page at the back of the pra_list_head qeueue.
+    list_add(head, entry);
+    return 0;
+}
+/*
+ *  (4)_fifo_swap_out_victim: According FIFO PRA, we should unlink the  earliest arrival page in front of pra_list_head qeueue,
+ *                            then set the addr of addr of this page to ptr_page.
+ */
+static int
+_fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick)
+{
+     list_entry_t *head=(list_entry_t*) mm->sm_priv;
+         assert(head != NULL);
+     assert(in_tick==0);
+     /* Select the victim */
+     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+     //(1)  unlink the  earliest arrival page in front of pra_list_head qeueue
+     //(2)  set the addr of addr of this page to ptr_page
+     /* Select the tail */
+     list_entry_t *le = head->prev;
+     assert(head!=le);
+     struct Page *p = le2page(le, pra_page_link);
+     list_del(le);
+     assert(p !=NULL);
+     *ptr_page = p;
+     return 0;
+}
+```
+
+
+
 ### Challenge
 
 ## 遇到的问题/错误
