@@ -756,7 +756,7 @@ trap_dispatch(struct trapframe *tf) {
 
     int ret;
     static struct trapframe switchk2u, *switchu2k;
-...
+```
 ```
 static volatile int in_swap_tick_event = 0;
 extern struct mm_struct *check_mm_struct;
@@ -766,9 +766,68 @@ extern struct mm_struct *check_mm_struct;
 
 ## 遇到的问题/错误
 
+- 不应该直接复制lab1 lab2内容：
+    + 需要用meld
+- 有些code跟标准答案有出入：
+    + vmm.c: ptep = get_pte(mm->pgdir, addr, 1); and goes straight to if (*ptep == 0). get_pte(..., 1) allocates a new page-table page when the PDE is missing, and that allocation can fail under memory pressure — in that case it returns NULL. Your version would then dereference a null pointer (*ptep) instead of failing gracefully into -E_NO_MEM via the existing failed: label. It passed your test run because the test environment always has free memory to satisfy that allocation, so the failure path never actually triggers — but it's a latent crash bug, not just style. Worth adding that check now since it's a one-line fix and it's exactly the kind of thing that would bite you on a stress test or a grading harness that simulates OOM.
+``` 
+if ((ptep = get_pte(mm->pgdir, addr, 1)) == NULL) {
+    cprintf("get_pte in do_pgfault failed\n");
+    goto failed;
+}
+```
+vmm.c step 2 (swap-in path) — identical between yours and the professor's. Nothing to change here.
+    + swap_fifo.c — functionally equivalent, just mirrored conventions, and both are internally consistent so neither is "more correct":
+        - Professor: insert with list_add(head, entry) (= insert right after head, i.e. at head->next), evict from head->prev.
+        - You (per our earlier exchange): insert with list_add_before(head, entry) (= insert right before head, i.e. at head->prev), evict from head->next (list_next(head)).
+  
+  
+
 ## 知识点总结
+1. Virtual address space — the range of addresses a process (or the kernel, via check_mm_struct in this lab's tests) can reference, distinct from actual RAM addresses. Lab3 is the layer that decides what's legal in that space before Lab2's allocator is ever touched.
+2. mm_struct — one per address space. Holds the doubly-linked list of VMAs (mmap_list), a one-entry lookup cache (mmap_cache), the page directory pointer (pgdir), and sm_priv, an opaque pointer the swap manager uses for its own bookkeeping (in this lab, it points at the FIFO queue head).
+3. vma_struct (Virtual Memory Area) — one contiguous sub-range of an address space with uniform permissions: vm_start, vm_end, vm_flags (VM_READ / VM_WRITE / VM_EXEC). A process's full address space is a set of these — e.g. one VMA for code, one for heap, one for stack — each with different permissions.
+4. Page Directory / Page Table (PDT/PT), PDE/PTE — the two-level x86 translation structure. A PDE points to a page table; a PTE points to (or records the swapped-out location of) one 4 KB physical page. get_pte walks/creates this structure; a PTE value of 0 means "nothing mapped yet," a non-zero-but-not-present value in this lab's convention means "swapped out — the bits encode where on disk."
+5. Page fault exception (#PF) — raised by the CPU when a memory access can't be satisfied by the current page tables. The hardware hands the handler two things: CR2 (the faulting linear address) and an error code whose low 3 bits are P (present), W/R (write vs. read), U/S (user vs. supervisor). do_pgfault's switch (error_code & 3) is reading exactly those bits to decide whether the fault is even legitimate for this VMA before doing any allocation work.
+6. Demand paging — not eagerly allocating physical memory for a VMA at creation time; only backing an address with a real page the first time it faults. This is why do_pgfault's *ptep == 0 branch exists — it's the "first touch" allocation path.\
+7. Swap subsystem — the mechanism that lets total virtual memory exceed physical RAM by evicting a physical page's contents to disk and reusing the frame, then restoring it on next access. swap_in/swap_out do the disk I/O; the policy of which page to evict is delegated to a page replacement algorithm (PRA).
+8. struct swap_manager (the FIFO in swap_fifo.c) — a function-pointer table (init, init_mm, map_swappable, swap_out_victim, tick_event, check_swap, …) — i.e. a hand-rolled vtable. This is the OS-textbook pattern for swapping PRA implementations (FIFO here; LRU/Clock in harder variants of this lab) without touching the fault-handling code in vmm.c at all.
+9. FIFO PRA — evict whichever resident page arrived first, tracked with a circular doubly-linked list (pra_list_head, list_add/list_del from list.h). Cheap, no per-access bookkeeping — and, notoriously, subject to Belady's anomaly (adding more physical frames can increase the fault count). It's the simplest correct PRA, which is why it's the one assigned first.
+10. Reference/access recency — the thing FIFO deliberately ignores. A page can be evicted the instant after it was heavily used, just because it happened to arrive early. This is the conceptual gap that LRU/Clock algorithms close (see §4).
+11. Tick event / in_swap_tick_event — a hook off the Lab1 timer interrupt that can drive swapping periodically rather than only synchronously inside a page fault. It's why trap.c needs extern struct mm_struct *check_mm_struct — the timer handler, running outside the fault path, still needs to know which address space it's managing.
+<br>
+### The logical flow (cause → effect through the files you edited)
+1. CPU faults → Lab1's IDT entry for vector 14 fires → trap.c's trap_dispatch recognizes T_PGFLT → calls pgfault_handler → do_pgfault(mm, error_code, addr) in vmm.c.
+2. Legality check — find_vma(mm, addr) walks mm->mmap_list (a plain linked list here — see §4) to find a VMA containing addr. If none exists, or the error-code bits are inconsistent with that VMA's vm_flags (e.g. a write fault against a read-only VMA), do_pgfault fails immediately — before ever consulting Lab2's allocator. This is the "policy before mechanism" boundary between Lab3 and Lab2.
+3. Resolve the PTE — get_pte(mm->pgdir, addr, 1) finds or creates the PTE slot (allocating a page-table page
+via Lab2's alloc_page if needed — this can fail, hence the NULL check discussed earlier).
+4. Two branches, both eventually calling into Lab2:
+    - Never mapped (*ptep == 0): pgdir_alloc_page = Lab2's alloc_page + page_insert. Pure demand paging, no disk involved.
+    - Previously swapped out (PTE non-zero, not present): swap_in reads the page back from disk into a freshly allocated frame, page_insert remaps it, and swap_map_swappable hands the page to the FIFO manager — which is where _fifo_map_swappable appends it to pra_list_head.
+5. Memory pressure — when Lab2's allocator later needs a free frame and none exists, the swap layer calls swap_out_victim, which is _fifo_swap_out_victim here: pop the oldest entry off the FIFO list, write it to disk, and hand the now-free physical frame back to Lab2. This is the step that actually closes the loop and makes memory overcommit possible.
+6. Self-test — _fifo_check_swap deliberately touches more distinct virtual pages than there are physical frames, in a specific order, and asserts pgfault_num after each access. This single test exercises all of the above at once: find_vma correctness, the demand-paging branch, the swap-in branch, and — critically — that your FIFO insert/evict ordering matches the expected trace. If your insert-end and evict-end conventions in swap_fifo.c are internally consistent (as discussed previously), this test passes regardless of which physical end of the list you called "front."
+
+### One-paragraph summary
+Lab3 slots a policy layer (mm_struct/VMA legality + PRA choice) between Lab1's fault delivery and Lab2's raw page allocator: a fault first asks "is this address even allowed, and how?" (VMA + error-code check), then "do I need a fresh page or a swapped-out one back?" (the *ptep == 0 branch vs. swap_in), and only then touches Lab2's allocator. The FIFO swap manager is a deliberately minimal, swappable (pun intended) PRA implementation wired in through a vtable so it can be replaced by Clock/LRU without touching do_pgfault — and the specific rough edges above (global list state, no recency awareness, linear VMA lookup, an unchecked allocation failure) are the standard list of things a "Lab3+" or systems-course follow-up would tighten.
+
 
 # Lab4 in MOOC
+## 前期准备需要的部分terminal 中的指令：
+## Exercise Code
+
+### Step 1
+
+### Step 2
+### Step 3
+### Challenge
+
+## 遇到的问题/错误
+
+## 知识点总结
+
+
+
+# Lab5 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
 ## Exercise Code
 
