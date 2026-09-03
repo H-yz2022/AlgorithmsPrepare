@@ -353,6 +353,10 @@ cp ../lab1/kern/trap/trap.c kern/trap/trap.c
 ``` bash
 gedit kern/mm/default_pmm.c kern/mm/pmm.c
 ```
+OR
+```
+gedit $(grep -rl "YOUR CODE" .) &
+```
 ```
 make clean
 make grade
