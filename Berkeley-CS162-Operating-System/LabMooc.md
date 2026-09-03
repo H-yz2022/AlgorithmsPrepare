@@ -591,15 +591,32 @@ meld lab1/kern/trap/trap.c      lab3/kern/trap/trap.c
 meld lab2/kern/mm/default_pmm.c lab3/kern/mm/default_pmm.c
 meld lab2/kern/mm/pmm.c         lab3/kern/mm/pmm.c
 ```
+``` bash 
+grep -rn "YOUR CODE" .
+```
+```
+./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/vmm.c:350:    /*LAB3 EXERCISE 1: YOUR CODE
+./kern/mm/vmm.c:368:    /*LAB3 EXERCISE 1: YOUR CODE*/
+./kern/mm/vmm.c:375:    /*LAB3 EXERCISE 2: YOUR CODE
+./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
+./kern/mm/pmm.c:363:    /* LAB2 EXERCISE 2: YOUR CODE
+./kern/mm/pmm.c:430:    /* LAB2 EXERCISE 3: YOUR CODE
+./kern/debug/kdebug.c:296:     /* LAB1 YOUR CODE : STEP 1 */
+./kern/trap/trap.c:40:     /* LAB1 YOUR CODE : STEP 2 */
+./kern/trap/trap.c:197:        /* LAB1 YOUR CODE : STEP 3 */
+./kern/trap/trap.c:218:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
 
 ```
-gedit $(grep -rl "YOUR CODE" .) &
+``` bash 
+gedit $(grep -rl "LAB3" .) &
 ```
-```
+``` bash 
 find . -name "*~" -type f
 find . -name "*~" -type f -delete
 ```
-```
+``` bash 
 make clean
 make grade
 make qemu
