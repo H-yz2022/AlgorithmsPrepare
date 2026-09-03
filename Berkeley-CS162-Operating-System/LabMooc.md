@@ -358,6 +358,10 @@ OR
 gedit $(grep -rl "YOUR CODE" .) &
 ```
 ```
+find . -name "*~" -type f
+find . -name "*~" -type f -delete
+```
+```
 make clean
 make grade
 make qemu
