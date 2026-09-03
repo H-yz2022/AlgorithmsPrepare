@@ -816,9 +816,25 @@ grep -rn "YOUR CODE" .
 ```
 
 ``` YOUR CODE 
+./kern/process/proc.c:89:    //LAB4:EXERCISE1 YOUR CODE
+./kern/process/proc.c:274:    //LAB4:EXERCISE2 YOUR CODE
+./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/vmm.c:347:    /*LAB3 EXERCISE 1: YOUR CODE
+./kern/mm/vmm.c:365:    /*LAB3 EXERCISE 1: YOUR CODE*/
+./kern/mm/vmm.c:372:    /*LAB3 EXERCISE 2: YOUR CODE
+./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
+./kern/mm/pmm.c:366:    /* LAB2 EXERCISE 2: YOUR CODE
+./kern/mm/pmm.c:419:    /* LAB2 EXERCISE 3: YOUR CODE
+./kern/debug/kdebug.c:296:     /* LAB1 YOUR CODE : STEP 1 */
+./kern/trap/trap.c:39:     /* LAB1 YOUR CODE : STEP 2 */
+./kern/trap/trap.c:183:        /* LAB1 YOUR CODE : STEP 3 */
+./kern/trap/trap.c:198:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
 
 ```
-
+``` bash
+grep -rn "LAB4" .
+```
 同步 Lab 1& 2 代码到 Lab 3
 ``` bash 
 #sudo apt install -y meld   # one-time, if not already installed
