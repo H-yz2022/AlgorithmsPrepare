@@ -374,21 +374,12 @@ make qemu
         - default_free_pages：原代码在查找插入位置和合并逻辑上写得比较粗糙（直接遍历链表尝试进行相等判断，且最后简单的 list_add 并没有保证按地址顺序插入）。需要修正：先顺着 free_list 遍历找到第一个地址高于 base 的节点 le，然后将 base 插入到 le 之前；插入后再尝试与前一个节点（prev）和后一个节点（next）进行物理地址相邻合并。
 
 ``` C
-#include <pmm.h>
-#include <list.h>
-#include <string.h>
-#include <default_pmm.h>
 
-free_area_t free_area;
 
 #define free_list (free_area.free_list)
 #define nr_free (free_area.nr_free)
 
-static void
-default_init(void) {
-    list_init(&free_list);
-    nr_free = 0;
-}
+
 
 static void
 default_init_memmap(struct Page *base, size_t n) {
@@ -422,41 +413,7 @@ default_init_memmap(struct Page *base, size_t n) {
     }
 }
 
-static struct Page *
-default_alloc_pages(size_t n) {
-    assert(n > 0);
-    if (n > nr_free) {
-        return NULL;
-    }
-    struct Page *page = NULL;
-    list_entry_t *le = &free_list;
-    
-    // First-Fit: 遍历按地址排序的链表，寻找第一个满足大小要求的空闲块
-    while ((le = list_next(le)) != &free_list) {
-        struct Page *p = le2page(le, page_link);
-        if (p->property >= n) {
-            page = p;
-            break;
-        }
-    }
-    
-    if (page != NULL) {
-        list_entry_t* prev = list_prev(&(page->page_link)); // 新代码在删除 page 之前，先记录了它在前驱节点 prev
-        list_del(&(page->page_link));
-        
-        // 如果分配后还有剩余，切分出剩余部分并重新插回原位置（保持按地址排序）
-        if (page->property > n) {
-            struct Page *p = page + n;
-            p->property = page->property - n;
-            SetPageProperty(p);
-            list_add(prev, &(p->page_link)); //由于切分出来的剩余块 p 紧跟在已被分配的 page 原位置之后，所以将 p 直接接在 prev 后面，完美保留了链表原本的物理地址顺序。
-        }
-        
-        nr_free -= n;
-        ClearPageProperty(page);
-    }
-    return page;
-}
+
 
 static void
 default_free_pages(struct Page *base, size_t n) {
