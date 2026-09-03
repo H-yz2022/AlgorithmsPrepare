@@ -764,7 +764,16 @@ vmm.c step 2 (swap-in path) — identical between yours and the professor's. Not
     + swap_fifo.c — functionally equivalent, just mirrored conventions, and both are internally consistent so neither is "more correct":
         - Professor: insert with list_add(head, entry) (= insert right after head, i.e. at head->next), evict from head->prev.
         - You (per our earlier exchange): insert with list_add_before(head, entry) (= insert right before head, i.e. at head->prev), evict from head->next (list_next(head)).
-  
+- 排除错误的方法：
+···
+grep -n "in_swap_tick_event\|check_mm_struct" kern/trap/trap.c
+168:    extern struct mm_struct *check_mm_struct;
+170:    if (check_mm_struct != NULL) {
+171:        return do_pgfault(check_mm_struct, tf->tf_err, rcr2());
+176:static volatile int in_swap_tick_event = 0;
+177:extern struct mm_struct *check_mm_struct;
+moocos@moocos-VirtualBox:~/mooc_os_lab/labcodes/lab3$
+···
   
 
 ## 知识点总结
