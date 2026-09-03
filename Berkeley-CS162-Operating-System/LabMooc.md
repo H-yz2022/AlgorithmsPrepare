@@ -17,6 +17,10 @@ cd ~/mooc_os_lab/labcodes/lab1
 git add .
 git commit -m "YOUR CODE"
 ```
+```
+ gedit $(grep -rl "YOUR CODE" .) &
+
+```
 ## Exercise Code
 ```
 lab1 中包含一个bootloader 和一个OS。这个bootloader可以切换到X86保护模式，能够读磁盘
