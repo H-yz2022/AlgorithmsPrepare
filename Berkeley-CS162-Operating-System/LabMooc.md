@@ -591,24 +591,7 @@ meld lab1/kern/trap/trap.c      lab3/kern/trap/trap.c
 meld lab2/kern/mm/default_pmm.c lab3/kern/mm/default_pmm.c
 meld lab2/kern/mm/pmm.c         lab3/kern/mm/pmm.c
 ```
-``` bash 
-grep -rn "YOUR CODE" .
-```
-```
-./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
-./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
-./kern/mm/vmm.c:350:    /*LAB3 EXERCISE 1: YOUR CODE
-./kern/mm/vmm.c:368:    /*LAB3 EXERCISE 1: YOUR CODE*/
-./kern/mm/vmm.c:375:    /*LAB3 EXERCISE 2: YOUR CODE
-./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
-./kern/mm/pmm.c:363:    /* LAB2 EXERCISE 2: YOUR CODE
-./kern/mm/pmm.c:430:    /* LAB2 EXERCISE 3: YOUR CODE
-./kern/debug/kdebug.c:296:     /* LAB1 YOUR CODE : STEP 1 */
-./kern/trap/trap.c:40:     /* LAB1 YOUR CODE : STEP 2 */
-./kern/trap/trap.c:197:        /* LAB1 YOUR CODE : STEP 3 */
-./kern/trap/trap.c:218:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
 
-```
 ``` bash 
 gedit $(grep -rl "LAB3" .) &
 ```
@@ -620,6 +603,7 @@ find . -name "*~" -type f -delete
 make clean
 make grade
 make qemu
+make clean && make
 ```
 
 
@@ -813,6 +797,41 @@ Lab3 slots a policy layer (mm_struct/VMA legality + PRA choice) between Lab1's f
 
 # Lab4 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
+``` bash
+cd ../lab4
+cd ~/mooc_os_lab/labcodes/lab4
+```
+
+``` bash
+grep -rn "YOUR CODE" .
+```
+
+``` YOUR CODE 
+
+```
+
+同步 Lab 1& 2 代码到 Lab 3
+``` bash 
+#sudo apt install -y meld   # one-time, if not already installed
+meld lab1/kern/debug/kdebug.c   lab3/kern/debug/kdebug.c
+meld lab1/kern/trap/trap.c      lab3/kern/trap/trap.c
+meld lab2/kern/mm/default_pmm.c lab3/kern/mm/default_pmm.c
+meld lab2/kern/mm/pmm.c         lab3/kern/mm/pmm.c
+```
+
+``` bash 
+gedit $(grep -rl "LAB4" .) &
+```
+``` bash 
+find . -name "*~" -type f
+find . -name "*~" -type f -delete
+```
+``` bash 
+make clean
+make grade
+make qemu
+make clean && make
+```
 ## Exercise Code
 
 ### Step 1
