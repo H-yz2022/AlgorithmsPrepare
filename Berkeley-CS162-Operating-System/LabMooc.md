@@ -555,8 +555,56 @@ list_add(prev, &(p->page_link));
 ## 知识点总结
 - First-Fit 算法（首次适应分配算法） 是操作系统内存管理（以及动态内存分配，如 malloc）中一种非常基础且高效的连续内存分配策略。
 - 它的核心思想可以用一句话概括：“寻找第一个能装下的空闲内存块。”
+
+- 
 # Lab3 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
+``` bash
+cd ../lab3
+cd ~/mooc_os_lab/labcodes/lab1
+```
+
+``` bash
+grep -rn "YOUR CODE" .
+```
+
+``` YOUR CODE 
+./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/vmm.c:350:    /*LAB3 EXERCISE 1: YOUR CODE
+./kern/mm/vmm.c:368:    /*LAB3 EXERCISE 1: YOUR CODE*/
+./kern/mm/vmm.c:375:    /*LAB3 EXERCISE 2: YOUR CODE
+./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
+./kern/mm/pmm.c:363:    /* LAB2 EXERCISE 2: YOUR CODE
+./kern/mm/pmm.c:416:    /* LAB2 EXERCISE 3: YOUR CODE
+./kern/debug/kdebug.c:296:     /* LAB1 YOUR CODE : STEP 1 */
+./kern/trap/trap.c:39:     /* LAB1 YOUR CODE : STEP 2 */
+./kern/trap/trap.c:183:        /* LAB1 YOUR CODE : STEP 3 */
+./kern/trap/trap.c:198:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
+```
+
+同步 Lab1& 2 代码到 Lab 3
+``` bash 
+sudo apt install -y meld   # one-time, if not already installed
+meld lab1/kern/debug/kdebug.c   lab3/kern/debug/kdebug.c
+meld lab1/kern/trap/trap.c      lab3/kern/trap/trap.c
+meld lab2/kern/mm/default_pmm.c lab3/kern/mm/default_pmm.c
+meld lab2/kern/mm/pmm.c         lab3/kern/mm/pmm.c
+```
+
+```
+gedit $(grep -rl "YOUR CODE" .) &
+```
+```
+find . -name "*~" -type f
+find . -name "*~" -type f -delete
+```
+```
+make clean
+make grade
+make qemu
+```
+
 
 ## Exercise Code
 
@@ -570,3 +618,16 @@ list_add(prev, &(p->page_link));
 
 ## 知识点总结
 
+# Lab4 in MOOC
+## 前期准备需要的部分terminal 中的指令：
+## Exercise Code
+
+### Step 1
+
+### Step 2
+### Step 3
+### Challenge
+
+## 遇到的问题/错误
+
+## 知识点总结
