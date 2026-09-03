@@ -843,6 +843,170 @@ grep -rn "LAB4" .
 同步 Lab 1& 2 代码到 Lab 3
 ``` bash 
 #sudo apt install -y meld   # one-time, if not already installed
+meld ~/mooc_os_lab/labcodes/lab1/kern/debug/kdebug.c ~/mooc_os_lab/labcodes/lab4/kern/debug/kdebug.c
+meld ~/mooc_os_lab/labcodes/lab1/kern/trap/trap.c     ~/mooc_os_lab/labcodes/lab4/kern/trap/trap.c
+meld ~/mooc_os_lab/labcodes/lab2/kern/mm/default_pmm.c ~/mooc_os_lab/labcodes/lab4/kern/mm/default_pmm.c
+meld ~/mooc_os_lab/labcodes/lab2/kern/mm/pmm.c          ~/mooc_os_lab/labcodes/lab4/kern/mm/pmm.c
+meld ~/mooc_os_lab/labcodes/lab3/kern/mm/vmm.c          ~/mooc_os_lab/labcodes/lab4/kern/mm/vmm.c
+meld ~/mooc_os_lab/labcodes/lab3/kern/mm/swap_fifo.c    ~/mooc_os_lab/labcodes/lab4/kern/mm/swap_fifo.c
+```
+faster to survey everything at once, diff the two kern/ trees as folders:
+```
+meld ~/mooc_os_lab/labcodes/lab3/kern ~/mooc_os_lab/labcodes/lab4/kern
+```
+Sanity build before touching proc.c, to confirm the port didn't break anything:
+```
+   cd ~/mooc_os_lab/labcodes/lab4
+   make
+```
+``` bash 
+gedit $(grep -rl "LAB4" .) &
+```
+``` bash 
+find . -name "*~" -type f
+find . -name "*~" -type f -delete
+```
+``` bash 
+make clean
+make grade
+make qemu
+make clean && make
+```
+## Exercise Code
+
+### Step 1
+```
+static struct proc_struct *
+alloc_proc(void) {
+    struct proc_struct *proc = kmalloc(sizeof(struct proc_struct));
+    if (proc != NULL) {
+        proc->state = PROC_UNINIT;      // brand new, not runnable yet
+        proc->pid = -1;                 // no pid assigned yet (get_pid does that later)
+        proc->runs = 0;                 // hasn't run
+        proc->kstack = 0;               // no kernel stack allocated yet
+        proc->need_resched = 0;
+        proc->parent = NULL;
+        proc->mm = NULL;
+        memset(&(proc->context), 0, sizeof(struct context));
+        proc->tf = NULL;
+        proc->cr3 = boot_cr3;           // until it gets its own page dir, use the kernel's
+        proc->flags = 0;
+        memset(proc->name, 0, PROC_NAME_LEN);
+    }
+    return proc;
+}
+```
+### Step 2
+```
+//    1. call alloc_proc to allocate a proc_struct
+    //    2. call setup_kstack to allocate a kernel stack for child process
+    //    3. call copy_mm to dup OR share mm according clone_flag
+    //    4. call copy_thread to setup tf & context in proc_struct
+    //    5. insert proc_struct into hash_list && proc_list
+    //    6. call wakup_proc to make the new child process RUNNABLE
+    //    7. set ret vaule using child proc's pid
+int
+do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
+    int ret = -E_NO_FREE_PROC;
+    struct proc_struct *proc;
+    if (nr_process >= MAX_PROCESS) {
+        goto fork_out;
+    }
+    ret = -E_NO_MEM;
+    //LAB4:EXERCISE2 YOUR CODE
+    if ((proc = alloc_proc()) == NULL) {
+        goto fork_out;
+    }
+
+    proc->parent = current;
+
+    if (setup_kstack(proc) != 0) {
+        goto bad_fork_cleanup_proc;
+    }
+    if (copy_mm(clone_flags, proc) != 0) {
+        goto bad_fork_cleanup_kstack;
+    }
+    copy_thread(proc, stack, tf);
+
+    bool intr_flag;
+    local_intr_save(intr_flag);
+    {
+        proc->pid = get_pid();
+        hash_proc(proc);
+        list_add(&proc_list, &(proc->list_link));
+        nr_process++;
+    }
+    local_intr_restore(intr_flag);
+
+    wakeup_proc(proc);
+
+    ret = proc->pid;
+
+fork_out:
+    return ret;
+
+bad_fork_cleanup_kstack:
+    put_kstack(proc);
+bad_fork_cleanup_proc:
+    kfree(proc);
+    goto fork_out;
+}
+```
+
+### Challenge
+
+## 遇到的问题/错误
+
+## 知识点总结
+
+
+
+# Lab5 in MOOC
+## 前期准备需要的部分terminal 中的指令：
+``` bash
+cd ../lab5
+cd ~/mooc_os_lab/labcodes/lab4
+```
+
+``` bash
+grep -rn "YOUR CODE" .
+```
+
+``` YOUR CODE 
+./kern/process/proc.c:90:    //LAB4:EXERCISE1 YOUR CODE
+./kern/process/proc.c:106:     //LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:373:    //LAB4:EXERCISE2 YOUR CODE
+./kern/process/proc.c:399:	//LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:596:    /* LAB5:EXERCISE1 YOUR CODE
+./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/vmm.c:437:    /*LAB3 EXERCISE 1: YOUR CODE
+./kern/mm/vmm.c:455:    /*LAB3 EXERCISE 1: YOUR CODE*/
+./kern/mm/vmm.c:462:    /*LAB3 EXERCISE 2: YOUR CODE
+./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
+./kern/mm/pmm.c:366:    /* LAB2 EXERCISE 2: YOUR CODE
+./kern/mm/pmm.c:419:    /* LAB2 EXERCISE 3: YOUR CODE
+./kern/mm/pmm.c:511:        /* LAB5:EXERCISE2 YOUR CODE
+./kern/debug/kdebug.c:338:     /* LAB1 YOUR CODE : STEP 1 */
+./kern/trap/trap.c:44:     /* LAB1 YOUR CODE : STEP 2 */
+./kern/trap/trap.c:56:     /* LAB5 YOUR CODE */ 
+./kern/trap/trap.c:216:        /* LAB1 YOUR CODE : STEP 3 */
+./kern/trap/trap.c:222:        /* LAB5 YOUR CODE */
+./kern/trap/trap.c:236:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
+```
+``` bash
+grep -rn "LAB4" .
+```
+```
+./kern/process/proc.c:90:    //LAB4:EXERCISE1 YOUR CODE
+./kern/process/proc.c:106:     //LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:373:    //LAB4:EXERCISE2 YOUR CODE
+./kern/process/proc.c:399:	//LAB5 YOUR CODE : (update LAB4 steps)
+
+```
+同步 Lab 1& 2 代码到 Lab 3
+``` bash 
+#sudo apt install -y meld   # one-time, if not already installed
 meld lab1/kern/debug/kdebug.c   lab3/kern/debug/kdebug.c
 meld lab1/kern/trap/trap.c      lab3/kern/trap/trap.c
 meld lab2/kern/mm/default_pmm.c lab3/kern/mm/default_pmm.c
@@ -868,15 +1032,13 @@ make clean && make
 
 ### Step 2
 ### Step 3
-### Challenge
+
 
 ## 遇到的问题/错误
 
 ## 知识点总结
 
-
-
-# Lab5 in MOOC
+# Lab6 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
 ## Exercise Code
 
