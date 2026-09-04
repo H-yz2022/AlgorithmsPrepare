@@ -1051,6 +1051,181 @@ make clean && make
 <br>
 # Lab6 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
+``` bash
+cd ../lab6
+cd ~/mooc_os_lab/labcodes/lab6
+```
+
+``` bash
+grep -rn "YOUR CODE" .
+```
+
+``` YOUR CODE 
+./kern/process/proc.c:90:    //LAB4:EXERCISE1 YOUR CODE
+./kern/process/proc.c:106:     //LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:112:     //LAB6 YOUR CODE : (update LAB5 steps)
+./kern/process/proc.c:383:    //LAB4:EXERCISE2 YOUR CODE
+./kern/process/proc.c:409:	//LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:606:    /* LAB5:EXERCISE1 YOUR CODE
+./kern/schedule/default_sched_stride_c:10:/* LAB6: YOUR CODE */
+./kern/schedule/default_sched_stride_c:39:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:61:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:82:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:104:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:123:     /* LAB6: YOUR CODE */
+./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/vmm.c:437:    /*LAB3 EXERCISE 1: YOUR CODE
+./kern/mm/vmm.c:455:    /*LAB3 EXERCISE 1: YOUR CODE*/
+./kern/mm/vmm.c:462:    /*LAB3 EXERCISE 2: YOUR CODE
+./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
+./kern/mm/pmm.c:366:    /* LAB2 EXERCISE 2: YOUR CODE
+./kern/mm/pmm.c:419:    /* LAB2 EXERCISE 3: YOUR CODE
+./kern/mm/pmm.c:511:        /* LAB5:EXERCISE2 YOUR CODE
+./kern/debug/kdebug.c:338:     /* LAB1 YOUR CODE : STEP 1 */
+./kern/trap/trap.c:45:     /* LAB1 YOUR CODE : STEP 2 */
+./kern/trap/trap.c:57:     /* LAB5 YOUR CODE */ 
+./kern/trap/trap.c:217:        /* LAB1 YOUR CODE : STEP 3 */
+./kern/trap/trap.c:223:        /* LAB5 YOUR CODE */
+./kern/trap/trap.c:227:        /* LAB6 YOUR CODE */
+./kern/trap/trap.c:244:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
+
+```
+``` bash
+grep -rn "LAB6" .
+```
+```
+./user/libs/syscall.h:13:/* FOR LAB6 ONLY */
+./kern/process/proc.c:112:     //LAB6 YOUR CODE : (update LAB5 steps)
+./kern/process/proc.c:114:     * below fields(add in LAB6) in proc_struct need to be initialized
+./kern/process/proc.c:118:     *     skew_heap_entry_t lab6_run_pool;            // FOR LAB6 ONLY: the entry in the run pool
+./kern/process/proc.c:119:     *     uint32_t lab6_stride;                       // FOR LAB6 ONLY: the current stride of the process
+./kern/process/proc.c:120:     *     uint32_t lab6_priority;                     // FOR LAB6 ONLY: the priority of process, set by lab6_set_priority(uint32_t)
+./kern/process/proc.c:866://FOR LAB6, set the process's priority (bigger value will get more CPU time) 
+./kern/process/proc.h:64:    skew_heap_entry_t lab6_run_pool;            // FOR LAB6 ONLY: the entry in the run pool
+./kern/process/proc.h:65:    uint32_t lab6_stride;                       // FOR LAB6 ONLY: the current stride of the process 
+./kern/process/proc.h:66:    uint32_t lab6_priority;                     // FOR LAB6 ONLY: the priority of process, set by lab6_set_priority(uint32_t)
+./kern/process/proc.h:95://FOR LAB6, set the process's priority (bigger value will get more CPU time) 
+./kern/schedule/default_sched_stride_c:10:/* LAB6: YOUR CODE */
+./kern/schedule/default_sched_stride_c:39:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:61:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:82:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:104:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:123:     /* LAB6: YOUR CODE */
+./kern/schedule/sched.h:61:    // For LAB6 ONLY
+./kern/trap/trap.c:227:        /* LAB6 YOUR CODE */
+./libs/unistd.h:23:/* OLNY FOR LAB6 */
+
+```
+同步 Lab 1-4 代码到 Lab 5
+faster to survey everything at once, diff the two kern/ trees as folders:
+```
+meld ~/mooc_os_lab/labcodes/lab5/kern ~/mooc_os_lab/labcodes/lab6/kern
+```
+
+``` bash 
+gedit $(grep -rl "LAB6" .) &
+```
+Sanity build before touching proc.c, to confirm the port didn't break anything:
+```
+   cd ~/mooc_os_lab/labcodes/lab6
+   make
+```
+``` bash 
+find . -name "*~" -type f
+find . -name "*~" -type f -delete
+```
+``` bash 
+make clean
+make grade
+make qemu
+make clean && make
+```
+## Exercise Code
+
+### Step 1
+
+### Step 2
+### Step 3
+### Challenge
+
+## 遇到的问题/错误
+
+## 知识点总结
+
+<br>
+<br>
+# Lab6 in MOOC
+## 前期准备需要的部分terminal 中的指令：
+``` bash
+cd ../lab6
+cd ~/mooc_os_lab/labcodes/lab6
+```
+
+``` bash
+grep -rn "YOUR CODE" .
+```
+
+``` YOUR CODE 
+./kern/process/proc.c:90:    //LAB4:EXERCISE1 YOUR CODE
+./kern/process/proc.c:106:     //LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:373:    //LAB4:EXERCISE2 YOUR CODE
+./kern/process/proc.c:399:	//LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:596:    /* LAB5:EXERCISE1 YOUR CODE
+./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/vmm.c:437:    /*LAB3 EXERCISE 1: YOUR CODE
+./kern/mm/vmm.c:455:    /*LAB3 EXERCISE 1: YOUR CODE*/
+./kern/mm/vmm.c:462:    /*LAB3 EXERCISE 2: YOUR CODE
+./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
+./kern/mm/pmm.c:366:    /* LAB2 EXERCISE 2: YOUR CODE
+./kern/mm/pmm.c:419:    /* LAB2 EXERCISE 3: YOUR CODE
+./kern/mm/pmm.c:511:        /* LAB5:EXERCISE2 YOUR CODE
+./kern/debug/kdebug.c:338:     /* LAB1 YOUR CODE : STEP 1 */
+./kern/trap/trap.c:44:     /* LAB1 YOUR CODE : STEP 2 */
+./kern/trap/trap.c:56:     /* LAB5 YOUR CODE */ 
+./kern/trap/trap.c:216:        /* LAB1 YOUR CODE : STEP 3 */
+./kern/trap/trap.c:222:        /* LAB5 YOUR CODE */
+./kern/trap/trap.c:236:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
+```
+``` bash
+grep -rn "LAB6" .
+```
+```
+./kern/process/proc.c:106:     //LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:108:     * below fields(add in LAB5) in proc_struct need to be initialized	
+./kern/process/proc.c:399:	//LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:596:    /* LAB5:EXERCISE1 YOUR CODE
+./kern/mm/vmm.c:474:     * LAB5 CHALLENGE ( the implmentation Copy on Write)
+./kern/mm/vmm.c:488:    //(4) [NOTICE]: you myabe need to update your lab3's implementation for LAB5's normal execution.
+./kern/mm/pmm.c:511:        /* LAB5:EXERCISE2 YOUR CODE
+./kern/trap/trap.c:56:     /* LAB5 YOUR CODE */ 
+./kern/trap/trap.c:222:        /* LAB5 YOUR CODE */
+```
+同步 Lab 1-4 代码到 Lab 5
+faster to survey everything at once, diff the two kern/ trees as folders:
+```
+meld ~/mooc_os_lab/labcodes/lab5/kern ~/mooc_os_lab/labcodes/lab6/kern
+```
+
+``` bash 
+gedit $(grep -rl "LAB6" .) &
+```
+Sanity build before touching proc.c, to confirm the port didn't break anything:
+```
+   cd ~/mooc_os_lab/labcodes/lab6
+   make
+```
+``` bash 
+find . -name "*~" -type f
+find . -name "*~" -type f -delete
+```
+``` bash 
+make clean
+make grade
+make qemu
+make clean && make
+```
 ## Exercise Code
 
 ### Step 1
