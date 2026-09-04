@@ -17,7 +17,6 @@
 | 7 | UCB CS61A: Structure and Interpretation of Computer Programs | []() | [link](https://csdiy.wiki/%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/Python/CS61A/) |  | 
 | 8 | Deep Learning | []() | [link](https://www.deeplearningbook.org/lecture_slides.html)  |  |
 | 9 | NYU Machine Learning | Machine Learning []() | [link](https://cims.nyu.edu/ai/areas/machine-learning/)  |  |
-
 | 10 | NYU PL, Fall 2018 |  PL []() | [link](https://cs.nyu.edu/~wies/teaching/pl-fa18/) |  |  
 | 11 | utah PL | []() | [link](https://my.eng.utah.edu/~cs3520/f20/schedule.html) |  |  
  
