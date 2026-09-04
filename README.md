@@ -9,12 +9,15 @@
 | # | Note | Fold | Link | Difficulcty |
 |------|------|------|------|------|
 | 1 | MIT6.006 Introduction to AlgorithmsPython | Algorithms []() | [link](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/download/)  |  |
-| 2 | UCB CS 162: Operating Systems and System Programming: Pintos Environment | Operating Systems []() | [link](https://cs162.org/)  |  |
-| 3 | COMPSCI 224 Advanced Algorithms | Algorithms []() | [link](https://people.seas.harvard.edu/~cs224/fall14/index.html)  |  |
-| 4 | Deep Learning | []() | [link](https://www.deeplearningbook.org/lecture_slides.html)  |  |
-| 5 | NYU Machine Learning | Machine Learning []() | [link](https://cims.nyu.edu/ai/areas/machine-learning/)  |  |
-| 5 | CS61A: Structure and Interpretation of Computer Programs | []() | [link](https://csdiy.wiki/%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/Python/CS61A/#_3)  [solution](https://web.archive.org/web/20230701000000*/https://cs61a.org/) [text book](https://www.composingprograms.com/) |  |
-| 6 | NYU PL, Fall 2018 |  PL []() | [link](https://cs.nyu.edu/~wies/teaching/pl-fa18/) |  |  
-| 7 | UCB CS61A: Structure and Interpretation of Computer Programs | []() | [link](https://csdiy.wiki/%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/Python/CS61A/) |  |  
-| 8 | utah PL | []() | [link](https://my.eng.utah.edu/~cs3520/f20/schedule.html) |  |  
-| 9 | MIT Operating System Engineering | Operating Systems []() | [link](https://pdos.csail.mit.edu/6.1810/2025/tools.html) |  |  
+| 2 | COMPSCI 224 Advanced Algorithms | Algorithms []() | [link](https://people.seas.harvard.edu/~cs224/fall14/index.html)  |  |
+| 3 | UCB CS 162: Operating Systems and System Programming: Pintos Environment | Operating Systems []() | [link](https://cs162.org/)  |  |
+| 4 | MIT Operating System Engineering | Operating Systems []() | [link](https://pdos.csail.mit.edu/6.1810/2025/tools.html) |  | 
+| 5 | 6.1200J Mathematics for Computer Science | Mathematics []() | [link](https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/lists/problem-sets/) |  |  
+| 6 | CS61A: Structure and Interpretation of Computer Programs | []() | [link](https://csdiy.wiki/%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/Python/CS61A/#_3)  [solution](https://web.archive.org/web/20230701000000*/https://cs61a.org/) [text book](https://www.composingprograms.com/) |  |
+| 7 | UCB CS61A: Structure and Interpretation of Computer Programs | []() | [link](https://csdiy.wiki/%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/Python/CS61A/) |  | 
+| 8 | Deep Learning | []() | [link](https://www.deeplearningbook.org/lecture_slides.html)  |  |
+| 9 | NYU Machine Learning | Machine Learning []() | [link](https://cims.nyu.edu/ai/areas/machine-learning/)  |  |
+
+| 10 | NYU PL, Fall 2018 |  PL []() | [link](https://cs.nyu.edu/~wies/teaching/pl-fa18/) |  |  
+| 11 | utah PL | []() | [link](https://my.eng.utah.edu/~cs3520/f20/schedule.html) |  |  
+ 
