@@ -1,4 +1,4 @@
-# Intro
+# 1- Intro
  SCRIBING 10%.<br>
  P sets 60%.<br>
  Final Project 30%.<br>
@@ -174,7 +174,7 @@ graph TD
 ```
 linear space and search time is still lglg u
 
-# Fusion trees 
+# 2- Fusion trees 
 (Fredman, Willard JCSS 1993)
 - static dynamic by (Andersson- Thorup JACM 2007):  $O((\log_w n)+lglgn)$ updates
 - by (Raman ESA 1996): $O(\log_w n)$ updates （expected time）
@@ -297,7 +297,7 @@ There is an m st, multiplying by m makes all the important bits consecutive w/ N
 - 1000
 - x first is 0101
 
-# Hashing
+# 3- Hashing
 1) lead balancing "负载均衡"
 2) k-wise independence
 3) dictionary
@@ -403,7 +403,7 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 < (k/2)^(-6) * E((L(I)-E( L(I) ))^4) ---> Markov<br>
 < O(1/K^3)<br>
 
-# Hashing (2)
+# 4- Hashing (2)
 1) Linear probing with 5-wise independent
 2) approx membership (Bloom filters)
 3) Cuckoo Hashing
