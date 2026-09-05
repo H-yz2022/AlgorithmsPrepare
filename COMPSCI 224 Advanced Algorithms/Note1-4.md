@@ -423,6 +423,8 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 ≤ ∑ ∞ k-1 ∑ |I|=k h(x)∈I P(( L(I) - EL(I))^6 > EL(I)^6 )<br>
 < ∑ ∞ k-1 k * 1/(k/2)^6 * E( L(I) - K/2 )^6
 
+...
+---> dominated by case of
 ## Linear probing
 - what is
 - trick for such situation: symmetrization
