@@ -443,8 +443,8 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 - (Patrascu- Thorup) 4-wise not sufficient
 - PPR:
 ```mermaid
-graph PPR binary tree
-    A[""]
+graph TD
+    A["1"]
 
     A --> B["1"]
     A --> C["1"]
@@ -480,6 +480,9 @@ graph PPR binary tree
     O --> AD["0"]
     O --> AE["0"]
 ```
+| 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
  ≤ ≥
  
 ## Cuckoo Hashing
