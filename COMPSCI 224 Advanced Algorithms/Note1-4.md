@@ -441,9 +441,10 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 ### PPR
 - (Pagh, Pagh, Ruzic '07) 5-wise work
 - (Patrascu- Thorup) 4-wise not sufficient
+-  E(# probes to insert x) ≤ E(# full intervals containing h(x) )<br>
 - PPR:
 ```mermaid
-graph PPR total height of 4
+graph PPR 
     A[" "]
 
     A --> B[" "]
@@ -481,6 +482,11 @@ graph PPR total height of 4
     O --> AE[" "]
 ```
 - Call a node "dangerous" if ≥(3/4)*2^h items hashed there (height of node is h)
+- Total height 4
+- numbner of location 2^h
+- E(# problems to insert x) ≤ E(# full intervals containing h(x) )
+ ≤ ∑ k P(
+ ≤ 
 
  
  ≤ ≥
