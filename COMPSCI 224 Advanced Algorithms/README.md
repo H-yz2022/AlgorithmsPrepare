@@ -444,7 +444,7 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 -  E(# probes to insert x) ≤ E(# full intervals containing h(x) )<br>
 - PPR:
 ```mermaid
-graph PPR 
+graph TD
     A[" "]
 
     A --> B[" "]
