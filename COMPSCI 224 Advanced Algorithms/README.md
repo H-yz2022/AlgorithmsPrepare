@@ -445,7 +445,7 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 - PPR:
 ```mermaid
 graph PPR 
-    A["."]
+    A[" "]
 
     A --> B[" "]
     A --> C[" "]
