@@ -443,25 +443,25 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 - (Patrascu- Thorup) 4-wise not sufficient
 - PPR:
 ```mermaid
-graph TD
-    A["1"]
+graph PPR total height of 4
+    A[" "]
 
-    A --> B["1"]
-    A --> C["1"]
+    A --> B[" "]
+    A --> C[" "]
 
-    B --> D["1"]
-    B --> E["1"]
-    C --> F["1"]
-    C --> G["1"]
+    B --> D[" "]
+    B --> E[" "]
+    C --> F[" "]
+    C --> G[" "]
 
-    D --> H["1"]
-    D --> I["1"]
-    E --> J["0"]
-    E --> K["1"]
-    F --> L["1"]
-    F --> M["0"]
-    G --> N["1"]
-    G --> O["0"]
+    D --> H[" "]
+    D --> I[" "]
+    E --> J[" "]
+    E --> K[" "]
+    F --> L[" "]
+    F --> M[" "]
+    G --> N[" "]
+    G --> O[" "]
 
     H --> P[" "]
     H --> Q[" "]
@@ -480,9 +480,7 @@ graph TD
     O --> AD[" "]
     O --> AE[" "]
 ```
-| 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 0 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
+- Call a node "dangerous" if ≥(3/4)*2^h items hashed there (height of node is h)
 
  
  ≤ ≥
