@@ -417,21 +417,71 @@ P(∃ overloaded machine) < n * P(machine 1 is overloaded)<br>
 -  Def: I is "full" if L(I) ≥ |I|
 -  Lemma: If inserting x takes k probs, then h(x) is contained in at least k full intervals each (if length ≥ k, not necessary)
  <br>Pf: h(x) is in the middle of 
--  # probes to insert x<br>
-≤ # full intervals containing h(x)<br>
+-  E(# probes to insert x)<br>
+≤ E(# full intervals containing h(x) )<br>
 = ∑ ∞ k=1 ∑ |I|=k h(x)∈I P( I is full)<br>
 ≤ ∑ ∞ k-1 ∑ |I|=k h(x)∈I P(( L(I) - EL(I))^6 > EL(I)^6 )<br>
 < ∑ ∞ k-1 k * 1/(k/2)^6 * E( L(I) - K/2 )^6
-
+- X_i={ 1 if h(i)∈I; 0, else ---> L(I) = ∑ i∈S X_i
 ...
----> dominated by case of
+
+
+  
 ## Linear probing
-- what is
+- what is L(I)?
+- Define X_1, ..., X_n
+
 - trick for such situation: symmetrization
 
 - <img width="383" height="209" alt="c6fb5bed0b59fc790089e44966c41344" src="https://github.com/user-attachments/assets/ba82961e-b34e-4289-9024-e4cd3d4feb7c" />
+- X_i= 1 w.p. |I|/m = k/2n = def p
+- E (∑ )^6 = ∑  ( E )/ ( E  )
+---> dominated by case of dsitinct items apearing twice each, givers O(n^3p^3)=O(k^3)
 
+### PPR
+- (Pagh, Pagh, Ruzic '07) 5-wise work
+- (Patrascu- Thorup) 4-wise not sufficient
+- PPR:
+```mermaid
+graph PPR binary tree
+    A[""]
+
+    A --> B["1"]
+    A --> C["1"]
+
+    B --> D["1"]
+    B --> E["1"]
+    C --> F["1"]
+    C --> G["1"]
+
+    D --> H["1"]
+    D --> I["1"]
+    E --> J["0"]
+    E --> K["1"]
+    F --> L["1"]
+    F --> M["0"]
+    G --> N["1"]
+    G --> O["0"]
+
+    H --> P["1"]
+    H --> Q["0"]
+    I --> R["1"]
+    I --> S["1"]
+    J --> T["0"]
+    J --> U["0"]
+    K --> V["0"]
+    K --> W["1"]
+    L --> X["1"]
+    L --> Y["1"]
+    M --> Z["0"]
+    M --> AA["0"]
+    N --> AB["1"]
+    N --> AC["1"]
+    O --> AD["0"]
+    O --> AE["0"]
+```
  ≤ ≥
+ 
 ## Cuckoo Hashing
 ### Lemma
 
