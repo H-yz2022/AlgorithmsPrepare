@@ -1141,6 +1141,36 @@ make grade
 make qemu
 make clean && make
 ```
+
+
+To remove them in your current directory:
+```
+rm *~
+```
+To find and remove them recursively through your whole mooc_os_lab tree
+```
+find ~/mooc_os_lab -name "*~" -delete
+```
+If you want to see what would be deleted first before actually removing anything, drop -delete and just list them:
+```
+find ~/mooc_os_lab -name "*~"
+```
+
+### Compare to answer
+clean both trees so the diff isn't cluttered with build artifacts
+```
+cd ~/mooc_os_lab/labcodes/lab5 && make clean
+cd ~/mooc_os_lab/labcodes_answer/lab5_result && make clean
+```
+Then get a fast overview of which files actually differ before opening anything visually:
+```
+diff -rq ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
+```
+Then open the two full directories side by side in meld:
+```
+meld ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
+```
+
 ## Exercise Code
 
 ### Step 1
@@ -1157,6 +1187,7 @@ make clean && make
 <br>
 # Lab6 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
+
 ``` bash
 cd ../lab6
 cd ~/mooc_os_lab/labcodes/lab6
@@ -1225,6 +1256,33 @@ make clean
 make grade
 make qemu
 make clean && make
+```
+To remove them in your current directory:
+```
+rm *~
+```
+To find and remove them recursively through your whole mooc_os_lab tree
+```
+find ~/mooc_os_lab -name "*~" -delete
+```
+If you want to see what would be deleted first before actually removing anything, drop -delete and just list them:
+```
+find ~/mooc_os_lab -name "*~"
+```
+
+### Compare to answer
+clean both trees so the diff isn't cluttered with build artifacts
+```
+cd ~/mooc_os_lab/labcodes/lab5 && make clean
+cd ~/mooc_os_lab/labcodes_answer/lab5_result && make clean
+```
+Then get a fast overview of which files actually differ before opening anything visually:
+```
+diff -rq ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
+```
+Then open the two full directories side by side in meld:
+```
+meld ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
 ```
 ## Exercise Code
 
