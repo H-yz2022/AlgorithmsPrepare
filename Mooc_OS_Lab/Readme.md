@@ -1289,6 +1289,19 @@ Then open the two full directories side by side in meld:
 ```
 meld ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
 ```
+For the actual disk-full problem, first check how bad it is:
+```
+df -h ~
+```
+Then find what's eating the space
+```
+du -sh ~/mooc_os_lab/labcodes/*
+```
+Also worth a general Ubuntu cleanup pass, since VM disks fill up fast from package cache and logs:
+```
+sudo apt-get clean
+```
+
 ## Exercise Code
 
 ### Step 1
