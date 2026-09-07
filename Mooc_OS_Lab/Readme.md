@@ -1180,6 +1180,11 @@ meld ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
 ### Challenge
 
 ## 遇到的问题/错误
+不知道为什么make grade 后最多只能得到136/150的成绩，使用answer code 也只能得到90/150的成绩————主要为“error: missing 'check_slab() succeeded!'”。在对比code和answer之后也没有查出重大的不同之处。
+<br>
+Claude 的解释是不需要lab5完美解决。
+
+
 
 ## 知识点总结
 
