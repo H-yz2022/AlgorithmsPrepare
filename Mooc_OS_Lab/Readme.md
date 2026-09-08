@@ -1117,7 +1117,7 @@ grep -rn "LAB6" .
 ./libs/unistd.h:23:/* OLNY FOR LAB6 */
 
 ```
-同步 Lab 1-4 代码到 Lab 5
+同步 Lab 1-5 代码到 Lab 6
 faster to survey everything at once, diff the two kern/ trees as folders:
 ```
 meld ~/mooc_os_lab/labcodes/lab5/kern ~/mooc_os_lab/labcodes/lab6/kern
@@ -1141,8 +1141,6 @@ make grade
 make qemu
 make clean && make
 ```
-
-
 To remove them in your current directory:
 ```
 rm *~
