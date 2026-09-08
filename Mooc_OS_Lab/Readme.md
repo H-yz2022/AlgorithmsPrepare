@@ -1172,10 +1172,74 @@ meld ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
 ## Exercise Code
 
 ### Step 1
+proc.c
+In alloc_proc
+```
+   proc->wait_state = 0;
+   proc->cptr = proc->yptr = proc->optr = NULL;
+```
+In do_fork, inside the local_intr_save/restore block, replace your lab4 list_add(&proc_list, &(proc->list_link)); nr_process++; with a call to set_links(proc) (a helper the lab5 skeleton provides elsewhere in the file — check for it) — it now does the list insertion, nr_process++, and wires up the parent/child/sibling pointers in one call:
+```
+   proc->pid = get_pid();
+   hash_proc(proc);
+   set_links(proc);
 
+```
+In load_icode
+```
+    tf->tf_cs = USER_CS;
+    tf->tf_ds = tf->tf_es = tf->tf_ss = USER_DS;
+    tf->tf_esp = USTACKTOP;
+    tf->tf_eip = elf->e_entry;
+    tf->tf_eflags = FL_IF;
+
+```
 ### Step 2
+pmm.c
+Fill copy_range
+```
+   void *src_kvaddr = page2kva(page);
+   void *dst_kvaddr = page2kva(npage);
+   memcpy(dst_kvaddr, src_kvaddr, PGSIZE);
+   ret = page_insert(to, npage, start, perm);
+```
+
 ### Step 3
-### Challenge
+trap.c
+In idt_init, add the syscall gate (T_SYSCALL is usually 0x80, DPL_USER makes it callable from ring 3):
+```
+    extern uintptr_t __vectors[];
+    int i;
+    for (i = 0; i < sizeof(idt) / sizeof(struct gatedesc); i++) {
+        SETGATE(idt[i], 0, GD_KTEXT, __vectors[i], DPL_KERNEL);
+    }
+    SETGATE(idt[T_SYSCALL], 1, GD_KTEXT, __vectors[T_SYSCALL], DPL_USER);
+    SETGATE(idt[T_SWITCH_TOK], 0, GD_KTEXT, __vectors[T_SWITCH_TOK], DPL_USER);
+    lidt(&idt_pd);
+```
+In the timer-interrupt case, right after the existing ticks++/print_ticks() logic:
+```
+case IRQ_OFFSET + IRQ_TIMER:
+    ticks++;
+    if (ticks % TICK_NUM == 0) {
+        print_ticks();
+    }
+    current->need_resched = 1;
+    break;
+```
+### Lab 5 Challenge
+trap.c
+```
+...
+static struct trapframe switchk2u, *switchu2k;
+
+static void
+trap_dispatch(struct trapframe *tf) {
+    ...
+
+```
+
+
 
 ## 遇到的问题/错误
 不知道为什么make grade 后最多只能得到136/150的成绩，使用answer code 也只能得到90/150的成绩————主要为“error: missing 'check_slab() succeeded!'”。在对比code和answer之后也没有查出重大的不同之处。
