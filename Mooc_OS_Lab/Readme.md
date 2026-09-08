@@ -1430,21 +1430,53 @@ grep -rn "YOUR CODE" .
 ```
 
 ``` YOUR CODE 
+/kern/process/proc.c:90:    //LAB4:EXERCISE1 YOUR CODE
+./kern/process/proc.c:106:     //LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:112:     //LAB6 YOUR CODE : (update LAB5 steps)
+./kern/process/proc.c:383:    //LAB4:EXERCISE2 YOUR CODE
+./kern/process/proc.c:409:	//LAB5 YOUR CODE : (update LAB4 steps)
+./kern/process/proc.c:606:    /* LAB5:EXERCISE1 YOUR CODE
+./kern/schedule/default_sched_stride_c:10:/* LAB6: YOUR CODE */
+./kern/schedule/default_sched_stride_c:39:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:61:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:82:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:104:     /* LAB6: YOUR CODE 
+./kern/schedule/default_sched_stride_c:123:     /* LAB6: YOUR CODE */
+./kern/sync/check_sync.c:124:     // LAB7 EXERCISE1: YOUR CODE
+./kern/sync/check_sync.c:138:     // LAB7 EXERCISE1: YOUR CODE
+./kern/sync/monitor.c:28:   //LAB7 EXERCISE1: YOUR CODE
+./kern/sync/monitor.c:47:    //LAB7 EXERCISE1: YOUR CODE
+./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/swap_fifo.c:67:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
+./kern/mm/vmm.c:437:    /*LAB3 EXERCISE 1: YOUR CODE
+./kern/mm/vmm.c:455:    /*LAB3 EXERCISE 1: YOUR CODE*/
+./kern/mm/vmm.c:462:    /*LAB3 EXERCISE 2: YOUR CODE
+./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
+./kern/mm/pmm.c:366:    /* LAB2 EXERCISE 2: YOUR CODE
+./kern/mm/pmm.c:419:    /* LAB2 EXERCISE 3: YOUR CODE
+./kern/mm/pmm.c:511:        /* LAB5:EXERCISE2 YOUR CODE
+./kern/debug/kdebug.c:338:     /* LAB1 YOUR CODE : STEP 1 */
+./kern/trap/trap.c:45:     /* LAB1 YOUR CODE : STEP 2 */
+./kern/trap/trap.c:57:     /* LAB5 YOUR CODE */ 
+./kern/trap/trap.c:217:        /* LAB1 YOUR CODE : STEP 3 */
+./kern/trap/trap.c:223:        /* LAB5 YOUR CODE */
+./kern/trap/trap.c:227:        /* LAB6 YOUR CODE */
+./kern/trap/trap.c:244:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
 
 
 ```
 ``` bash
-grep -rn "LAB6" .
+grep -rn "LAB7" .
 ```
+```
+kern/sync/check_sync.c:124:     // LAB7 EXERCISE1: YOUR CODE
+./kern/sync/check_sync.c:138:     // LAB7 EXERCISE1: YOUR CODE
+./kern/sync/monitor.c:28:   //LAB7 EXERCISE1: YOUR CODE
+./kern/sync/monitor.c:47:    //LAB7 EXERCISE1: YOUR CODE
 ```
 
 
-```
-``` bash
-
-```
-
-同步 Lab 1-4 代码到 Lab 5
+同步 Lab 1-6 代码到 Lab 7
 faster to survey everything at once, diff the two kern/ trees as folders:
 ```
 meld ~/mooc_os_lab/labcodes/lab6/kern ~/mooc_os_lab/labcodes/lab7/kern
