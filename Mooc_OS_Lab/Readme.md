@@ -1252,6 +1252,7 @@ Claude 的解释是不需要lab5完美解决。
 
 <br>
 <br>
+
 # Lab6 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
 
@@ -1356,18 +1357,7 @@ make grade
 make qemu
 make clean && make
 ```
-To remove them in your current directory:
-```
-rm *~
-```
-To find and remove them recursively through your whole mooc_os_lab tree
-```
-find ~/mooc_os_lab -name "*~" -delete
-```
-If you want to see what would be deleted first before actually removing anything, drop -delete and just list them:
-```
-find ~/mooc_os_lab -name "*~"
-```
+
 
 ### Compare to answer
 clean both trees so the diff isn't cluttered with build artifacts
@@ -1382,6 +1372,20 @@ diff -rq ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
 Then open the two full directories side by side in meld:
 ```
 meld ~/mooc_os_lab/labcodes/lab5 ~/mooc_os_lab/labcodes_answer/lab5_result
+```
+
+### Clean disk
+To remove them in your current directory:
+```
+rm *~
+```
+To find and remove them recursively through your whole mooc_os_lab tree
+```
+find ~/mooc_os_lab -name "*~" -delete
+```
+If you want to see what would be deleted first before actually removing anything, drop -delete and just list them:
+```
+find ~/mooc_os_lab -name "*~"
 ```
 For the actual disk-full problem, first check how bad it is:
 ```
@@ -1412,6 +1416,7 @@ for i in $(seq 1 20); do echo "--- run $i ---"; make clean >/dev/null 2>&1; make
 ## 知识点总结
 
 <br>
+
 # Lab7 in MOOC
 ## 前期准备需要的部分terminal 中的指令：
 
@@ -1425,85 +1430,136 @@ grep -rn "YOUR CODE" .
 ```
 
 ``` YOUR CODE 
-./kern/process/proc.c:90:    //LAB4:EXERCISE1 YOUR CODE
-./kern/process/proc.c:121:     //LAB5 YOUR CODE : (update LAB4 steps)
-./kern/process/proc.c:127:     //LAB6 YOUR CODE : (update LAB5 steps)
-./kern/process/proc.c:398:    //LAB4:EXERCISE2 YOUR CODE
-./kern/process/proc.c:450:	//LAB5 YOUR CODE : (update LAB4 steps)
-./kern/process/proc.c:647:    /* LAB5:EXERCISE1 YOUR CODE
-./kern/schedule/default_sched_stride_c:10:/* LAB6: YOUR CODE */
-./kern/schedule/default_sched_stride_c:39:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:61:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:82:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:104:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:123:     /* LAB6: YOUR CODE */
-./kern/mm/swap_fifo.c:52:    /*LAB3 EXERCISE 2: YOUR CODE*/ 
-./kern/mm/swap_fifo.c:68:     /*LAB3 EXERCISE 2: YOUR CODE*/ 
-./kern/mm/vmm.c:437:    /*LAB3 EXERCISE 1: YOUR CODE
-./kern/mm/vmm.c:455:    /*LAB3 EXERCISE 1: YOUR CODE*/
-./kern/mm/vmm.c:462:    /*LAB3 EXERCISE 2: YOUR CODE
-./kern/mm/default_pmm.c:12:// LAB2 EXERCISE 1: YOUR CODE
-./kern/mm/pmm.c:366:    /* LAB2 EXERCISE 2: YOUR CODE
-./kern/mm/pmm.c:433:    /* LAB2 EXERCISE 3: YOUR CODE
-./kern/mm/pmm.c:534:        /* LAB5:EXERCISE2 YOUR CODE
-./kern/debug/kdebug.c:338:     /* LAB1 YOUR CODE : STEP 1 */
-./kern/trap/trap.c:45:     /* LAB1 YOUR CODE : STEP 2 */
-./kern/trap/trap.c:70:     /* LAB5 YOUR CODE */ 
-./kern/trap/trap.c:230:        /* LAB1 YOUR CODE : STEP 3 */
-./kern/trap/trap.c:246:        /* LAB5 YOUR CODE */
-./kern/trap/trap.c:250:        /* LAB6 YOUR CODE */
-./kern/trap/trap.c:268:    //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
+
 
 ```
 ``` bash
 grep -rn "LAB6" .
 ```
 ```
-./user/libs/syscall.h:13:/* FOR LAB6 ONLY */
-./kern/process/proc.c:127:     //LAB6 YOUR CODE : (update LAB5 steps)
-./kern/process/proc.c:129:     * below fields(add in LAB6) in proc_struct need to be initialized
-./kern/process/proc.c:133:     *     skew_heap_entry_t lab6_run_pool;            // FOR LAB6 ONLY: the entry in the run pool
-./kern/process/proc.c:134:     *     uint32_t lab6_stride;                       // FOR LAB6 ONLY: the current stride of the process
-./kern/process/proc.c:135:     *     uint32_t lab6_priority;                     // FOR LAB6 ONLY: the priority of process, set by lab6_set_priority(uint32_t)
-./kern/process/proc.c:907://FOR LAB6, set the process's priority (bigger value will get more CPU time) 
-./kern/process/proc.h:64:    skew_heap_entry_t lab6_run_pool;            // FOR LAB6 ONLY: the entry in the run pool
-./kern/process/proc.h:65:    uint32_t lab6_stride;                       // FOR LAB6 ONLY: the current stride of the process 
-./kern/process/proc.h:66:    uint32_t lab6_priority;                     // FOR LAB6 ONLY: the priority of process, set by lab6_set_priority(uint32_t)
-./kern/process/proc.h:95://FOR LAB6, set the process's priority (bigger value will get more CPU time) 
-./kern/schedule/default_sched_stride_c:10:/* LAB6: YOUR CODE */
-./kern/schedule/default_sched_stride_c:39:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:61:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:82:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:104:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:123:     /* LAB6: YOUR CODE */
-./kern/schedule/sched.h:61:    // For LAB6 ONLY
-./kern/trap/trap.c:250:        /* LAB6 YOUR CODE */
-./libs/unistd.h:23:/* OLNY FOR LAB6 */
+
 
 ```
 ``` bash
-./kern/schedule/default_sched_stride_c:10:/* LAB6: YOUR CODE */
-./kern/schedule/default_sched_stride_c:39:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:61:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:82:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:104:     /* LAB6: YOUR CODE 
-./kern/schedule/default_sched_stride_c:123:     /* LAB6: YOUR CODE */
-./kern/process/proc.c:127:     //LAB6 YOUR CODE : (update LAB5 steps)
-./kern/trap/trap.c:250:        /* LAB6 YOUR CODE */
+
 ```
 
 同步 Lab 1-4 代码到 Lab 5
 faster to survey everything at once, diff the two kern/ trees as folders:
 ```
-meld ~/mooc_os_lab/labcodes/lab5/kern ~/mooc_os_lab/labcodes/lab6/kern
+meld ~/mooc_os_lab/labcodes/lab6/kern ~/mooc_os_lab/labcodes/lab7/kern
 ```
 
 ``` bash 
-gedit $(grep -rl "LAB6" .) &
+gedit $(grep -rl "LAB7" .) &
 ```
 Sanity build before touching proc.c, to confirm the port didn't break anything:
 ```
-   cd ~/mooc_os_lab/labcodes/lab6
+   cd ~/mooc_os_lab/labcodes/lab7
+   make
+```
+``` bash 
+find . -name "*~" -type f
+find . -name "*~" -type f -delete
+```
+``` bash 
+make clean
+make grade
+make qemu
+make clean && make
+```
+To remove them in your current directory:
+```
+rm *~
+```
+To find and remove them recursively through your whole mooc_os_lab tree
+```
+find ~/mooc_os_lab -name "*~" -delete
+```
+If you want to see what would be deleted first before actually removing anything, drop -delete and just list them:
+```
+find ~/mooc_os_lab -name "*~"
+```
+
+### Compare to answer
+clean both trees so the diff isn't cluttered with build artifacts
+```
+cd ~/mooc_os_lab/labcodes/lab5 && make clean
+cd ~/mooc_os_lab/labcodes_answer/lab5_result && make clean
+```
+Then get a fast overview of which files actually differ before opening anything visually:
+```
+diff -rq ~/mooc_os_lab/labcodes/lab7 ~/mooc_os_lab/labcodes_answer/lab7_result
+```
+Then open the two full directories side by side in meld:
+```
+meld ~/mooc_os_lab/labcodes/lab7 ~/mooc_os_lab/labcodes_answer/lab7_result
+```
+For the actual disk-full problem, first check how bad it is:
+```
+df -h ~
+```
+Then find what's eating the space
+```
+du -sh ~/mooc_os_lab/labcodes/*
+```
+Also worth a general Ubuntu cleanup pass, since VM disks fill up fast from package cache and logs:
+```
+sudo apt-get clean
+```
+## Exercise Code
+
+### Step 1
+
+### Step 2
+### Step 3
+### Challenge
+
+## 遇到的问题/错误
+
+## 知识点总结
+
+<br>
+
+# Lab8 in MOOC
+## 前期准备需要的部分terminal 中的指令：
+
+``` bash
+cd ../lab8
+cd ~/mooc_os_lab/labcodes/lab8
+```
+
+``` bash
+grep -rn "YOUR CODE" .
+```
+
+``` YOUR CODE 
+
+
+```
+``` bash
+grep -rn "LAB8" .
+```
+```
+
+
+```
+``` bash
+
+```
+
+同步 Lab 1-7 代码到 Lab 8
+faster to survey everything at once, diff the two kern/ trees as folders:
+```
+meld ~/mooc_os_lab/labcodes/lab7/kern ~/mooc_os_lab/labcodes/lab8/kern
+```
+
+``` bash 
+gedit $(grep -rl "LAB8" .) &
+```
+Sanity build before touching proc.c, to confirm the port didn't break anything:
+```
+   cd ~/mooc_os_lab/labcodes/lab8
    make
 ```
 ``` bash 
