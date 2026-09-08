@@ -1395,7 +1395,9 @@ Also worth a general Ubuntu cleanup pass, since VM disks fill up fast from packa
 ```
 sudo apt-get clean
 ```
-
+```
+for i in $(seq 1 20); do echo "--- run $i ---"; make clean >/dev/null 2>&1; make run-matrix 2>&1 | grep -E "matrix pass|kernel panic|K>" | tail -3; make run-priority 2>&1 | grep "stride sched correct" | tail -1; done | tee matrix_priority_stress.log
+```
 ## Exercise Code
 
 ### Step 1
@@ -1403,6 +1405,7 @@ sudo apt-get clean
 ### Step 2
 ### Step 3
 ### Challenge
+
 
 ## 遇到的问题/错误
 
