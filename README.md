@@ -19,4 +19,4 @@
 | 9 | NYU Machine Learning | Machine Learning []() | [link](https://cims.nyu.edu/ai/areas/machine-learning/)  |  |
 | 10 | NYU PL, Fall 2018 |  PL []() | [link](https://cs.nyu.edu/~wies/teaching/pl-fa18/) |  |  
 | 11 | utah PL | []() | [link](https://my.eng.utah.edu/~cs3520/f20/schedule.html) |  |  
- 
+| 12 | Harvard's CS171 (Visualization) | Visualization[]() | [link](https://www.cs171.org/2020/syllabus/)[Github](https://github.com/CS171) |  | 
