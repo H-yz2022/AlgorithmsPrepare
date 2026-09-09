@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Grocery Prices Over Time</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --series-1:       #2a78d6; /* Aluminum Foil */
+    --series-2:       #eb6834; /* Apple Juice */
+    --series-3:       #1baf7a; /* Apple Sauce */
+    --series-4:       #eda100; /* Bacon */
+    --series-5:       #e87ba4; /* Bagles, plain */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --series-1:       #3987e5;
+      --series-2:       #d95926;
+      --series-3:       #199e70;
+      --series-4:       #c98500;
+      --series-5:       #d55181;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --page-plane:     #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --baseline:       #383835;
+    --series-1:       #3987e5;
+    --series-2:       #d95926;
+    --series-3:       #199e70;
+    --series-4:       #c98500;
+    --series-5:       #d55181;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .viz-root { background: var(--page-plane); padding: 28px 20px 40px; }
+  .card {
+    max-width: 780px; margin: 0 auto;
+    background: var(--surface-1);
+    border: 1px solid var(--gridline);
+    border-radius: 12px;
+    padding: 22px 24px 18px;
+  }
+  h1 { font-size: 1.15rem; font-weight: 700; margin: 0 0 2px; }
+  .sub { font-size: .85rem; color: var(--text-secondary); margin: 0 0 16px; max-width: 60ch; }
+
+  /* legend row doubles as the Activity 2 product filter */
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 6px 14px;
+    padding: 10px 0 16px; border-bottom: 1px solid var(--gridline); margin-bottom: 10px;
+  }
+  .filter-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: .84rem; color: var(--text-secondary); cursor: pointer; user-select: none;
+  }
+  .filter-item input { accent-color: currentColor; cursor: pointer; }
+  .swatch { display: inline-block; width: 14px; height: 2px; border-radius: 1px; }
+
+  svg { display: block; overflow: visible; }
+  .axis text { fill: var(--text-muted); font-size: 11px; }
+  .axis .domain { stroke: var(--baseline); }
+  .axis .tick line { stroke: var(--gridline); }
+  .gridline { stroke: var(--gridline); stroke-width: 1; }
+
+  .crosshair { stroke: var(--baseline); stroke-width: 1; opacity: 0; pointer-events: none; }
+  .hitlayer { fill: transparent; }
+
+  .tooltip {
+    position: absolute; pointer-events: none; opacity: 0;
+    background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 8px;
+    padding: 8px 10px; font-size: .8rem; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    min-width: 150px; transition: opacity .1s ease;
+  }
+  .tooltip .t-year { font-weight: 700; margin-bottom: 4px; color: var(--text-primary); }
+  .tooltip .t-row { display: flex; align-items: center; gap: 6px; padding: 1px 0; }
+  .tooltip .t-key { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+  .tooltip .t-name { color: var(--text-secondary); flex: 1; }
+  .tooltip .t-val { font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+  .note { font-size: .76rem; color: var(--text-muted); margin-top: 14px; }
+  button.tablebtn {
+    font: inherit; font-size: .8rem; color: var(--text-secondary);
+    background: var(--page-plane); border: 1px solid var(--gridline); border-radius: 6px;
+    padding: 5px 10px; cursor: pointer; margin-top: 12px;
+  }
+  table.datatable {
+    width: 100%; border-collapse: collapse; margin-top: 10px; font-size: .82rem; display: none;
+  }
+  table.datatable th, table.datatable td {
+    border-bottom: 1px solid var(--gridline); padding: 5px 8px; text-align: right;
+  }
+  table.datatable th:first-child, table.datatable td:first-child { text-align: left; }
+  table.datatable thead th { color: var(--text-muted); font-weight: 600; }
+  table.datatable td { font-variant-numeric: tabular-nums; color: var(--text-primary); }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="card">
+    <h1>Grocery prices, 2010&ndash;2022</h1>
+    <p class="sub">Average price across every store that reported a price that year (Aldi, Kroger, Trader Joe's, Publix, Walmart) &mdash; data from CompareGroceryPrices.org via CS171's Lab 1 dataset. Click a name below to show/hide it.</p>
+    <div class="filters" id="filters"></div>
+    <div id="chart"></div>
+    <button class="tablebtn" id="tablebtn">Show as table</button>
+    <table class="datatable" id="datatable"></table>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+var PRODUCTS = ["Aluminum Foil", "Apple Juice", "Apple Sauce", "Bacon", "Bagles, plain"];
+var YEARS = ["2010", "2016", "2022"];
+var STORES = [
+  { name: "Aldi", col: "Aldi.Price" },
+  { name: "Kroger", col: "Kroger.Price" },
+  { name: "Trader Joe's", col: "Trader Joe's.Price" },
+  { name: "Publix", col: "Publix.Price" },
+  { name: "Walmart", col: "Walmart.Price" }
+];
+var COLOR_VARS = ["--series-1", "--series-2", "--series-3", "--series-4", "--series-5"];
+
+function parsePrice(v) {
+  if (!v) return null;
+  var n = parseFloat(String(v).replace(/[^0-9.]/g, ""));
+  return isNaN(n) ? null : n;
+}
+
+d3.csv("groceries_all.csv").then(function (rows) {
+  // Keep only the 5 products this chart is about, average across stores with data.
+  var byProductYear = {};
+  rows.forEach(function (d) {
+    if (PRODUCTS.indexOf(d.Product) === -1) return;
+    var key = d.Product + "|" + d.Year;
+    var prices = STORES.map(function (s) { return parsePrice(d[s.col]); }).filter(function (p) { return p !== null; });
+    if (!prices.length) return;
+    byProductYear[key] = {
+      avg: d3.mean(prices),
+      n: prices.length,
+      perStore: STORES.map(function (s) { return { store: s.name, price: parsePrice(d[s.col]) }; }).filter(function (p) { return p.price !== null; })
+    };
+  });
+
+  var series = PRODUCTS.map(function (product, i) {
+    return {
+      product: product,
+      colorVar: COLOR_VARS[i],
+      values: YEARS.map(function (y) {
+        var rec = byProductYear[product + "|" + y];
+        return { year: y, avg: rec ? rec.avg : null, n: rec ? rec.n : 0 };
+      })
+    };
+  });
+
+  drawFilters(series);
+  drawChart(series);
+  drawTable(series);
+  document.getElementById("note").textContent =
+    "Prices average " + STORES.length + " possible stores per item; not every store carried every item every year, so some points average fewer than " + STORES.length + ".";
+});
+
+var visible = {};
+PRODUCTS.forEach(function (p) { visible[p] = true; });
+
+function drawFilters(series) {
+  var root = d3.select("#filters");
+  var items = root.selectAll(".filter-item").data(series).enter()
+    .append("label").attr("class", "filter-item");
+  items.append("input")
+    .attr("type", "checkbox")
+    .property("checked", true)
+    .on("change", function (event, d) {
+      visible[d.product] = event.target.checked;
+      redraw(series);
+    });
+  items.append("span").attr("class", "swatch")
+    .style("background", function (d) { return "var(" + d.colorVar + ")"; });
+  items.append("span").text(function (d) { return d.product; });
+}
+
+var xScale, yScale, gLines, W = 720, H = 320, M = { top: 12, right: 16, bottom: 28, left: 44 };
+
+function drawChart(series) {
+  var svg = d3.select("#chart").append("svg")
+    .attr("width", W).attr("height", H).attr("viewBox", "0 0 " + W + " " + H);
+
+  xScale = d3.scalePoint().domain(YEARS).range([M.left, W - M.right]).padding(0.5);
+  var maxVal = d3.max(series, function (s) { return d3.max(s.values, function (v) { return v.avg; }); });
+  yScale = d3.scaleLinear().domain([0, maxVal * 1.15]).nice().range([H - M.bottom, M.top]);
+
+  svg.append("g").attr("class", "axis")
+    .selectAll("line.gridline").data(yScale.ticks(5)).enter()
+    .append("line").attr("class", "gridline")
+    .attr("x1", M.left).attr("x2", W - M.right)
+    .attr("y1", function (d) { return yScale(d); }).attr("y2", function (d) { return yScale(d); });
+
+  svg.append("g").attr("class", "axis")
+    .attr("transform", "translate(0," + (H - M.bottom) + ")")
+    .call(d3.axisBottom(xScale).tickSizeOuter(0));
+
+  svg.append("g").attr("class", "axis")
+    .attr("transform", "translate(" + M.left + ",0)")
+    .call(d3.axisLeft(yScale).ticks(5).tickFormat(function (d) { return "$" + d.toFixed(0); }).tickSizeOuter(0));
+
+  gLines = svg.append("g").attr("id", "gLines");
+
+  var line = d3.line()
+    .defined(function (d) { return d.avg !== null; })
+    .x(function (d) { return xScale(d.year); })
+    .y(function (d) { return yScale(d.avg); });
+
+  var sSel = gLines.selectAll("g.series").data(series).enter().append("g").attr("class", "series");
+
+  sSel.append("path")
+    .attr("class", "line-path")
+    .attr("fill", "none")
+    .attr("stroke-width", 2)
+    .attr("stroke-linecap", "round")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke", function (d) { return "var(" + d.colorVar + ")"; })
+    .attr("d", function (d) { return line(d.values); });
+
+  sSel.each(function (d) {
+    d3.select(this).selectAll("circle").data(d.values.filter(function (v) { return v.avg !== null; }))
+      .enter().append("circle")
+      .attr("r", 5)
+      .attr("stroke", "var(--surface-1)")
+      .attr("stroke-width", 2)
+      .attr("fill", "var(" + d.colorVar + ")")
+      .attr("cx", function (v) { return xScale(v.year); })
+      .attr("cy", function (v) { return yScale(v.avg); });
+  });
+
+  // crosshair + one shared tooltip, per interaction.md
+  var crosshair = svg.append("line").attr("class", "crosshair")
+    .attr("y1", M.top).attr("y2", H - M.bottom);
+
+  var tooltip = d3.select("#tooltip");
+
+  svg.append("rect").attr("class", "hitlayer")
+    .attr("x", M.left).attr("y", M.top)
+    .attr("width", (W - M.left - M.right)).attr("height", (H - M.top - M.bottom))
+    .on("mousemove", function (event) {
+      var mx = d3.pointer(event, this)[0] + M.left;
+      var years = YEARS.map(function (y) { return { y: y, dx: Math.abs(xScale(y) - mx) }; });
+      years.sort(function (a, b) { return a.dx - b.dx; });
+      var nearest = years[0].y;
+      crosshair.attr("x1", xScale(nearest)).attr("x2", xScale(nearest)).style("opacity", 1);
+
+      tooltip.html("");
+      tooltip.append("div").attr("class", "t-year").text(nearest);
+      series.forEach(function (s) {
+        if (!visible[s.product]) return;
+        var v = s.values.find(function (vv) { return vv.year === nearest; });
+        if (!v || v.avg === null) return;
+        var row = tooltip.append("div").attr("class", "t-row");
+        row.append("span").attr("class", "t-key").style("background", "var(" + s.colorVar + ")");
+        row.append("span").attr("class", "t-name").text(s.product);
+        row.append("span").attr("class", "t-val").text("$" + v.avg.toFixed(2));
+      });
+      var box = document.getElementById("chart").getBoundingClientRect();
+      tooltip.style("left", (box.left + window.scrollX + xScale(nearest) + 12) + "px")
+        .style("top", (box.top + window.scrollY + yScale.range()[1]) + "px")
+        .style("opacity", 1);
+    })
+    .on("mouseleave", function () {
+      crosshair.style("opacity", 0);
+      tooltip.style("opacity", 0);
+    });
+}
+
+function redraw(series) {
+  gLines.selectAll("g.series").style("display", function (d) { return visible[d.product] ? null : "none"; });
+}
+
+function drawTable(series) {
+  var table = d3.select("#datatable");
+  var thead = table.append("thead").append("tr");
+  thead.append("th").text("Product");
+  YEARS.forEach(function (y) { thead.append("th").text(y); });
+  var tbody = table.append("tbody");
+  series.forEach(function (s) {
+    var tr = tbody.append("tr");
+    tr.append("td").text(s.product);
+    s.values.forEach(function (v) {
+      tr.append("td").text(v.avg === null ? "-" : "$" + v.avg.toFixed(2));
+    });
+  });
+  document.getElementById("tablebtn").addEventListener("click", function () {
+    var el = document.getElementById("datatable");
+    var showing = el.style.display === "table";
+    el.style.display = showing ? "none" : "table";
+    this.textContent = showing ? "Show as table" : "Hide table";
+  });
+}
+</script>
+</body>
+</html>

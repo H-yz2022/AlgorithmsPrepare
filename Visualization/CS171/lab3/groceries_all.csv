@@ -1,0 +1,16 @@
+Product,Aldi.Price,Aldi.Weight,Aldi.Price/Weight,Aldi.Natural,Aldi.Comment,Kroger.Price,Kroger.Weight,Kroger.Price/Weight,Kroger.Natural,Kroger.Comment,Trader Joe's.Price,Trader Joe's.Weight,Trader Joe's.Price/Weight,Trader Joe's.Natural,Trader Joe's.Comment,Publix.Price,Publix.Weight,Publix.Price/Weight,Publix.Natural,Publix.Comment,Year,Walmart.Price,Walmart.Weight,Walmart.Price/Weight,Walmart.Comment
+Aluminum Foil,$2.29,75 sq ft,,,Kwik 'n Fresh,,,,,,,,,,,2.99,50 sq ft,,,Publix,2010,,,,
+Aluminum Foil,$2.29,75 sq ft,,,Kwik 'n Fresh,$2.59,50 ft,,,Kroger Everyday; best price seen: 2.19 w/ card,,,,,,2.99,50 sq ft,,,Publix,2016,,,,
+Aluminum Foil,$1.99,75 sq ft,,,Boulder,$2.49,75 sq ft,,,"Kroger, regular strength; best price seen: 1.69 w/ card",,,,,,2.45,75 sq ft,,,"Publix, regular strength",2022,$2.97,90 sq ft,,Great Value
+Apple Juice,$1.19,64 fl oz,,,Nature's Nectar,$1.39,64 fl oz,,,Kroger Value,$2.49,64 fl oz,,Y,TJ,$2.49,2 qt,,,"Publix, pure, not from concentrate",2010,,,,
+Apple Juice,$1.19,64 fl oz,,,Nature's Nectar,$1.48,64 fl oz,,,Kroger Value,$2.49,64 fl oz,,Y,TJ,$2.49,2 qt,,,"Publix, pure, not from concentrate",2016,,,,
+Apple Juice,$1.69,64 fl oz,,,Nature's Nectar,$1.50,64 fl oz,,,Kroger Value,$2.99,64 fl oz,,,"TJ, regular",$2.69,64 oz,,,"Publix Premium, not from concentrate",2022,$2.68,96 fl oz,,"Great Value, from concentrate"
+Apple Sauce,$0.99,25 oz,,,"Sweet Harvest, regular or cinnamon",$1.92,50 oz,,,"Kroger, classic, cinnamon and no sugar added",$1.99,25 oz,,Y,"TJ, unsweetened",$2.73,46 oz,,Y,"Mott's, no sugar added",2010,,,,
+Apple Sauce,$0.99,25 oz,,,"Sweet Harvest, regular or cinnamon",$1.55,50 oz,,,"Kroger, classic, cinnamon and no sugar added",$1.99,25 oz,,Y,"TJ, unsweetened",$2.73,46 oz,,Y,"Mott's, no sugar added",2016,,,,
+Apple Sauce,$1.29,25 oz,,,"Sweet Harvest, regular or cinnamon",$2.89,50 oz,,,"Kroger, classic, cinnamon and no sugar added",$1.99,25 oz,,,"TJ, unsweetened",$2.50,46 oz,,,"Mott's, original, no sugar added (natural) or cinnamon",2022,$1.98,48 oz,,"Great Value, original or cinnamon"
+Bacon,$2.69,16 oz,,,Premium Pride,$3.69,12 oz,,,Gwaltney,$3.99,12 oz,,Y,TJ,$2.99,12 oz,,,Sunnyland or Carolina Pride,2010,,,,
+Bacon,$2.69,16 oz,,,Premium Pride,$3.79,12 oz,,,Gwaltney; best price seen: $3.49 w/ card,$3.99,12 oz,,Y,TJ,$2.99,12 oz,,,Sunnyland or Carolina Pride,2016,,,,
+Bacon,$2.99,16 oz,,,Appleton Farms,$3.79,12 oz,,,Gwaltney; best price seen: 2.00 w/ card,$3.99,12 oz,,,"TJ, center cut seasoned, uncured",$4.99,16 oz,,,"Publix, original or low sodium",2022,$3.50,16 oz,,"Smithfield, assorted flavors"
+"Bagles, plain",$1.39,20 oz,,,"L'oven Fresh, 6 ct",$2.19,22 oz,,,"Kroger, 6 ct",$2.29,18 oz,,Y,"TJ, 6 ct.",$2.49,20 oz,,,"Publix, 6 bagles, also cinnamon and multi-grain",2010,,,,
+"Bagles, plain",$1.39,20 oz,,,"L'oven Fresh, 6 ct",$2.19,22 oz,,,"Kroger, 6 ct; best price seen: 1.89 w/ card",$2.29,18 oz,,Y,"TJ, 6 ct.",$2.49,20 oz,,,"Publix, 6 bagles, also cinnamon and multi-grain",2016,,,,
+"Bagles, plain",$1.49,20 oz,,,"L'oven Fresh, 6 ct",$2.19,22 oz,,,"Kroger, 6 ct; best price seen: 1.79 w/ card",$2.49,22 oz,,,"TJ, 6 ct.",$2.00,20 oz,,,"Publix Premium, 6 bagles, also cinnamon-raisin, onion and multi-grain, (= 2 for $4)",2022,$2.48,22 oz,,"Nature's Own, 6 ct"

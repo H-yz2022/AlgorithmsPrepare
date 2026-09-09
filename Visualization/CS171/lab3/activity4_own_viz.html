@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Which Store Is Cheapest?</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --series-1:       #2a78d6; /* Aldi */
+    --series-2:       #eb6834; /* Kroger */
+    --series-3:       #1baf7a; /* Trader Joe's */
+    --series-4:       #eda100; /* Publix */
+    --series-5:       #e87ba4; /* Walmart */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1: #1a1a19; --page-plane: #0d0d0d;
+      --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #898781;
+      --gridline: #2c2c2a; --baseline: #383835;
+      --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1: #1a1a19; --page-plane: #0d0d0d;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #898781;
+    --gridline: #2c2c2a; --baseline: #383835;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page-plane); color: var(--text-primary); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .viz-root { background: var(--page-plane); padding: 28px 20px 40px; }
+  .card { max-width: 780px; margin: 0 auto; background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 12px; padding: 22px 24px 18px; }
+  h1 { font-size: 1.15rem; font-weight: 700; margin: 0 0 2px; }
+  .sub { font-size: .85rem; color: var(--text-secondary); margin: 0 0 16px; max-width: 62ch; }
+
+  .controls { display: flex; align-items: center; gap: 10px; padding: 10px 0 16px; border-bottom: 1px solid var(--gridline); margin-bottom: 16px; }
+  .controls label { font-size: .82rem; color: var(--text-secondary); }
+  .controls select { font: inherit; font-size: .85rem; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--gridline); background: var(--surface-1); color: var(--text-primary); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: .82rem; color: var(--text-secondary); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+  svg { display: block; overflow: visible; }
+  .axis text { fill: var(--text-muted); font-size: 11px; }
+  .axis .domain { stroke: var(--baseline); }
+  .axis .tick line { stroke: var(--gridline); }
+  .gridline { stroke: var(--gridline); stroke-width: 1; }
+  .bar { cursor: pointer; }
+  .bar:hover { filter: brightness(1.08); }
+
+  .tooltip {
+    position: absolute; pointer-events: none; opacity: 0;
+    background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 8px;
+    padding: 7px 10px; font-size: .8rem; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    transition: opacity .1s ease;
+  }
+  .tooltip .t-name { color: var(--text-secondary); }
+  .tooltip .t-val { font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .note { font-size: .76rem; color: var(--text-muted); margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="card">
+    <h1>Which store is cheapest, item by item?</h1>
+    <p class="sub">Same 5 grocery items as the line chart, but grouped by store instead of by year &mdash; this answers a different question: not "did prices go up," but "who's cheapest for this item, right now." Switch years to see the ranking shift.</p>
+    <div class="controls">
+      <label for="yearSelect">Year</label>
+      <select id="yearSelect"></select>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div id="chart"></div>
+    <p class="note">Blank bars mean that store didn't report a price for that item that year &mdash; not that it was free.</p>
+  </div>
+</div>
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+var PRODUCTS = ["Aluminum Foil", "Apple Juice", "Apple Sauce", "Bacon", "Bagles, plain"];
+var YEARS = ["2010", "2016", "2022"];
+var STORES = [
+  { name: "Aldi", col: "Aldi.Price", colorVar: "--series-1" },
+  { name: "Kroger", col: "Kroger.Price", colorVar: "--series-2" },
+  { name: "Trader Joe's", col: "Trader Joe's.Price", colorVar: "--series-3" },
+  { name: "Publix", col: "Publix.Price", colorVar: "--series-4" },
+  { name: "Walmart", col: "Walmart.Price", colorVar: "--series-5" }
+];
+
+function parsePrice(v) {
+  if (!v) return null;
+  var n = parseFloat(String(v).replace(/[^0-9.]/g, ""));
+  return isNaN(n) ? null : n;
+}
+
+d3.csv("groceries_all.csv").then(function (rows) {
+  var byYear = {};
+  YEARS.forEach(function (y) { byYear[y] = {}; });
+  rows.forEach(function (d) {
+    if (PRODUCTS.indexOf(d.Product) === -1) return;
+    if (YEARS.indexOf(d.Year) === -1) return;
+    byYear[d.Year][d.Product] = STORES.map(function (s) {
+      return { store: s.name, colorVar: s.colorVar, price: parsePrice(d[s.col]) };
+    });
+  });
+
+  drawLegend();
+  var select = d3.select("#yearSelect");
+  select.selectAll("option").data(YEARS).enter().append("option").attr("value", function (d) { return d; }).text(function (d) { return d; });
+  select.property("value", YEARS[YEARS.length - 1]);
+  select.on("change", function () { drawChart(byYear[this.value]); });
+
+  drawChart(byYear[YEARS[YEARS.length - 1]]);
+});
+
+function drawLegend() {
+  var items = d3.select("#legend").selectAll(".legend-item").data(STORES).enter()
+    .append("div").attr("class", "legend-item");
+  items.append("span").attr("class", "legend-swatch").style("background", function (d) { return "var(" + d.colorVar + ")"; });
+  items.append("span").text(function (d) { return d.name; });
+}
+
+var W = 720, H = 340, M = { top: 12, right: 16, bottom: 44, left: 44 };
+
+function drawChart(dataByProduct) {
+  d3.select("#chart").selectAll("*").remove();
+  var svg = d3.select("#chart").append("svg").attr("width", W).attr("height", H).attr("viewBox", "0 0 " + W + " " + H);
+
+  var x0 = d3.scaleBand().domain(PRODUCTS).range([M.left, W - M.right]).paddingInner(0.3).paddingOuter(0.1);
+  var x1 = d3.scaleBand().domain(STORES.map(function (s) { return s.name; })).range([0, x0.bandwidth()]).paddingInner(0.08);
+
+  var maxVal = d3.max(PRODUCTS, function (p) {
+    return d3.max(dataByProduct[p] || [], function (s) { return s.price; });
+  }) || 1;
+  var y = d3.scaleLinear().domain([0, maxVal * 1.15]).nice().range([H - M.bottom, M.top]);
+
+  svg.append("g").attr("class", "axis").selectAll("line.gridline").data(y.ticks(5)).enter()
+    .append("line").attr("class", "gridline")
+    .attr("x1", M.left).attr("x2", W - M.right)
+    .attr("y1", function (d) { return y(d); }).attr("y2", function (d) { return y(d); });
+
+  svg.append("g").attr("class", "axis")
+    .attr("transform", "translate(" + M.left + ",0)")
+    .call(d3.axisLeft(y).ticks(5).tickFormat(function (d) { return "$" + d.toFixed(0); }).tickSizeOuter(0));
+
+  var xAxis = svg.append("g").attr("class", "axis")
+    .attr("transform", "translate(0," + (H - M.bottom) + ")")
+    .call(d3.axisBottom(x0).tickSizeOuter(0));
+  xAxis.selectAll("text").attr("transform", "rotate(-18)").style("text-anchor", "end").attr("dx", "-0.3em").attr("dy", "0.5em");
+
+  var tooltip = d3.select("#tooltip");
+
+  var groups = svg.append("g").selectAll("g.pgroup").data(PRODUCTS).enter().append("g")
+    .attr("class", "pgroup")
+    .attr("transform", function (p) { return "translate(" + x0(p) + ",0)"; });
+
+  groups.each(function (product) {
+    var storeVals = (dataByProduct[product] || []).filter(function (s) { return s.price !== null; });
+    d3.select(this).selectAll("rect.bar").data(storeVals).enter()
+      .append("rect").attr("class", "bar")
+      .attr("x", function (s) { return x1(s.store); })
+      .attr("width", Math.min(x1.bandwidth(), 24))
+      .attr("y", function (s) { return y(s.price); })
+      .attr("height", function (s) { return (H - M.bottom) - y(s.price); })
+      .attr("rx", 4).attr("ry", 4)
+      .attr("fill", function (s) { return "var(" + s.colorVar + ")"; })
+      .on("pointermove", function (event, s) {
+        tooltip.html("");
+        tooltip.append("div").text(product).style("font-weight", 700).style("margin-bottom", "3px");
+        var row = tooltip.append("div");
+        row.append("span").attr("class", "t-name").text(s.store + ": ");
+        row.append("span").attr("class", "t-val").text("$" + s.price.toFixed(2));
+        var box = document.getElementById("chart").getBoundingClientRect();
+        tooltip.style("left", (box.left + window.scrollX + x0(product) + x1(s.store) + 10) + "px")
+          .style("top", (box.top + window.scrollY + y(s.price) - 46) + "px")
+          .style("opacity", 1);
+      })
+      .on("pointerleave", function () { tooltip.style("opacity", 0); });
+  });
+}
+</script>
+</body>
+</html>
