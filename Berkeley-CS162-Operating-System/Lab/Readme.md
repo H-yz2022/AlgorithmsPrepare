@@ -801,9 +801,13 @@ To preprocess map.c, run:
 i386-gcc -m32 -E -o map.i map.c
 ```
 10. You can see that gcc produces a map.i that is far larger than the original map.c file. Notice that define directives perform string replacement.
-map.i will exist and be much bigger than map.c with all #includes and macros expanded inline.
+- map.i will exist and be much bigger than map.c with all #includes and macros expanded inline.
 
-12. Modify Makefile to make sure that "CS162 is the best!" is printed instead. You may not modify or add any other files. Hint: Refer to this page from the GCC documentation.
+11. Modify Makefile to make sure that "CS162 is the best!" is printed instead. You may not modify or add any other files. Hint: Refer to this page from the GCC documentation.
+```
+map: map.c
+	$(CC) $(CFLAGS) -DCS162 map.c recurse.c -o map
+```
 
 # HW 1
 [](https://cs162.org/static/hw/hw-list/)
