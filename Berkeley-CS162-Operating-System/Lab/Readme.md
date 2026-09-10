@@ -54,8 +54,6 @@ Enter password: workspace
 From source code to executable
 Now that you’ve seen how map works, let’s take a dive into how we went from high-level C code to an executable.
 
-There are 10 written questions for this section, and you must submit your responses to these questions on Gradescope.
-
 Before we start, we’ll be using a few compiler flags which are likely new to you. Here’s a summary of the flags we’ll be using.
 
 - Wall – Enables all compiler warnings
@@ -82,8 +80,9 @@ This will only invoke the compiler for map.c and output the assembly code in map
 Now we will assemble our compiled code into an executable. To assemble our code we can run:
 ```
 i386-gcc -m32 -c map.S -o map.o
-This turns our raw x86 code (map.S) into machine code or an object file (map.o).
 ```
+This turns our raw x86 code (map.S) into machine code or an object file (map.o).
+
 We can also combine these steps by just running i386-gcc -m32 -c on our C file directly. We can run:
 ```
 i386-gcc -m32 -c recurse.c -o recurse.o
@@ -93,6 +92,7 @@ The assembler converts the raw assembly code into an object file which contains 
 i386-objdump -D map.o
 i386-objdump -D recurse.o
 ```
+
 2. What do the .text and .data sections contain? Provide a qualitative description.
 The assembler generates a symbol table which is part of the object file. The symbol table contains all the symbols that can be globally referenced (referenced outside the object file) from another object file (i.e. global/static variables and functions).
 
@@ -139,4 +139,5 @@ i386-gcc -m32 -E -o map.i map.c
 
 11. Modify Makefile to make sure that "CS162 is the best!" is printed instead. You may not modify or add any other files. Hint: Refer to this page from the GCC documentation.
 
-##
+# HW 1
+[](https://cs162.org/static/hw/hw-list/)
