@@ -1516,8 +1516,8 @@ find ~/mooc_os_lab -name "*~"
 ### Compare to answer
 clean both trees so the diff isn't cluttered with build artifacts
 ```
-cd ~/mooc_os_lab/labcodes/lab5 && make clean
-cd ~/mooc_os_lab/labcodes_answer/lab5_result && make clean
+cd ~/mooc_os_lab/labcodes/lab7 && make clean
+cd ~/mooc_os_lab/labcodes_answer/lab7_result && make clean
 ```
 Then get a fast overview of which files actually differ before opening anything visually:
 ```
