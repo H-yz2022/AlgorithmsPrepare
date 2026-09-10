@@ -2,7 +2,7 @@ Table of Content
 [](https://cs162.org/static/hw/hw-intro/docs/executable/)
 
 # Set up
-
+[Deatils of set up](https://claude.ai/code/artifact/fe196d6b-ee4b-4695-b998-1eb7c8fc7310)
 
 ## VS Code
 
