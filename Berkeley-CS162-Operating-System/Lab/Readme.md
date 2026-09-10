@@ -196,13 +196,23 @@ Here’s an excerpt from the map.o symbol table:
 -  00001201 g F .text ... main → F = Function.
 -  00000000 F *UND* ... printf@GLIBC_2.0 → *UND* = undefined here: the symbol is used in this file but not defined in it — its real definition is resolved elsewhere (for printf/malloc/puts, that's libc at load time; for recur, it was recurse.o before linking).
 <br>
+
 Finally, let’s link our 2 object files to create an executable.
 ```
 i386-gcc -m32 map.o recurse.o -o map
 ```
+
 Note that we could’ve just called i386-gcc -m32 map.c recurse.c -o map on the C files to do this entire process in a single command. Often times build systems will separate these commands in order to speed up compile times (since only the changed files need to be recompiled).
+
 ```
 i386-exec ./map                        # run it
+```
+```
+CS 362 is the best!
+i is 3. Address of i is 0x3ffff0b0
+i is 2. Address of i is 0x3ffff090
+i is 1. Address of i is 0x3ffff070
+i is 0. Address of i is 0x3ffff050
 ```
 5. Examine the symbol table of the entire map program now. What has changed? Give a general description, including what happened to recur.
 ```
@@ -271,6 +281,7 @@ objdump can be used to look at more than just the symbol table—it can show us 
 ```
 i386-objdump -x -d map
 ```
+
  You will see that your program has several segments, names of functions and variables in your program correspond to labels with addresses or values. The guts of everything is chunks of stuff within segments.
 
 ```
@@ -750,18 +761,37 @@ Disassembly of section .fini:
     1337:       5b                      pop    %ebx
     1338:       c3                      ret    (#11)
 ```
+
 In the objdump output these segments are under the section heading. There’s actually a slight nuance between these two terms which you can read more about online.
 <br>
 Using the output of objdump, answer the following questions:
 
 6. What segment(s)/section(s) contains recur (the function)? (The address of recur in objdump will not be exactly the same as what you saw in gdb. An optional stretch exercise is to think about why. Hint: See the Wikipedia article on relocation.)
-
+- see 00001273 g F .text 00000052 recur in the symbol table, and 00001273 <recur>: under "Disassembly of section .text" in the same output.
+- 
 7. What segment(s)/section(s) contains global variables? Hint: look for the variables foo and stuff.
+- 00004008 g O .data 00000004 stuff: initialized: volatile int stuff = 7
+- 00004014 g O .bss 00000004 foo: declared but never given a value: int foo;
 
 8. Do you see the stack or heap segment anywhere? Explain.
+- No
+- However, in the Program Header filesz 0x00000000 memsz 0x00000000 flags rw-, its file size and memory size are both 0.
+- here's no heap entry anywhere. no real stack or heap content appears in the file, because neither exists until the OS actually starts running the process.
 
-9. Based on the output of map, in which direction does the stack grow? (Reminder: Please use i386-exec ./map to run map.)
-
+9. Based on the output of map, in which direction does the stack grow? (Reminder: Please use
+```
+i386-exec ./map
+```
+to run map.)
+```
+CS 362 is the best!
+i is 3. Address of i is 0x3ffff0b0
+i is 2. Address of i is 0x3ffff090
+i is 1. Address of i is 0x3ffff070
+i is 0. Address of i is 0x3ffff050
+```
+Each deeper recursive call gets a smaller address, so the stack grows downward, toward lower memory addresses.
+<br>
 When you ran map, you might have noticed that it prints "CS362 is the best!". However, we wanted to print "CS162 is the best!".
 
 Let’s see what happened by invoking the preprocessing stage. The compiler takes your C code and will output new C code. What does this really do? Time to find out!
@@ -771,8 +801,9 @@ To preprocess map.c, run:
 i386-gcc -m32 -E -o map.i map.c
 ```
 10. You can see that gcc produces a map.i that is far larger than the original map.c file. Notice that define directives perform string replacement.
+map.i will exist and be much bigger than map.c with all #includes and macros expanded inline.
 
-11. Modify Makefile to make sure that "CS162 is the best!" is printed instead. You may not modify or add any other files. Hint: Refer to this page from the GCC documentation.
+12. Modify Makefile to make sure that "CS162 is the best!" is printed instead. You may not modify or add any other files. Hint: Refer to this page from the GCC documentation.
 
 # HW 1
 [](https://cs162.org/static/hw/hw-list/)
