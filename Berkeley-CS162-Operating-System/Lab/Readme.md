@@ -58,23 +58,24 @@ There are 10 written questions for this section, and you must submit your respon
 
 Before we start, we’ll be using a few compiler flags which are likely new to you. Here’s a summary of the flags we’ll be using.
 
--Wall – Enables all compiler warnings
+- Wall – Enables all compiler warnings
 
--m32 – Compiles the code for the i386 architecture.
+- m32 – Compiles the code for the i386 architecture.
 
--E - Invokes the PREPROCESSOR only.
+- E - Invokes the PREPROCESSOR only.
 
--S – Invokes the COMPILER only.
+- S – Invokes the COMPILER only.
 
--c – Invokes the COMPILER and ASSEMBLER only.
+- c – Invokes the COMPILER and ASSEMBLER only.
 
 Important: Please use i386-gcc instead of gcc for this homework.
 
 Let’s now invoke the compiler. The compiler takes high-level C code and produces a variant of x86 known as 8086 or i386 assembly.
 
 To compile map.c, run:
-
+```
 i386-gcc -m32 -S -o map.S map.c
+```
 This will only invoke the compiler for map.c and output the assembly code in map.S.
 
 1. Generate recurse.S and find which instructions correspond to the recursive call of recur(i - 1).
