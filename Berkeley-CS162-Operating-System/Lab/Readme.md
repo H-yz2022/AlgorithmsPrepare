@@ -202,7 +202,11 @@ Finally, let’s link our 2 object files to create an executable.
 i386-gcc -m32 map.o recurse.o -o map
 ```
 
-Note that we could’ve just called i386-gcc -m32 map.c recurse.c -o map on the C files to do this entire process in a single command. Often times build systems will separate these commands in order to speed up compile times (since only the changed files need to be recompiled).
+Note that we could’ve just called 
+```
+i386-gcc -m32 map.c recurse.c -o map
+```
+on the C files to do this entire process in a single command. Often times build systems will separate these commands in order to speed up compile times (since only the changed files need to be recompiled).
 
 ```
 i386-exec ./map                        # run it
